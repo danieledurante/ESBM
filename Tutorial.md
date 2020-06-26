@@ -1,10 +1,10 @@
 Description
 ================
-As described in the [`README.md`]() file, this tutorial contains guidelines and code to perform the analyses for the first scenario [NETWORK 1] considered in the simulation study of the article [**Extended stochastic block models**](). In particular, you will find detailed step-by-step guide and detailed `R` code to implement the collapsed Gibbs-sampler presented in the article [Algorithm 1] and to perform posterior inference. For implementation purposes, **execute the code below considering the same order in which is presented**.
+As described in the [`README.md`](https://github.com/danieledurante/ESBM/blob/master/README.md) file, this tutorial contains guidelines and code to perform the analyses for the first scenario [`network 1`] considered in the simulation study of the article [**extended stochastic block models**](https://github.com/danieledurante/ESBM). In particular, you will find a detailed step-by-step guide and `R` code to **implement the collapsed Gibbs-sampler presented in the article** and to **perform posterior inference** under **ESBM**. For implementation purposes, **execute the code below considering the same order in which is presented**.
 
 Upload the data and check performance of algorithmic methods
 ================
-To start the analysis, set the working directory where the simulated network `network_1.RData`, and the source codes `esbm.R` and `stirling.cpp` are placed. Once this has been done, **clean the workspace, and load the data along with useful** `R` **packages**.
+To start the analysis, **set the working directory** where the simulated network [`network_1.RData`](https://github.com/danieledurante/ESBM/blob/master/Data%20and%20Codes/network_1.RData), and the source codes [`esbm.R`](https://github.com/danieledurante/ESBM/blob/master/Data%20and%20Codes/esbm.R) and [`stirling.cpp`](https://github.com/danieledurante/ESBM/blob/master/Data%20and%20Codes/stirling.cpp) are placed. Once this has been done, **clean the workspace, and load the data along with useful** `R` **packages**.
 
 ``` r
 rm(list=ls())
@@ -29,7 +29,7 @@ V <- dim(Y)[1]
 diag(Y)
 ```
 
-As discussed in the article, the network under analysis has `V=100` and `5` equally–sized clusters of 20 nodes each, displaying not only classical community structures, but also core-periphery patterns [see Figure 2 in the article]. Hence, before implementing the proposed **ESBM**, it is useful to check the performance of state-of-the-art algorithmic approaches for community detection in this illustrative network. To accomplish this goal, let us focus on the popular [`Louvain algorithm`](https://iopscience.iop.org/article/10.1088/1742-5468/2008/10/P10008/meta).
+As discussed in the article, the network under analysis has *V=100* and *5* equally–sized clusters of *20* nodes each, displaying not only classical community structures, but also core-periphery patterns [see Figure 2 in the article]. Hence, before implementing the proposed **ESBM**, it is useful to **check the performance of state-of-the-art algorithmic approaches for community detection** in this illustrative network. To accomplish this goal, let us focus on the popular [`Louvain algorithm`](https://iopscience.iop.org/article/10.1088/1742-5468/2008/10/P10008/meta).
 
 ``` r
 net<-graph.adjacency(Y, mode=c("undirected"), weighted=NULL, diag=FALSE)
@@ -37,12 +37,12 @@ class(net)
 cluster_louvain(net)
 ```
 
-According to the above results, the [`Louvain algorithm`](https://iopscience.iop.org/article/10.1088/1742-5468/2008/10/P10008/meta) detects only `3` communities, wrongly collapsing clusters 2 and 3 as well as 4 and 5. In fact, as shown Figure 2 in the article, such communities display core-periphery patterns that cannot be detected by classical algorithmic approaches. This motivates our focus on the **ESBM** class.
+According to the above results, the [`Louvain algorithm`](https://iopscience.iop.org/article/10.1088/1742-5468/2008/10/P10008/meta) detects only *3* communities, wrongly collapsing clusters *2* and *3* as well as *4* and *5*. In fact, as shown Figure 2 in the article, such communities display core-periphery patterns that cannot be detected by classical algorithmic approaches. This motivates our focus on the **ESBM** class.
 
 
-Setting hyperparameters
+Setting the hyperparameters
 ================
-For the hyperparameters of the `Beta(a,b)` priors on the block probabilities we follow common implementations of stochastic block models and consider the default values `a=1` and `b=1` to induce a uniform prior. Less straightforward is instead the choice of the hyperparameters for the Gibb-type priors on the random partition. A possibility to address this issue is to specify such quantities in order to obtain a value for the expectation of the non-empty number of communities `H` that matches some prior knowledge. Below, we provide the code to obtain such a quantity as a function of pre-specified hyperparameters for the four relevant examples of Gibbs-type priors discussed in the article. 
+For the hyperparameters of the `Beta(a,b)` **priors on the block probabilities we follow common implementations of stochastic block models and consider the default values** `a=1` **and** `b=1` **to induce a uniform prior**. Less straightforward is instead the choice of the hyperparameters for the **Gibb-type** priors on the random partition. A possibility to address this issue is to specify such quantities in order to obtain a value for the expectation of the non-empty number of communities `H` that matches some prior knowledge. Below, we provide the code to obtain such a quantity as a function of pre-specified hyperparameters for the four relevant examples of Gibbs-type priors discussed in the article. 
 
 ``` r
 # ------------------------------------
