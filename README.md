@@ -1,4 +1,4 @@
-# ESBM: Extended stochastic block models [ESBM] for network data
+# ESBM: Extended stochastic block models for network data
 
 This repository is associated with the paper [**Extended stochastic block models**]() and aims at providing detailed materials and codes to perform posterior computation and inference under the general **ESBM** class. 
 
