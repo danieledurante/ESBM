@@ -500,6 +500,6 @@ png("scenario1.png",width=1500,height=501)
 print(g2)
 dev.off()
 ```
-![](https://raw.githubusercontent.com/danieledurante/probitSUN/master/img/F_predict_genes.png)
+![](https://github.com/danieledurante/ESBM/blob/master/Data%20and%20Codes/scenario1.png)
 
 Refer to the simulation section in the article [**Extended stochastic block models**]()  for detailed comments on the above Figures.
