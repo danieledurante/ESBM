@@ -42,7 +42,7 @@ According to the above results, the [`Louvain algorithm`](https://iopscience.iop
 
 Setting the hyperparameters
 ================
-For the hyperparameters of the `Beta(a,b)` **priors on the block probabilities we follow common implementations of stochastic block models and consider the default values** `a=1` **and** `b=1` **to induce a uniform prior**. Less straightforward is instead the choice of the hyperparameters for the **Gibb-type** priors on the random partition. A possibility to address this issue is to specify such quantities in order to obtain a value for the expectation of the non-empty number of communities `H` that matches some prior knowledge. Below, we provide the code to obtain such a quantity as a function of pre-specified hyperparameters for the four relevant examples of Gibbs-type priors discussed in the article. 
+For the hyperparameters of the `Beta(a,b)` **priors on the block probabilities** we follow common implementations of stochastic block models and consider the default values `a=1` and `b=1` to induce a **uniform** prior. Less straightforward is instead the choice of the hyperparameters for the **Gibb-type priors on the random partition**. A possibility to address this issue is to specify such quantities in order to obtain a value for the expectation of the non-empty number of communities `H` that matches some prior knowledge. Below, we provide the **code to obtain such a quantity as a function of pre-specified hyperparameters for the four relevant examples of Gibbs-type priors** discussed in the article. 
 
 ``` r
 # ------------------------------------
@@ -77,15 +77,15 @@ probs_gnedin <- HGnedin(V, 1:V, gamma = gamma)
 sum(1:V*probs_gnedin)
 ```
 
-Here we set the hyperparameters so that the expectation of `H` is close to `10` under all the four priors, twice as many as the true number of communities to check whether our results are robust to hyperparameters settings.
+Here we **set the hyperparameters so that the expectation of `H` is close to *10* under all the four priors**. This is twice as many as the true number of communities to check whether our results are robust to hyperparameters settings.
 
 Posterior computation via collapsed Gibbs sampler
 ================
-This section contains the code to implement collapsed Gibbs sampler for **ESBM** presented in Algorithm 1 [function `esbm()`] and to evaluate marginal likelihoods [function `log_pY_z()`] for model selection. Such a code is applied to the four relevant examples of Gibbs-type priors discussed in the article, both without and with node-specific attributes. See the source code [`esbm.R`]() for a detailed description of the inputs and the outputs of the two functions `esbm()` and `log_pY_z()`.
+This section contains the code to **implement collapsed Gibbs sampler for ESBM** [function `esbm()`] and to **evaluate marginal likelihoods** [function `log_pY_z()`] for model selection. Such a code is applied to the four relevant examples of Gibbs-type priors discussed in the article, both without and with node-specific attributes. See the source code [`esbm.R`]() for a detailed description of the inputs and the outputs of the two functions `esbm()` and `log_pY_z()`.
 
 Implementation without node-specific attributes
 ------------------
-Let us first perform posterior computation for the model without node-attributes. To accomplish this goal, execute the code below.
+Let us first **perform posterior computation for the model without node-attributes**. To accomplish this goal, execute the code below.
 
 ``` r
 N_iter <- 20000
@@ -122,7 +122,7 @@ my_prior<-"GN"
 Z_GN <- esbm(Y,my_seed,N_iter, my_prior, my_z,a=1,b=1,gamma_GN=0.475)
 ```
 
-Once the above steps have been done, compute the log-marginal likelihoods that will be used for comparing the performance of the different prior specifications and save the output in the file `Posterior_No_Attributes.RData`.
+Once the above steps have been done, **compute the log-marginal likelihoods** that will be used for comparing the performance of the different prior specifications, and **save the output** in the file `Posterior_No_Attributes.RData`.
 
 ``` r
 # Compute the log-marginal likelihoods under the different priors
@@ -159,7 +159,7 @@ rm(Z_DP,l_y_DP,Z_PY,l_y_PY,Z_GN,l_y_GN,Z_DM,l_y_DM)
 
 Implementation with node-specific attributes
 ------------------
-Let us now perform posterior computation for the model with node-specific attributes coinciding, in this case, with the true membership labels. To accomplish this goal, execute the code below.
+Let us now **perform posterior computation for the model with node-specific attributes** coinciding, in this case, with the true membership labels. To accomplish this goal, execute the code below.
 
 ``` r
 N_iter <- 20000
@@ -199,7 +199,7 @@ my_prior<-"GN"
 Z_GN_x <- esbm(Y,my_seed,N_iter, my_prior, my_z,a=1,b=1,gamma_GN=0.475,x=my_x,alpha_xi=my_alpha_xi)
 ```
 
-Also in this case we compute the log-marginal likelihoods that will be used for comparing the performance of the different prior specifications and save the output in the file `Posterior_Attributes.RData`.
+Also in this case we **compute the log-marginal likelihoods** that will be used for comparing the performance of the different prior specifications, and **save the output** in the file `Posterior_Attributes.RData`.
 
 ``` r
 # Compute the log-marginal likelihoods under the different priors
@@ -236,7 +236,7 @@ rm(Z_DP_x,l_y_DP_x,Z_PY_x,l_y_PY_x,Z_GN_x,l_y_GN_x,Z_DM_x,l_y_DM_x)
 
 Posterior inference
 ================
-This section contains the code to perform estimation, uncertainty quantification and model selection for **ESBM** leveraging the samples from the collapsed Gibbs sampler. In particular, we focus on reproducing the analyses in Table 2 and Figure 2 in the article. To accomplish this goal let us first upload the MCMC samples, and define the `burn_in` along with the vector `z_0` containing the true community labels. 
+This section contains the **code to perform estimation, uncertainty quantification and model selection for ESBM** leveraging the samples from the collapsed Gibbs sampler. In particular, we **reproduce the analyses in Table 2 and Figure 2 in the article**. To accomplish this goal let us first **upload the MCMC samples**, and define the `burn_in` along with the vector `z_0` containing the true community labels. 
 
 ``` r
 burn_in<- 10000
@@ -245,7 +245,7 @@ load("Posterior_No_Attributes.RData")
 load("Posterior_Attributes.RData")
 ```
 
-We now compute the logarithm of the marginal likelihoods for the different priors and models [without and with attributes] evaluated via the harmonic mean approach in Eq. (17).
+We now compute the **logarithm of the marginal likelihoods** for the different priors and models [without and with attributes] evaluated via the harmonic mean approach in Eq. [17].
 
 ``` r
 # ------------------------------------
@@ -302,10 +302,10 @@ l_y_post_GN_x<- log(length(l_y_GN_x))-max(neg_l_y_GN_x)-log(sum(exp(neg_l_y_GN_x
 l_y_post_GN_x
 ```
 
-As it can be noticed, the Gnedin process tends to perform slightly better in both scenarios relative to the other priors. Moreover, as expected, the overall learning process benefits from informative node-specific attributes.   
+As it can be noticed, the **Gnedin process tends to perform slightly better** in both scenarios relative to the other priors. Moreover, as expected, the overall **learning process benefits from informative node-specific attributes**.   
 
 
-The posterior mean of the VI distance from the true partition `z_0` can be instead obtained using the `VI()` function within the `mcclust.ext` package ([Wade and Ghahramani, 2018](https://projecteuclid.org/euclid.ba/1508378464)) as follow.
+The **posterior mean of the VI distance from the true partition `z_0`** can be instead obtained using the `VI()` function within the `mcclust.ext` package ([Wade and Ghahramani, 2018](https://projecteuclid.org/euclid.ba/1508378464)) as follow.
 
 
 ``` r
@@ -334,9 +334,9 @@ VI(z_0,t(Z_GN[,(burn_in+1):N_iter]))
 VI(z_0,t(Z_GN_x[,(burn_in+1):N_iter]))
 ```
 
-The above results confirm the results and rankings obtained from the analysis of the marginal likelihoods.
+The above results **confirm the results and rankings** obtained from the analysis of the marginal likelihoods.
 
-As discussed in the article, accurate learning of the underlying number of communities is a fundamental goal. Hence, let us study the quantiles of the posterior distribution for the number of non-empty communities under the different priors and model. 
+As discussed in the article, accurate learning of the underlying number of communities is a fundamental goal. Hence, let us study the **quantiles of the posterior distribution for the number of non-empty communities** under the different priors and models. 
 
 ``` r
 # ------------------------------------
@@ -364,9 +364,9 @@ quantile(apply(Z_GN[,(burn_in+1):N_iter],2,max))[c(2:4)]
 quantile(apply(Z_GN_x[,(burn_in+1):N_iter],2,max))[c(2:4)]
 ```
 
-Also for this measure, the inclusion of informative node-specific attributes provides improved performance. It also interesting to notice how, unlike DM, DP and PY, the Gnedin process can learn accurately the true number of underlying communities even without the additional information provided by the node-specific attributes.
+Also for this measure, the inclusion of **informative node-specific attributes provides improved performance**. It also interesting to notice how, unlike DM, DP and PY, the **Gnedin process can learn accurately the true number of underlying communities even without the additional information** provided by the node-specific attributes.
 
-To conclude our analysis, let us obtain a point estimates and credible balls for the community assignments of the different nodes. This is done by adapting the methods presented in [Wade and Ghahramani (2018)](https://projecteuclid.org/euclid.ba/1508378464) and implemented in the `R` package `mcclust.ext`. To apply these strategies we also require an estimate of the co-clustering matrix, whose generic element `c[v,u]` encodes the relative frequency of MCMC samples in which nodes `v` and `u` are in the same community. Such an estimate can be obtained via the function `pr_cc()` in the source code `esbm.R`.  
+To conclude our analysis, let us obtain a **point estimates** and **credible balls** for the community assignments of the different nodes. This is done by adapting the methods presented in [Wade and Ghahramani (2018)](https://projecteuclid.org/euclid.ba/1508378464) and implemented in the `R` package `mcclust.ext`. To apply these strategies we also require an estimate of the **co-clustering matrix**, whose generic element `c[v,u]` encodes the relative frequency of MCMC samples in which nodes `v` and `u` are in the same community. Such an estimate can be obtained via the function `pr_cc()` in the source code `esbm.R`.  
 
 
 ``` r
@@ -454,7 +454,7 @@ VI(z_0,t(memb_Z_GN))
 credibleball(memb_Z_GN_VI$cl,t(Z_GN_x[,(burn_in+1):N_iter]))[[5]]
 ```
 
-Also these results are in line with our previous discussion. Finally, the code to reproduce the upper panel of Figure 2 and save it, is provided below.
+Also these **results are in line with our previous discussion**. Finally, the code to **reproduce the upper panel of Figure 2** and save it, is provided below.
 
 ``` r
 c_Z_GN <- pr_cc(Z_GN[,(burn_in+1):N_iter])
