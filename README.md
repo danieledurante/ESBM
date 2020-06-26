@@ -8,7 +8,7 @@ The documentation is organized in two main parts described below.
 
 - [`Tutorial.md`](https://github.com/danieledurante/ESBM/blob/master/Tutorial.md). It contains a comprehensive tutorial to perform posterior computation and inference under the ESBM, leveraging the methods and algorithms presented in the article and implemented in the source code [`esbm.R`](https://github.com/danieledurante/ESBM/blob/master/Data%20and%20Codes/esbm.R). To accomplish this goal, we reproduce step-by-step the analysis of `network 1` in the simulation study within the article.
 
-All the above analyses are performed with a **MacBook Pro (OS X El Capitan, version 10.11.6)**, using a `R` version **3.6.3**. 
+The analyses are performed with a **MacBook Pro (OS X El Capitan, version 10.11.6)**, using a `R` version **3.6.3**. 
 
 All the above functions rely on a **basic and reproducible `R` implementation**, mostly meant to provide a clear understanding of the computational routines and steps associated with the proposed model. **Optimized computational routines relying on C++ coding can be easily considered.** Generalizations to include additional priors in the Gibbs-type class, and different types of edges and attributes require minor modifications on the functions in the file [`esbm.R`](https://github.com/danieledurante/ESBM/blob/master/Data%20and%20Codes/esbm.R).
 
