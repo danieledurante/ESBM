@@ -174,14 +174,14 @@ my_alpha_xi <- rep(1,5)
 # ------------------------------------
 
 my_prior <- "DM"
-Z_DM_x   <- esbm(Y, my_seed, N_iter, my_prior, my_z, a=1, b=1, beta_DM=3/50, H_DM=50, x=my_x, alpha_xi=my_alpha_xi)
+Z_DM_x   <- esbm(Y, my_seed, N_iter, my_prior, my_z, a = 1, b = 1, beta_DM = 3/50, H_DM = 50, x = my_x, alpha_xi = my_alpha_xi)
 
 # ------------------------------------
 # DIRICHLET PROCESS (CRP)
 # ------------------------------------
 
 my_prior <- "DP"
-Z_DP_x   <- esbm(Y, my_seed, N_iter, my_prior, my_z, a=1, b=1, alpha_PY=2.55, sigma_PY=0, x=my_x, alpha_xi=my_alpha_xi)
+Z_DP_x   <- esbm(Y, my_seed, N_iter, my_prior, my_z, a = 1, b = 1, alpha_PY = 2.55, sigma_PY = 0, x = my_x, alpha_xi = my_alpha_xi)
 
 # ------------------------------------
 # PITMAN-YOR PROCESS
@@ -195,7 +195,7 @@ Z_PY_x <- esbm(Y,my_seed,N_iter, my_prior, my_z,a=1,b=1,alpha_PY=-0.325,sigma_PY
 # ------------------------------------
 
 my_prior <- "GN"
-Z_GN_x   <- esbm(Y, my_seed, N_iter, my_prior, my_z, a=1, b=1, gamma_GN=0.475, x=my_x, alpha_xi=my_alpha_xi)
+Z_GN_x   <- esbm(Y, my_seed, N_iter, my_prior, my_z, a = 1, b = 1, gamma_GN = 0.475, x = my_x, alpha_xi = my_alpha_xi)
 ```
 
 Also in this case we **compute the log-marginal likelihoods** that will be used for comparing the performance of the different prior specifications, and **save the output** in the file `Posterior_Attributes.RData`.
