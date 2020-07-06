@@ -87,45 +87,6 @@ arma::mat lgfactorials_ns(int n, double sigma){
 }
 
 // [[Rcpp::export]]
-arma::vec lstirling2(int n){
-  
-  arma::vec LogSk1(n+1); LogSk1.zeros();
-  arma::vec LogSk(n+1);  LogSk.zeros();
-  
-  LogSk1(1) = 0;
-  LogSk(0) = -arma::datum::inf;
-  
-  for(int i = 2; i <= n; i++){
-    LogSk(1)   = 0;
-    for(int j  = 2; j < i; j++){
-      LogSk(j) = LogSk1(j) + std::log(j + std::exp(LogSk1(j-1) - LogSk1(j)));
-    }
-    LogSk(i)  = 0;
-    LogSk1    = LogSk;
-  }
-  return(LogSk.rows(1,n));
-}
-
-// [[Rcpp::export]]
-arma::mat lstirlings2(int n){
-  
-  arma::mat LogS(n+1,n+1);  LogS.fill(-arma::datum::inf);
-  
-  // Fill the starting values
-  LogS(0,0) = 0;
-  LogS(1,1) = 0;
-  
-  for(int i = 2; i <= n; i++){
-    LogS(i,1)   = 0;
-    for(int j = 2; j < i; j++){
-      LogS(i,j) = LogS(i-1,j) + std::log(j + std::exp(LogS(i-1,j-1) - LogS(i-1,j))); 
-    }
-    LogS(i,i)  = 0;
-  }
-  return(LogS.submat(1,1,n,n));
-}
-
-// [[Rcpp::export]]
 arma::vec lastirling1(int n){
   
   arma::vec LogSk1(n+1); LogSk1.zeros();
