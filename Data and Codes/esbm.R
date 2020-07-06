@@ -273,14 +273,8 @@ expected_cl_py <- function(n, sigma, theta, H){
     if(sigma==0) {
       index <- 0:(n-1)
       out <- H - H*exp(sum(log(index + theta*(1 - 1/H)) - log(theta+ index)))
-    } else {
-      index <- 1:n
-      lgS <- c(lgfactorial(n,sigma))
-      lV  <- lV_py(n,1:n,sigma,theta)
-      lterms <- lV + lgS - index*log(sigma) + index*log(1 - 1/H)
-      out <- H - H*exp(max(lterms) + log(sum(exp(lterms - max(lterms)))))
-      }
     }
+  }
   return(out)
 }
 
@@ -313,16 +307,7 @@ dclust_py <- function(n, sigma, theta, H, log_scale=FALSE){
   }
   if(H < Inf){
     index <- 1:min(n,H)
-    if(sigma > 0){
-      lS2 <- lstirlings2(n)
-      lgS <- c(lgfactorial(n,sigma))
-      lV  <- lV_py(n,1:n,sigma,theta)
-      # for a fixed k
-      for(k in 1:min(H,n)){
-        lterms <- lV[k:n] + lS2[k:n,k] + lgS[k:n] - (k:n)*log(sigma*H) + lfactorial(H) - lfactorial(H-k)
-        probs[k] <- max(lterms) + log(sum(exp(lterms - max(lterms))))
-      }
-    } else if(theta > 0){
+    if(sigma == 0){
       probs[index]  <- lfactorial(H) - lfactorial(H-index) + c(lgfactorial_ns(n,-theta/H))[index] + lgamma(theta) - lgamma(theta + n)
     }
   }
