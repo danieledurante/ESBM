@@ -88,38 +88,38 @@ Implementation without node-specific attributes
 Let us first **perform posterior computation for the model without node-attributes**. To accomplish this goal, execute the code below.
 
 ``` r
-N_iter <- 20000
-V <- dim(Y)[1]
+N_iter  <- 20000
+V       <- dim(Y)[1]
 my_seed <- 1
-my_z <- c(1:V)
+my_z    <- c(1:V)
 
 # ------------------------------------
 # DIRICHLET MULTINOMIAL
 # ------------------------------------
 
-my_prior<-"DM"
-Z_DM <- esbm(Y, my_seed, N_iter, my_prior, my_z, a=1, b=1, beta_DM=3/50, H_DM=50)
+my_prior <- "DM"
+Z_DM     <- esbm(Y, my_seed, N_iter, my_prior, my_z, a = 1, b = 1, beta_DM = 3/50, H_DM = 50)
 
 # ------------------------------------
 # DIRICHLET PROCESS (CRP)
 # ------------------------------------
 
-my_prior<-"DP"
-Z_DP <- esbm(Y, my_seed, N_iter, my_prior, my_z, a=1, b=1, alpha_PY=2.55, sigma_PY=0)
+my_prior <- "DP"
+Z_DP     <- esbm(Y, my_seed, N_iter, my_prior, my_z, a = 1, b = 1, alpha_PY = 2.55, sigma_PY = 0)
 
 # ------------------------------------
 # PITMAN-YOR PROCESS
 # ------------------------------------
 
-my_prior<-"PY"
-Z_PY <- esbm(Y, my_seed, N_iter, my_prior, my_z, a=1, b=1, alpha_PY=-0.325, sigma_PY=0.575)
+my_prior  <- "PY"
+Z_PY      <- esbm(Y, my_seed, N_iter, my_prior, my_z, a = 1, b = 1, alpha_PY = -0.325, sigma_PY = 0.575)
 
 # ------------------------------------
 # GNEDIN PROCESS
 # ------------------------------------
 
-my_prior<-"GN"
-Z_GN <- esbm(Y, my_seed, N_iter, my_prior, my_z, a=1, b=1, gamma_GN=0.475)
+my_prior  <- "GN"
+Z_GN      <- esbm(Y, my_seed, N_iter, my_prior, my_z, a = 1, b = 1, gamma_GN = 0.475)
 ```
 
 Once the above steps have been done, **compute the log-marginal likelihoods** that will be used for comparing the performance of the different prior specifications, and **save the output** in the file `Posterior_No_Attributes.RData`.
