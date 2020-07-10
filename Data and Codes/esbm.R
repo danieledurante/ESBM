@@ -229,6 +229,24 @@ pr_cc <- function(z_post){
   return(c/N_iter)
 }
 
+####################################################################################
+# COMPUTE MISCLASSIFICATION ERROR  #################################################
+####################################################################################
+
+misclass <- function(memb,Y,a,b){
+ # in: vector of cluster labels (membr), VxV adjancency matrix (Y) and hyperparameters beta priors (a,b)
+ # out: VxV matrix c with elements c[vu]=fraction of iterations in which v and u are in the same cluster
+z <- dummy(memb)
+H <- ncol(z)
+V <- dim(Y)[1]
+Abs_Freq <- t(z)%*%Y%*%z
+diag(Abs_Freq) <- diag(Abs_Freq)/2
+Tot <- t(z)%*%matrix(1,V,V)%*%z
+diag(Tot) <- (diag(Tot)-table(memb))/2
+Rel_Freq <- (a+Abs_Freq)/(a+b+Tot)
+pred <- z%*%Rel_Freq%*%t(z)
+return(1-sum(diag(table(lowerTriangle(Y),lowerTriangle(pred>0.5))))/length(lowerTriangle(Y)))
+}
 
 ####################################################################################
 # COMPUTE LOG MARGINAL LIKELIHOOD  #################################################
