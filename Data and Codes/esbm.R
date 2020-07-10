@@ -234,7 +234,7 @@ pr_cc <- function(z_post){
 ####################################################################################
 
 misclass <- function(memb,Y,a,b){
- # in: vector of cluster labels (membr), VxV adjancency matrix (Y) and hyperparameters beta priors (a,b)
+ # in: vector of cluster labels (memb), VxV adjancency matrix (Y) and hyperparameters beta priors (a,b)
  # out: VxV matrix c with elements c[vu]=fraction of iterations in which v and u are in the same cluster
 z <- dummy(memb)
 H <- ncol(z)
