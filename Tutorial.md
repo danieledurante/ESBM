@@ -254,10 +254,10 @@ traceplot <- traceplot[,-2]
 traceplot$Group <- c(rep("DM",N_iter*2),rep("DP",N_iter*2),rep("PY",N_iter*2),rep("GN",N_iter*2))
 traceplot$Group <- factor(traceplot$Group,levels=c("DM","DP","PY","GN"))
 
-traceplot$Attr<- rep(c(rep("Without Attributes",20000),rep("With Attributes",20000)),4)
+traceplot$Attr <- rep(c(rep("Without Attributes",20000),rep("With Attributes",20000)),4)
 traceplot$Attr <- factor(traceplot$Attr,levels=c("Without Attributes","With Attributes"))
 
-Trace <- ggplot(traceplot,aes(y=value,x=X1))+geom_line()+facet_grid(Attr~Group)+ theme_bw()+labs(y="",x="")
+Trace <- ggplot(traceplot,aes(y=value,x=X1)) + geom_line() + facet_grid(Attr~Group) + theme_bw() + labs(y="",x="")
 ggsave("Trace.png",width=10,height=4.5)
 ```
 ![](https://github.com/danieledurante/ESBM/blob/master/Data%20and%20Codes/Trace.png)
