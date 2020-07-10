@@ -21,6 +21,8 @@ library(gridExtra)
 library(grid)
 library(cowplot)
 library(ggplot2)
+library(coda)
+library(dummies)
 
 load("network_1.RData")
 V <- dim(Y)[1]
