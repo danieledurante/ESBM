@@ -113,8 +113,8 @@ Z_DP <- esbm(Y, my_seed, N_iter, my_prior, my_z, a = 1, b = 1, alpha_PY = 2.55, 
 # PITMAN-YOR PROCESS
 # ------------------------------------
 
-my_prior  <- "PY"
-Z_PY      <- esbm(Y, my_seed, N_iter, my_prior, my_z, a = 1, b = 1, alpha_PY = -0.325, sigma_PY = 0.575)
+my_prior <- "PY"
+Z_PY <- esbm(Y, my_seed, N_iter, my_prior, my_z, a = 1, b = 1, alpha_PY = -0.325, sigma_PY = 0.575)
 
 # ------------------------------------
 # GNEDIN PROCESS
