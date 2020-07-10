@@ -370,7 +370,7 @@ quantile(apply(Z_GN_x[,(burn_in+1):N_iter],2,max))[c(2:4)]
 
 Also for this measure, the inclusion of **informative node-specific attributes provides improved performance**. It also interesting to notice how, unlike DM, DP and PY, the **Gnedin process can learn accurately the true number of underlying communities even without the additional information** provided by the node-specific attributes.
 
-To conclude our analysis, let us obtain a **point estimates** and **credible balls** for the community assignments of the different nodes. This is done by adapting the methods presented in [Wade and Ghahramani (2018)](https://projecteuclid.org/euclid.ba/1508378464) and implemented in the `R` package `mcclust.ext`. To apply these strategies we also require an estimate of the **co-clustering matrix**, whose generic element `c[v,u]` encodes the relative frequency of MCMC samples in which nodes `v` and `u` are in the same community. Such an estimate can be obtained via the function `pr_cc()` in the source code `esbm.R`.  
+To conclude our analysis, let us obtain a **point estimates** and **credible balls** for the community assignments of the different nodes. This is done by adapting the methods presented in [Wade and Ghahramani (2018)](https://projecteuclid.org/euclid.ba/1508378464) and implemented in the `R` package `mcclust.ext`. To apply these strategies we also require an estimate of the **co-clustering matrix**, whose generic element `c[v,u]` encodes the relative frequency of MCMC samples in which nodes `v` and `u` are in the same community. Such an estimate can be obtained via the function `pr_cc()` in the source code `esbm.R`. We also study the **misclassification error** using the function `misclass()` in the source code `esbm.R`.
 
 
 ``` r
@@ -385,6 +385,8 @@ memb_Z_DM    <- memb_Z_DM_VI$cl
 VI(z_0,t(memb_Z_DM))
 # Horizontal bound of the credible ball
 credibleball(memb_Z_DM_VI$cl,t(Z_DM[,(burn_in+1):N_iter]))[[5]]
+# Misclassification error
+misclass(memb_Z_DM,Y,a=1,b=1)
 
 
 c_Z_DM       <- pr_cc(Z_DM_x[,(burn_in+1):N_iter])
@@ -394,6 +396,9 @@ memb_Z_DM.   <- memb_Z_DM_VI$cl
 VI(z_0,t(memb_Z_DM))
 # Horizontal bound of the credible ball
 credibleball(memb_Z_DM_VI$cl,t(Z_DM_x[,(burn_in+1):N_iter]))[[5]]
+# Misclassification error
+misclass(memb_Z_DM,Y,a=1,b=1)
+
 
 # ------------------------------------
 # DIRICHLET PROCESS (CRP)
@@ -406,6 +411,8 @@ memb_Z_DP    <- memb_Z_DP_VI$cl
 VI(z_0,t(memb_Z_DP))
 # Horizontal bound of the credible ball
 credibleball(memb_Z_DP_VI$cl,t(Z_DP[,(burn_in+1):N_iter]))[[5]]
+# Misclassification error
+misclass(memb_Z_DP,Y,a=1,b=1)
 
 
 c_Z_DP       <- pr_cc(Z_DP_x[,(burn_in+1):N_iter])
@@ -415,6 +422,9 @@ memb_Z_DP    <- memb_Z_DP_VI$cl
 VI(z_0,t(memb_Z_DP))
 # Horizontal bound of the credible ball
 credibleball(memb_Z_DP_VI$cl,t(Z_DP_x[,(burn_in+1):N_iter]))[[5]]
+# Misclassification error
+misclass(memb_Z_DP,Y,a=1,b=1)
+
 
 # ------------------------------------
 # PITMAN-YOR PROCESS
@@ -427,6 +437,8 @@ memb_Z_PY    <- memb_Z_PY_VI$cl
 VI(z_0,t(memb_Z_PY))
 # Horizontal bound of the credible ball
 credibleball(memb_Z_PY_VI$cl,t(Z_PY[,(burn_in+1):N_iter]))[[5]]
+# Misclassification error
+missclass(memb_Z_PY,Y,a=1,b=1)
 
 
 c_Z_PY       <- pr_cc(Z_PY_x[,(burn_in+1):N_iter])
@@ -436,6 +448,9 @@ memb_Z_PY    <- memb_Z_PY_VI$cl
 VI(z_0,t(memb_Z_PY))
 # Horizontal bound of the credible ball
 credibleball(memb_Z_PY_VI$cl,t(Z_PY_x[,(burn_in+1):N_iter]))[[5]]
+# Misclassification error
+misclass(memb_Z_PY,Y,a=1,b=1)
+
 
 # ------------------------------------
 # GNEDIN PROCESS
@@ -448,6 +463,8 @@ memb_Z_GN    <- memb_Z_GN_VI$cl
 VI(z_0,t(memb_Z_GN))
 # Horizontal bound of the credible ball
 credibleball(memb_Z_GN_VI$cl,t(Z_GN[,(burn_in+1):N_iter]))[[5]]
+# Misclassification error
+misclass(memb_Z_GN,Y,a=1,b=1)
 
 
 c_Z_GN       <- pr_cc(Z_GN_x[,(burn_in+1):N_iter])
@@ -457,6 +474,8 @@ memb_Z_GN    <- memb_Z_GN_VI$cl
 VI(z_0,t(memb_Z_GN))
 # Horizontal bound of the credible ball
 credibleball(memb_Z_GN_VI$cl,t(Z_GN_x[,(burn_in+1):N_iter]))[[5]]
+# Misclassification error
+misclass(memb_Z_GN,Y,a=1,b=1)
 ```
 
 Also these **results are in line with our previous discussion**. Finally, the code to **reproduce the upper panel of Figure 2** and save it, is provided below.
