@@ -245,6 +245,22 @@ z_0 <- c(rep(1,20),rep(2,20),rep(3,20),rep(4,20),rep(5,20))
 load("Posterior_No_Attributes.RData")
 load("Posterior_Attributes.RData")
 ```
+Before performing posterior inference, let us **visualize the traceplots for the logarithm of the likelihood in equation [3]**, evaluated at the MCMC samples of `z`.
+
+``` r
+traceplot <- melt(cbind(l_y_DM,l_y_DM_x,l_y_DP,l_y_DP_x,l_y_PY,l_y_PY_x,l_y_GN,l_y_GN_x))
+traceplot <- traceplot[,-2]
+
+traceplot$Group <- c(rep("DM",N_iter*2),rep("DP",N_iter*2),rep("PY",N_iter*2),rep("GN",N_iter*2))
+traceplot$Group <- factor(traceplot$Group,levels=c("DM","DP","PY","GN"))
+
+traceplot$Attr<- rep(c(rep("Without Attributes",20000),rep("With Attributes",20000)),4)
+traceplot$Attr <- factor(traceplot$Attr,levels=c("Without Attributes","With Attributes"))
+
+Trace <- ggplot(traceplot,aes(y=value,x=X1))+geom_line()+facet_grid(Attr~Group)+ theme_bw()+labs(y="",x="")
+ggsave("Trace.png",width=10,height=4.5)
+```
+![](https://github.com/danieledurante/ESBM/blob/master/Data%20and%20Codes/Trace.png)
 
 We now compute the **logarithm of the marginal likelihoods** for the different priors and models [without and with attributes] evaluated via the harmonic mean approach in Eq. [17].
 
