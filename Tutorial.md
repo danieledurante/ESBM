@@ -240,7 +240,7 @@ Posterior inference
 This section contains the **code to perform estimation, uncertainty quantification and model selection for ESBM** leveraging the samples from the collapsed Gibbs sampler. In particular, we **reproduce the analyses in Table 2 and Figure 2 in the article**. To accomplish this goal let us first **upload the MCMC samples**, and define the `burn_in` along with the vector `z_0` containing the true community labels. 
 
 ``` r
-burn_in <- 10000
+burn_in <- 5000
 z_0 <- c(rep(1,20),rep(2,20),rep(3,20),rep(4,20),rep(5,20))
 load("Posterior_No_Attributes.RData")
 load("Posterior_Attributes.RData")
