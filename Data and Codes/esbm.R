@@ -235,7 +235,7 @@ pr_cc <- function(z_post){
 
 misclass <- function(memb,Y,a,b){
  # in: vector of cluster labels (memb), VxV adjancency matrix (Y) and hyperparameters beta priors (a,b)
- # out: VxV matrix c with elements c[vu]=fraction of iterations in which v and u are in the same cluster
+ # out: misclassification error when predicting the edges with the estimated block probabilities
 z <- dummy(memb)
 H <- ncol(z)
 V <- dim(Y)[1]
