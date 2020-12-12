@@ -734,7 +734,7 @@ Graphical representation [Figure 3: Row 2]
 Finally, the code to **reproduce the second row of Figure 3** is provided below.
 
 ``` r
-diag(Y) <- 1
+diag(Y) <- 0
 row_plot_Y <- as.data.frame(as.factor(matrix(z_0,V,1)))
 names(row_plot_Y) <-"z_0"
 rownames(Y) <- rownames(row_plot_Y)
