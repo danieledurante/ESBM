@@ -510,7 +510,7 @@ Also these **results are in line with our previous discussion**.
 
 Comparison with state-of-the-art competitors [Table 3: Scenario 1]
 ================
-Let us now reproduce the results for **scenario 1** in **Table 3**. Here the focus is on comparing the performance of between **ESBM with GN prior** and state–of–the–art competitors in the `R` libraries `igraph` and `randnet`. Such alternative strategies include the **Louvain algorithm** [Blondel et al., 2008], **spectral clustering** [Von Luxburg, 2007] and **regularized spectral clustering** [Amini et al., 2013]. 
+Let us now reproduce the results for **scenario 1** in **Table 3**. Here the focus is on comparing the performance of **ESBM with GN prior** and **state–of–the–art competitors** in the `R` libraries `igraph` and `randnet`. Such alternative strategies include the **Louvain algorithm** [Blondel et al., 2008], **spectral clustering** [Von Luxburg, 2007] and **regularized spectral clustering** [Amini et al., 2013]. 
 
 To compute the errors in the column `ERROR [EST]`, we require the **matrix of true edge probabilities** which have been used to simulate `network_1.RData`.
 
