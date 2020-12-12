@@ -459,7 +459,7 @@ memb_Z_PY <- memb_Z_PY_VI$cl
 credibleball(memb_Z_PY_VI$cl,t(Z_PY[,(burn_in+1):N_iter]))[[5]]
 
 # misclassification error
-missclass(memb_Z_PY,Y,a=1,b=1)
+misclass(memb_Z_PY,Y,a=1,b=1)
 
 # ------------------------------------
 
