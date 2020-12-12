@@ -376,7 +376,7 @@ quantile(apply(Z_GN[,(burn_in+1):N_iter],2,max))[c(2:4)]
 quantile(apply(Z_GN_x[,(burn_in+1):N_iter],2,max))[c(2:4)]
 ```
 
-Also for this measure, the inclusion of **informative node-specific attributes provides improved performance**. It also interesting to notice how, unlike DM, DP and PY, the **Gnedin process can learn accurately the true number of underlying groups even without the additional information** provided by the node-specific attributes.
+Also for this measure, the inclusion of **informative node-specific attributes provides improved performance**. It is also interesting to notice how, unlike DM, DP and PY, the **Gnedin process can learn accurately the true number of underlying groups even without the additional information** provided by the node-specific attributes.
 
 To conclude Table 2, let us obtain a **point estimates** and **credible balls** for the group assignments of the different nodes. This is done by adapting the methods presented in Wade and Ghahramani (2018) and implemented in the `R` package `mcclust.ext`. To apply these strategies we also require an estimate of the **co-clustering matrix**, whose generic element `c[v,u]` encodes the relative frequency of MCMC samples in which nodes `v` and `u` are in the same cluster. Such an estimate can be obtained via the function `pr_cc()` in the source code `esbm.R`. We also study the **misclassification error** using the function `misclass()` in the source code `esbm.R` (*see the seventh and eighth column of scenario 1 in Table 2 for the `VI` distance between the estimated partition and the 95% credible bound*). 
 
