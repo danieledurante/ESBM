@@ -32,7 +32,7 @@ V <- dim(Y)[1]
 diag(Y)
 ```
 
-As discussed in the article, the network under analysis has *V=80* and *5* groups displaying classical community structures [see first row of Figure 3 in the article]. 
+As discussed in the article, the network under analysis has *V=80* nodes and *5* groups displaying **classical community structures** [see first row of Figure 3 in the article]. 
 
 Setting the hyperparameters
 ================
