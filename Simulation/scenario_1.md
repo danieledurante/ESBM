@@ -71,7 +71,7 @@ probs_gnedin <- HGnedin(V, 1:V, gamma = gamma)
 round(sum(1:V*probs_gnedin))
 ```
 
-Here we **set the hyperparameters so that the expectation of `H` is close to *10* under all the four priors**. This is twice as many as the true number of true groups to check whether our results are robust to hyperparameters settings.
+Here we **set the hyperparameters so that the expectation of `H` is close to *10* under all the four priors**. This is twice as many as the true number of groups to check whether our results are robust to hyperparameters settings.
 
 Posterior computation via collapsed Gibbs sampler
 ================
