@@ -45,7 +45,7 @@ For the hyperparameters of the `Beta(a,b)` **priors on the block probabilities**
 sigma_dm <- 0   
 H_dm <- 50 # Conservative upper bound 
 beta_dm <- 3.5/H_dm 
-expected_cl_py(V, sigma = sigma_dm, theta = beta_dm*H_dm, H = H_dm)
+round(expected_cl_py(V, sigma = sigma_dm, theta = beta_dm*H_dm, H = H_dm))
 
 # ------------------------------------
 # DIRICHLET PROCESS (CRP)
@@ -53,7 +53,7 @@ expected_cl_py(V, sigma = sigma_dm, theta = beta_dm*H_dm, H = H_dm)
 sigma_dp <- 0   
 H_dp <- Inf 
 alpha_dp <- 3
-expected_cl_py(V, sigma = sigma_dp, theta = alpha_dp, H = H_dp)
+round(expected_cl_py(V, sigma = sigma_dp, theta = alpha_dp, H = H_dp))
 
 # ------------------------------------
 # PITMAN-YOR PROCESS
@@ -61,14 +61,14 @@ expected_cl_py(V, sigma = sigma_dp, theta = alpha_dp, H = H_dp)
 sigma_py <- 0.6
 H_py <- Inf 
 alpha_py <- -0.3
-expected_cl_py(V, sigma = sigma_py, theta = alpha_py, H = H_py)
+round(expected_cl_py(V, sigma = sigma_py, theta = alpha_py, H = H_py))
 
 # ------------------------------------
 # GNEDIN PROCESS
 # ------------------------------------
 gamma <- 0.45
 probs_gnedin <- HGnedin(V, 1:V, gamma = gamma)
-sum(1:V*probs_gnedin)
+round(sum(1:V*probs_gnedin))
 ```
 
 Here we **set the hyperparameters so that the expectation of `H` is close to *10* under all the four priors**. This is twice as many as the true number of true groups to check whether our results are robust to hyperparameters settings.
