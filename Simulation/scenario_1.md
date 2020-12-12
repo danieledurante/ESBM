@@ -708,7 +708,7 @@ Y_augmented <- matrix(0,V+1,V+1)
 Y_augmented[1:V,1:V] <- Y
 ```
 
-Once the edges for the new incoming nodes have been simulated, we can compute a **plug–in estimate for the predictive probabilities of the cluster allocations** by applying Eq. [15] to each new node (one at-a-time). This can be done via the function `pred_esbm()` in the source code [`esbm.R`]. The final prediction of the group allocation for each node is that label with the highest predicted probability. Once these predictions have been obtained, we also compute the **misclassification error** by comparing such quantities with the true labels in `memb_new`.
+Once the edges for the new incoming nodes have been simulated, we can compute a **plug–in estimate for the predictive probabilities of the cluster allocations** by applying Eq. [15] to each new node (one at-a-time). This can be done via the function `pred_esbm()` in the source code `esbm.R`. The final prediction of the group allocation for each node is that label with the highest predicted probability. Once these predictions have been obtained, we also compute the **misclassification error** by comparing such quantities with the true labels in `memb_new`.
 
 
 ``` r
