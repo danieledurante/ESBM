@@ -1,6 +1,6 @@
 Simulation: Scenario 1
 ================
-This tutorial contains guidelines and code to perform the analyses for the first scenario `network_1.RData` considered in the simulation study of the article **extended stochastic block models with application to criminal networks**. In particular, you will find a detailed step-by-step guide and `R` code to **implement the collapsed Gibbs-sampler presented in the article** and to **fully reproduce the results for the first scenario** presented in Section 4 of the article. For implementation purposes, **execute the code below considering the same order in which is presented**.
+This tutorial contains guidelines and code to perform the analyses for the first scenario `network_1.RData` considered in the simulation study of the article **extended stochastic block models with application to criminal networks**. In particular, you will find a detailed step-by-step guide and `R` code to **implement the collapsed Gibbs sampler presented in the article** and to **fully reproduce the results for the first scenario** presented in Section 4 of the article. For implementation purposes, **execute the code below considering the same order in which is presented**.
 
 Upload the data
 ================
@@ -75,11 +75,11 @@ Here we **set the hyperparameters so that the expectation of `H` is close to *10
 
 Posterior computation via collapsed Gibbs sampler
 ================
-This section contains the code to **implement collapsed Gibbs sampler for ESBM** [function `esbm()`] and to **evaluate marginal likelihoods** [function `log_pY_z()`] for model selection. Such a code is applied to the four relevant examples of Gibbs-type priors discussed in the article, both without and with node-specific attributes. See the source code [`esbm.R`]() for a detailed description of the inputs and the outputs of the two functions `esbm()` and `log_pY_z()`.
+This section contains the code to **implement the collapsed Gibbs sampler for ESBM** [function `esbm()`] and to **evaluate marginal likelihoods** [function `log_pY_z()`] for model selection. Such a code is applied to the four relevant examples of Gibbs-type priors discussed in the article, both without and with node-specific attributes. See the source code [`esbm.R`] for a detailed description of the inputs and the outputs of the two functions `esbm()` and `log_pY_z()`.
 
 Implementation without node-specific attributes
 ------------------
-Let us first **perform posterior computation for the model without node-attributes**. To accomplish this goal, execute the code below.
+Let us first **perform posterior computation for the model without node attributes**. To do this, execute the code below.
 
 ``` r
 N_iter <- 50000
@@ -225,14 +225,13 @@ for (t in 1:N_iter){
 }
 
 # save the output
-
 save(Z_DP_x,l_y_DP_x,Z_PY_x,l_y_PY_x,Z_GN_x,l_y_GN_x,Z_DM_x,l_y_DM_x,file="Posterior_Attributes1.RData")
 rm(Z_DP_x,l_y_DP_x,Z_PY_x,l_y_PY_x,Z_GN_x,l_y_GN_x,Z_DM_x,l_y_DM_x)
 ```
 
 Posterior inference under ESBM [Table 2: Scenario 1]
 ================
-This section contains the **code to perform estimation, uncertainty quantification and model selection for ESBM** leveraging the samples from the collapsed Gibbs sampler. In particular, we **reproduce the analyses in Tables 2-3 and Figure 3 in the article**, for `scenario 1`. To accomplish this goal let us first **upload the MCMC samples**, and define the `burn_in` along with the vector `z_0` containing the true group labels. 
+This section contains the **code to perform estimation, uncertainty quantification and model selection for ESBM** leveraging the samples from the collapsed Gibbs sampler. In particular, we **reproduce the analyses in Tables 2 of the article**, for **scenario 1**. To accomplish this goal let us first **upload the MCMC samples**, and define the `burn_in` along with the vector `z_0` containing the true group labels. 
 
 ``` r
 burn_in <- 10000
@@ -256,7 +255,7 @@ Trace <- ggplot(traceplot,aes(y=value,x=X1)) + geom_line() + facet_grid(Attr~Gro
 Trace
 ```
 
-The above traceplots confirm that our Gibbs sampler has **satisfactory mixing and rapid convergence**. Due to the high stability of the chains for the quantity in Eq. [1], we can reliably compute the **logarithm of the marginal likelihoods** for the different priors and models [without and with attributes] via the harmonic mean approach in Eq. [14] (see the first and second column of scenario 1 in Table 2).
+The above traceplots confirm that our Gibbs sampler has **satisfactory mixing and rapid convergence**. Due to the stability of the chains for the quantity in Eq. [1], we can reliably compute the **logarithm of the marginal likelihoods** for the different priors and models [without and with attributes] via the harmonic mean in Eq. [14] (*see the first and second column of scenario 1 in Table 2*).
 
 ``` r
 # ------------------------------------
@@ -318,7 +317,7 @@ l_y_post_GN_x
 
 As it can be noticed, the **Gnedin process tends to perform slightly better** in both scenarios relative to the other priors. Moreover, as expected, the overall **learning process benefits from informative node-specific attributes**.   
 
-The **posterior mean of the VI distance from the true partition `z_0`** can be instead obtained using the `VI()` function within the `mcclust.ext` package [Wade and Ghahramani, 2018] as follow (see the third and fourth column of scenario 1 in Table 2).
+The **posterior mean of the VI distance from the true partition** `z_0` can be instead obtained using the `VI()` function within the `mcclust.ext` package [Wade and Ghahramani, 2018] as follow (*see the third and fourth column of scenario 1 in Table 2*).
 
 
 ``` r
@@ -349,7 +348,7 @@ VI(z_0,t(Z_GN_x[,(burn_in+1):N_iter]))
 
 The above results **confirm the rankings** obtained from the analysis of the marginal likelihoods.
 
-As discussed in the article, accurate learning of the underlying number of groups is a fundamental goal. Hence, let us study the **quantiles of the posterior distribution for the number of non-empty groups** under the different priors and models (see the fifth and sixth column of scenario 1 in Table 2). 
+As discussed in the article, accurate learning of the underlying number of groups is a fundamental goal. Hence, let us study the **quantiles of the posterior distribution for the number of non-empty groups** under the different priors and models (*see the fifth and sixth column of scenario 1 in Table 2*). 
 
 ``` r
 # ------------------------------------
@@ -379,7 +378,7 @@ quantile(apply(Z_GN_x[,(burn_in+1):N_iter],2,max))[c(2:4)]
 
 Also for this measure, the inclusion of **informative node-specific attributes provides improved performance**. It also interesting to notice how, unlike DM, DP and PY, the **Gnedin process can learn accurately the true number of underlying groups even without the additional information** provided by the node-specific attributes.
 
-To conclude Table 2, let us obtain a **point estimates** and **credible balls** for the group assignments of the different nodes. This is done by adapting the methods presented in Wade and Ghahramani (2018) and implemented in the `R` package `mcclust.ext`. To apply these strategies we also require an estimate of the **co-clustering matrix**, whose generic element `c[v,u]` encodes the relative frequency of MCMC samples in which nodes `v` and `u` are in the same cluster. Such an estimate can be obtained via the function `pr_cc()` in the source code `esbm.R`. We also study the **misclassification error** using the function `misclass()` in the source code `esbm.R` (see the seventh and eight column of scenario 1 in Table 2 for the `VI` distance between the estimated partition and the 95% credible bound). 
+To conclude Table 2, let us obtain a **point estimates** and **credible balls** for the group assignments of the different nodes. This is done by adapting the methods presented in Wade and Ghahramani (2018) and implemented in the `R` package `mcclust.ext`. To apply these strategies we also require an estimate of the **co-clustering matrix**, whose generic element `c[v,u]` encodes the relative frequency of MCMC samples in which nodes `v` and `u` are in the same cluster. Such an estimate can be obtained via the function `pr_cc()` in the source code `esbm.R`. We also study the **misclassification error** using the function `misclass()` in the source code `esbm.R` (*see the seventh and eighth column of scenario 1 in Table 2 for the `VI` distance between the estimated partition and the 95% credible bound*). 
 
 
 ``` r
@@ -396,7 +395,7 @@ memb_Z_DM <- memb_Z_DM_VI$cl
 # horizontal bound of the credible ball
 credibleball(memb_Z_DM_VI$cl,t(Z_DM[,(burn_in+1):N_iter]))[[5]]
 
-# misclassification error
+# misclassification error [in-sample for edges]
 misclass(memb_Z_DM,Y,a=1,b=1)
 
 # ------------------------------------
@@ -410,7 +409,7 @@ memb_Z_DM  <- memb_Z_DM_VI$cl
 # horizontal bound of the credible ball
 credibleball(memb_Z_DM_VI$cl,t(Z_DM_x[,(burn_in+1):N_iter]))[[5]]
 
-# misclassification error
+# misclassification error [in-sample for edges]
 misclass(memb_Z_DM,Y,a=1,b=1)
 
 
@@ -427,7 +426,7 @@ memb_Z_DP <- memb_Z_DP_VI$cl
 # horizontal bound of the credible ball
 credibleball(memb_Z_DP_VI$cl,t(Z_DP[,(burn_in+1):N_iter]))[[5]]
 
-# misclassification error
+# misclassification error [in-sample for edges]
 misclass(memb_Z_DP,Y,a=1,b=1)
 
 # ------------------------------------
@@ -441,7 +440,7 @@ memb_Z_DP <- memb_Z_DP_VI$cl
 # horizontal bound of the credible ball
 credibleball(memb_Z_DP_VI$cl,t(Z_DP_x[,(burn_in+1):N_iter]))[[5]]
 
-# misclassification error
+# misclassification error [in-sample for edges]
 misclass(memb_Z_DP,Y,a=1,b=1)
 
 
@@ -458,7 +457,7 @@ memb_Z_PY <- memb_Z_PY_VI$cl
 # horizontal bound of the credible ball
 credibleball(memb_Z_PY_VI$cl,t(Z_PY[,(burn_in+1):N_iter]))[[5]]
 
-# misclassification error
+# misclassification error [in-sample for edges]
 misclass(memb_Z_PY,Y,a=1,b=1)
 
 # ------------------------------------
@@ -472,7 +471,7 @@ memb_Z_PY <- memb_Z_PY_VI$cl
 # horizontal bound of the credible ball
 credibleball(memb_Z_PY_VI$cl,t(Z_PY_x[,(burn_in+1):N_iter]))[[5]]
 
-# misclassification error
+# misclassification error [in-sample for edges]
 misclass(memb_Z_PY,Y,a=1,b=1)
 
 
@@ -489,7 +488,7 @@ memb_Z_GN <- memb_Z_GN_VI$cl
 # horizontal bound of the credible ball
 credibleball(memb_Z_GN_VI$cl,t(Z_GN[,(burn_in+1):N_iter]))[[5]]
 
-# misclassification error
+# misclassification error [in-sample for edges]
 misclass(memb_Z_GN,Y,a=1,b=1)
 
 # ------------------------------------
@@ -503,7 +502,7 @@ memb_Z_GN <- memb_Z_GN_VI$cl
 # horizontal bound of the credible ball
 credibleball(memb_Z_GN_VI$cl,t(Z_GN_x[,(burn_in+1):N_iter]))[[5]]
 
-# misclassification error
+# misclassification error [in-sample for edges]
 misclass(memb_Z_GN,Y,a=1,b=1)
 ```
 
@@ -511,7 +510,7 @@ Also these **results are in line with our previous discussion**.
 
 Comparison with state-of-the-art competitors [Table 3: Scenario 1]
 ================
-Let us now reproduce the results for `scenario 1` in **Table 3**. Here the focus is on comparing the performance of between **ESBM with GN prior**, and state–of–the–art competitors in the `R` libraries `igraph` and `randnet`. Such alternative strategies include the **Louvain algorithm** [Blondel et al., 2008], **spectral clustering** (Von Luxburg, 2007) and **regularized spectral clustering** (Amini et al., 2013). 
+Let us now reproduce the results for **scenario 1** in **Table 3**. Here the focus is on comparing the performance of between **ESBM with GN prior** and state–of–the–art competitors in the `R` libraries `igraph` and `randnet`. Such alternative strategies include the **Louvain algorithm** [Blondel et al., 2008], **spectral clustering** [Von Luxburg, 2007] and **regularized spectral clustering** [Amini et al., 2013]. 
 
 To compute the errors in the column `ERROR [EST]`, we require the **matrix of true edge probabilities** which have been used to simulate `network_1.RData`.
 
@@ -533,7 +532,7 @@ pi_true[v,u] <- block_matrix[z_0[v],z_0[u]]
 pi_true <- pi_true+t(pi_true)
 ```
 
-The following code provides the performance measures in columns 1, 4 and 7 of Table 3 for the **unsupervised GN prior**.
+The following code provides the performance measures in *columns 1, 4 and 7 of Table 3* for the **unsupervised GN prior**.
 
 ``` r
 # ------------------------------------
@@ -556,7 +555,7 @@ VI(z_0,t(memb_Z_GN))
 mean(abs(lowerTriangle(edge_est(memb_Z_GN,Y,a=1,b=1))-lowerTriangle(pi_true)))
 ```
 
-Similarly, the performance measures in columns 1, 4 and 7 of Table 3 for the **supervised GN prior** are obtained as follow.
+Similarly, the performance measures in *columns 1, 4 and 7 of Table 3* for the **supervised GN prior** are obtained as follow.
 
 ``` r
 # ------------------------------------
@@ -579,7 +578,7 @@ VI(z_0,t(memb_Z_GN))
 mean(abs(lowerTriangle(edge_est(memb_Z_GN,Y,a=1,b=1))-lowerTriangle(pi_true)))
 ```
 
-Let us now focus on the performance of the **Louvain algorithm** in columns 1, 4 and 7 of Table 3. To implement this strategy we rely on the function `cluster_louvain` within the `R` library `igraph`.
+Let us now focus on the performance of the **Louvain algorithm** in *columns 1, 4 and 7 of Table 3*. To implement this strategy we rely on the function `cluster_louvain()` within the `R` library `igraph`.
 
 ``` r
 # ------------------------------------
@@ -634,7 +633,7 @@ H_select[8] <- ecv.R$auc.rank
 sel_H <- round(median(H_select))
 ```
 
-Once `sel_H` is available, we can obtain the performance measures in columns 1, 4 and 7 of Table 3 under **spectral clustering** and **regularized spectral clustering** as follow.
+Once `sel_H` is available, we can obtain the performance measures in *columns 1, 4 and 7 of Table 3* under **spectral clustering** and **regularized spectral clustering** as follow.
 
 ``` r
 # ------------------------------------
@@ -677,7 +676,7 @@ mean(abs(lowerTriangle(edge_est(r_sc,Y,a=1,b=1))-lowerTriangle(pi_true)))
 
 Predictive performance for the group membership of new nodes
 ================
-We study the performance of the **supervised GN process prior** (which yields the most accurate inference within the **ESBM** class for `scenario 1`) in predicting the group membership of new incoming nodes. To accomplish this goal, we first simulate the edges between `300` new nodes and those comprising the original network `Y`. Among these incoming nodes, `50` belong to a new group not yet observed in `Y` which is characterized by low connection probability with nodes in the original `5` clusters.
+We study the performance of the **supervised GN process prior** (which yields the most accurate inference within the **ESBM** class for **scenario 1**) in **predicting the group membership of new incoming nodes**. To accomplish this goal, we first simulate the edges between `300` new nodes and those comprising the original network `Y`. Among these incoming nodes, `50` belong to a new group not yet observed in `Y` (which is characterized by low connection probability with nodes in the original `5` clusters).
 
 ``` r
 set.seed(1)
@@ -709,7 +708,7 @@ Y_augmented <- matrix(0,V+1,V+1)
 Y_augmented[1:V,1:V] <- Y
 ```
 
-Once the edges for the new incoming nodes have been simulated, we can compute a **plug–in estimate for the predictive probabilities of the cluster allocations** by applying Eq. [15] to each new node (one at-a-time). This can be done via the function `pred_esbm()` in the source code [`esbm.R`](). The final prediction of the group allocation for each node, is that label with the highest predicted probability. Once these predicted group memberships have been obtained, we also compute the **misclassification error** by comparing such quantities with the true labels in `memb_new`.
+Once the edges for the new incoming nodes have been simulated, we can compute a **plug–in estimate for the predictive probabilities of the cluster allocations** by applying Eq. [15] to each new node (one at-a-time). This can be done via the function `pred_esbm()` in the source code [`esbm.R`]. The final prediction of the group allocation for each node is that label with the highest predicted probability. Once these predictions have been obtained, we also compute the **misclassification error** by comparing such quantities with the true labels in `memb_new`.
 
 
 ``` r
@@ -722,7 +721,7 @@ Y_augmented[V+1,1:V] <- Y_augmented[1:V,V+1] <- Y_new[v,]
 Post_Prob[v,] <- pred_esbm(Y_augmented, prior="GN", z_hat=memb_Z_GN,a = 1, b = 1, gamma_GN = 0.45)
 }
 
-# compute misclassification
+# compute misclassification error
 (V_new-sum(diag(table(memb_new,apply(Post_Prob,1,which.max)))))/V_new
 ```
 
