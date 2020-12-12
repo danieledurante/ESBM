@@ -723,7 +723,6 @@ Post_Prob[v,] <- pred_esbm(Y_augmented, prior="GN", z_hat=memb_Z_GN,a = 1, b = 1
 }
 
 # compute misclassification
-table(memb_new,apply(Post_Prob,1,which.max))
 (V_new-sum(diag(table(memb_new,apply(Post_Prob,1,which.max)))))/V_new
 ```
 
