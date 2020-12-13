@@ -795,12 +795,12 @@ norm_transitivity_pred <- norm_transitivity[Pred_memb]
 norm_betwenness_pred <- norm_betwenness[Pred_memb]
 
 # summaries of the difference between such quantities for held-out affiliates
-mean((norm_transitivity_pred-norm_betwenness_pred)[which(Role_test=="aff”)])
-quantile((norm_transitivity_pred-norm_betwenness_pred)[which(Role_test=="aff”)],probs=c(0.25,0.5,0.75))
+mean((norm_transitivity_pred-norm_betwenness_pred)[which(Role_test=="aff")])
+quantile((norm_transitivity_pred-norm_betwenness_pred)[which(Role_test=="aff")],probs=c(0.25,0.5,0.75))
 
 # summaries of the difference between such quantities for held-out bosses
-mean((norm_transitivity_pred-norm_betwenness_pred)[which(Role_test==“boss”)])
-quantile((norm_transitivity_pred-norm_betwenness_pred)[which(Role_test==“boss”)],probs=c(0.25,0.5,0.75))
+mean((norm_transitivity_pred-norm_betwenness_pred)[which(Role_test=="boss")])
+quantile((norm_transitivity_pred-norm_betwenness_pred)[which(Role_test=="boss")],probs=c(0.25,0.5,0.75))
 ```
 
 
