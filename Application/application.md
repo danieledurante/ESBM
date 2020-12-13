@@ -792,7 +792,7 @@ norm_betwenness <- (betwenness_block-min(betwenness_block))/(max(betwenness_bloc
 # assign to each held-out suspect the normalized betweenness 
 # and local transitivity of the predicted group
 norm_transitivity_pred <- norm_transitivity[Pred_memb]
-norm_betwenness_pred <- norm_betwenness_pred[Pred_memb]
+norm_betwenness_pred <- norm_betwenness[Pred_memb]
 
 # summaries of the difference between such quantities for held-out affiliates
 mean((norm_transitivity_pred-norm_betwenness_pred)[which(Role_test=="aff”)])
