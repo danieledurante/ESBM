@@ -146,7 +146,7 @@ for (t in 1:N_iter){
 }
 
 # save the output
-save(Z_DP,l_y_DP,Z_PY,l_y_PY,Z_GN,l_y_GN,Z_DM,l_y_DM,file="Posterior_No_Attributes2.RData")
+save(Z_DP,l_y_DP,Z_PY,l_y_PY,Z_GN,l_y_GN,Z_DM,l_y_DM,file="Simulation/Posterior_No_Attributes2.RData")
 rm(Z_DP,l_y_DP,Z_PY,l_y_PY,Z_GN,l_y_GN,Z_DM,l_y_DM)
 ```
 
@@ -225,7 +225,7 @@ for (t in 1:N_iter){
 }
 
 # save the output
-save(Z_DP_x,l_y_DP_x,Z_PY_x,l_y_PY_x,Z_GN_x,l_y_GN_x,Z_DM_x,l_y_DM_x,file="Posterior_Attributes2.RData")
+save(Z_DP_x,l_y_DP_x,Z_PY_x,l_y_PY_x,Z_GN_x,l_y_GN_x,Z_DM_x,l_y_DM_x,file="Simulation/Posterior_Attributes2.RData")
 rm(Z_DP_x,l_y_DP_x,Z_PY_x,l_y_PY_x,Z_GN_x,l_y_GN_x,Z_DM_x,l_y_DM_x)
 ```
 
@@ -236,8 +236,8 @@ This section contains the **code to perform estimation, uncertainty quantificati
 ``` r
 burn_in <- 10000
 z_0 <- c(rep(1,30),rep(2,5),rep(3,30),rep(4,5),rep(5,10))
-load("Posterior_No_Attributes2.RData")
-load("Posterior_Attributes2.RData")
+load("Simulation/Posterior_No_Attributes2.RData")
+load("Simulation/Posterior_Attributes2.RData")
 ```
 Before performing posterior inference, let us **visualize the traceplots for the logarithm of the likelihood in Eq. [1]**, evaluated at the MCMC samples of `z` under the different priors, both with and without nodal attributes.
 
