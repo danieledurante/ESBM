@@ -1,15 +1,15 @@
-# ESBM: Extended stochastic block models for networks
+# ESBM: Extended stochastic block models
 
-This repository is associated with the article [**extended stochastic block models**](https://github.com/danieledurante/ESBM) and aims at providing detailed materials and codes to perform posterior computation and inference under the general **ESBM** class presented in the article.
+This repository is associated with the article **extended stochastic block models with application to criminal networks** and aims at providing detailed materials and codes to implement the general **ESBM** class presented in the article, and to fully reproduce the results presented in Sections 4 and 5.
 
-The documentation is organized in two main parts described below.  
+The documentation is organized in **three main folders** described below.  
 
-- [`Data and Codes`](https://github.com/danieledurante/ESBM/tree/master/Data%20and%20Codes).  It contains [i] useful data to reproduce the [`Tutorial.md`](https://github.com/danieledurante/ESBM/blob/master/Tutorial.md), [ii]  commented source `R` functions in [`esbm.R`](https://github.com/danieledurante/ESBM/blob/master/Data%20and%20Codes/esbm.R) to perform posterior computation and inference under the **ESBM** class, and [iii]  the additional `cpp` file [`stirling.cpp`](https://github.com/danieledurante/ESBM/blob/master/Data%20and%20Codes/stirling.cpp) that is necessary to study the **Gibbs-type** priors discussed in the article.
+- `Source Code`.  It contains all the **source** `R` **functions** [see `esbm.R`] which are required to perform posterior computation and inference under the **ESBM** class, and  the **additional** `cpp` **file** [see `stirling.cpp`] that is necessary to study the **Gibbs-type** priors discussed in the article.
 
-- [`Tutorial.md`](https://github.com/danieledurante/ESBM/blob/master/Tutorial.md). It contains a comprehensive tutorial to perform posterior computation and inference under the ESBM, leveraging the methods and algorithms presented in the article and implemented in the source code [`esbm.R`](https://github.com/danieledurante/ESBM/blob/master/Data%20and%20Codes/esbm.R). To accomplish this goal, we reproduce step-by-step the analysis of `network 1` in the simulation study within the article.
+- `Simulation`. It contains the three comprehensive tutorials [see `scenario_1.md`, `scenario_2.md` and `scenario_3.md`] to **fully reproduce step-by-step the results for the simulation scenarios 1, 2 and 3, respectively, presented in Section 4** of the article. The folder contains also the **simulated networks associated with these three scenarios** [see `network_1.RData`, `network_2.RData` and `network_3.RData`].  
+
+- `Application`. It contains a comprehensive tutorial [see `application.md`] to **fully reproduce step-by-step the pre-processing and all the analysis of the *Infinito network*, presented in Section 5** of the article. The folder contains also the **pre-processed *Infinito network* which is studied in the article** [see `crime_net.RData`]. The raw open data are available online at https://sites.google.com/site/ucinetsoftware/datasets/covert-networks/ndranghetamafia2. 
 
 The analyses are performed with a **MacBook Pro (OS X El Capitan, version 10.11.6)**, using a `R` version **3.6.3**. 
 
-All the above functions rely on a **basic and reproducible `R` implementation**, mostly meant to provide a clear understanding of the computational routines and steps associated with the proposed model. **Optimized computational routines relying on C++ coding can be easily considered.** Generalizations to include additional priors in the Gibbs-type class, and different types of edges and attributes require minor modifications on the functions in the file [`esbm.R`](https://github.com/danieledurante/ESBM/blob/master/Data%20and%20Codes/esbm.R).
-
-The **bill co-sponsorship network** considered in the application is openly available at [`https://github.com/briatte/parlnet`](https://github.com/briatte/parlnet). More specifically, we study a dichotomized version of the network `net_it_ca2013` within the data frame [`parlnet.rda`](https://github.com/briatte/parlnet/blob/master/parlnet.rda).
+All the above functions rely on a **basic and reproducible `R` implementation**, mostly meant to provide a clear understanding of the computational routines and steps associated with the proposed model. **Optimized computational routines relying on C++ coding can be easily considered.** Generalizations to include additional priors in the Gibbs-type class, and different types of edges and attributes require minor modifications on the functions in the file `esbm.R`.
