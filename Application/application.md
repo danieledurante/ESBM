@@ -745,7 +745,7 @@ log_pY_z(Y,r_sc,1,1)
 
 Results are still worse relative to those provided by **ESBM**, thereby confirming the **superior performance of the ESBM class also in this specific application**.
 
-Predictive performance for the group membership of new nodes [Table 5]
+Predictive performance for held-out suspects [Table 5]
 ================
 We study the performance of the **supervised GN process prior** (which yields the most accurate inference within the **ESBM** class for the **Infinito network**) in **predicting the group membership of the held-out suspects**. To accomplish this goal, let us first **create an augmented adjacency matrix** which adds to `Y` a last row and column that will contain the edges between a new incoming suspect in the held-out set and the `V=84` original suspects (Note: prediction is done for one node at-a-time). 
 
