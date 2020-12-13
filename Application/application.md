@@ -807,7 +807,7 @@ quantile((norm_transitivity_pred-norm_betwenness_pred)[which(Role_test=="boss")]
 Graphical representations [Figures 1, 2, 4, 5 and 6]
 ================
 
-Let us first **define the colors for the different categories of the attribute** `RoleLocale. Such colors will be used for Figures 1, 2, 4, 5 and 6.
+Let us first **define the colors for the different categories of the attribute** `RoleLocale`. Such colors will be used for Figures 1, 2, 4, 5 and 6.
 
 ``` r
 mycolors <- c(brewer.pal(10,"RdBu")[c(4,7)],brewer.pal(10,"PRGn")[c(7,4)],brewer.pal(9,"YlOrBr")[3],
