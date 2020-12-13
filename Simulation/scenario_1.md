@@ -2,7 +2,7 @@ Simulation: Scenario 1
 ================
 This tutorial contains guidelines and code to perform the analyses for the first scenario `network_1.RData` considered in the simulation study of the article **extended stochastic block models with application to criminal networks**. In particular, you will find a detailed step-by-step guide and `R` code to **implement the collapsed Gibbs sampler presented in the article** and to **fully reproduce the results for the first scenario** presented in Section 4 of the article. For implementation purposes, **execute the code below considering the same order in which is presented**.
 
-Upload the data
+Import the data
 ================
 To start the analysis, **set the working directory** where the `README` file is located. Once this has been done, **clean the workspace, and load the data along with useful** `R` **packages**.
 

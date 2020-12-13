@@ -116,7 +116,7 @@ save(Y,Y_test,Locale,Locale_test,Role,Role_test,RoleLocale,RoleLocale_test,file=
 rm(list=ls())
 ```
 
-Upload the data
+Import the data
 ================
 To start the analysis, **set the working directory** where the `README` file is located. Once this has been done, **clean the workspace, and load the data along with useful** `R` **packages**.
 
