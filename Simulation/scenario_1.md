@@ -231,7 +231,7 @@ rm(Z_DP_x,l_y_DP_x,Z_PY_x,l_y_PY_x,Z_GN_x,l_y_GN_x,Z_DM_x,l_y_DM_x)
 
 Posterior inference under ESBM [Table 2: Scenario 1]
 ================
-This section contains the **code to perform estimation, uncertainty quantification and model selection for ESBM** leveraging the samples from the collapsed Gibbs sampler. In particular, we **reproduce the analyses in Table 2 of the article**, for **scenario 1**. To accomplish this goal let us first **upload the MCMC samples**, and define the `burn_in` along with the vector `z_0` containing the true group labels. 
+This section contains the **code to perform estimation, uncertainty quantification and model selection for ESBM** leveraging the samples from the collapsed Gibbs sampler. In particular, we **reproduce the analyses in Table 2 of the article**, for **scenario 1**. To accomplish this goal let us first **import the MCMC samples**, and define the `burn_in` along with the vector `z_0` containing the true group labels. 
 
 ``` r
 burn_in <- 10000
