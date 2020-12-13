@@ -1126,7 +1126,7 @@ betwenness_block_esbm <- c(c(t(z)%*%betweenness(net_Y))/(table(memb_Z_GN)))
 data_measure <- data.frame(cbind(c(betwenness_block_esbm,betwenness_block_Louv,betwenness_block_sc),c(transivity_block_esbm,transivity_block_Louv,transivity_block_sc)))
 rownames(data_measure)<-c(1:dim(data_measure)[[1]])
 
-# define a grouping variable code as follow:
+# define a grouping variable coded as follow:
 # 1 to 15: Ids of the groups estimated under ESBM
 # 16: Unique Id for the groups estimated under Louvain and spectral clustering
 data_measure$group <- as.factor(c(1:15,rep(16,14)))
