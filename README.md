@@ -1,6 +1,6 @@
 # ESBM: Extended stochastic block models
 
-This repository is associated with the article **extended stochastic block models with application to criminal networks** and aims at providing detailed materials and codes to implement the general **ESBM** class presented in the article, and to fully reproduce the results presented in Sections 4 and 5.
+This repository is associated with the article **extended stochastic block models with application to criminal networks** and aims at providing detailed materials and codes to implement the general **ESBM** class presented in the article, and **fully reproduce the results presented in Sections 4 and 5**.
 
 The documentation is organized in **three main folders** described below.  
 
