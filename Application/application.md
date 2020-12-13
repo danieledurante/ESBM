@@ -715,7 +715,7 @@ length(table(r_sc))
 log_pY_z(Y,r_sc,1,1)
 ```
 
-All the above **deviances are considerably higher relative to those obtain under ESBM with GN prior**. Since `sel_H` is lower than the one obtained under the GN prior, let us also compute the deviance for spectral clustering with the same number of clusters `H = 15` inferred by the GN process.
+All the above **deviances are considerably higher relative to those provided by ESBM with GN prior**. Since `sel_H` is lower than the one obtained under the GN prior, let us also compute the deviance for spectral clustering with the same number of clusters `H = 15` inferred by the GN process.
 
 ``` r
 # ------------------------------------
