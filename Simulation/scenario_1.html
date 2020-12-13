@@ -419,10 +419,10 @@ summary {
 </div>
 <div id="upload-the-data" class="section level1">
 <h1>Upload the data</h1>
-<p>To start the analysis, <strong>set the working directory</strong> where the simulated network <code>network_1.RData</code>, and the source codes <code>esbm.R</code> and <code>stirling.cpp</code> are located. Once this has been done, <strong>clean the workspace, and load the data along with useful</strong> <code>R</code> <strong>packages</strong>.</p>
+<p>To start the analysis, <strong>set the working directory</strong> where the <code>README</code> file is located. Once this has been done, <strong>clean the workspace, and load the data along with useful</strong> <code>R</code> <strong>packages</strong>.</p>
 <pre class="r"><code>rm(list=ls())
-source(&quot;esbm.R&quot;)
-Rcpp::sourceCpp(&#39;stirling.cpp&#39;)
+source(&quot;Source/esbm.R&quot;)
+Rcpp::sourceCpp(&#39;Source/stirling.cpp&#39;)
 
 library(reshape)
 library(gdata)
@@ -438,7 +438,7 @@ library(coda)
 library(dummies)
 library(randnet)
 
-load(&quot;network_1.RData&quot;)
+load(&quot;Simulation/network_1.RData&quot;)
 V &lt;- dim(Y)[1]
 
 # note that Y must have diagonal equal to 0

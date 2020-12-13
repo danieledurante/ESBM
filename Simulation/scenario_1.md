@@ -4,12 +4,12 @@ This tutorial contains guidelines and code to perform the analyses for the first
 
 Upload the data
 ================
-To start the analysis, **set the working directory** where the simulated network `network_1.RData`, and the source codes `esbm.R` and `stirling.cpp` are located. Once this has been done, **clean the workspace, and load the data along with useful** `R` **packages**.
+To start the analysis, **set the working directory** where the `README` file is located. Once this has been done, **clean the workspace, and load the data along with useful** `R` **packages**.
 
 ``` r
 rm(list=ls())
-source("esbm.R")
-Rcpp::sourceCpp('stirling.cpp')
+source("Source/esbm.R")
+Rcpp::sourceCpp('Source/stirling.cpp')
 
 library(reshape)
 library(gdata)
@@ -25,7 +25,7 @@ library(coda)
 library(dummies)
 library(randnet)
 
-load("network_1.RData")
+load("Simulation/network_1.RData")
 V <- dim(Y)[1]
 
 # note that Y must have diagonal equal to 0
