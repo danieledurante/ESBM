@@ -4,7 +4,7 @@ This tutorial contains guidelines and code to perform the analyses in the applic
 
 Data pre-processing
 ================
-The original data [`NDRANGHETAMAFIA_2M.csv`] are available in the zip directory `Ndrangheta Mafia 2 CSV.zip` at the link **https://sites.google.com/site/ucinetsoftware/datasets/covert-networks/ndranghetamafia2**, and comprise information on the co–participation of 156 suspects at 47 monitored summits of the criminal organization *La Lombardia*, as reported in the **judicial acts** which can be accessed at, e.g., **https://liberavco.liberapiemonte.it/wp-content/uploads/sites/13/2012/04/Operazione-Infinito-Ordinanza-di-Custodia-Cautelare.pdf**.  
+The original data [`NDRANGHETAMAFIA_2M.csv`] are available in the zip directory `Ndrangheta Mafia 2 CSV.zip` at the link https://sites.google.com/site/ucinetsoftware/datasets/covert-networks/ndranghetamafia2, and comprise information on the co–participation of 156 suspects at 47 monitored summits of the criminal organization *La Lombardia*, as reported in the **judicial acts** which can be accessed at, e.g., https://liberavco.liberapiemonte.it/wp-content/uploads/sites/13/2012/04/Operazione-Infinito-Ordinanza-di-Custodia-Cautelare.pdf.  
 
 To load these data, set the working directory where the file `NDRANGHETAMAFIA_2M.csv` is located. Once this has been done, **clean the workspace and load the data**.
  
