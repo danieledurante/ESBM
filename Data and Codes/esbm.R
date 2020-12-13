@@ -248,6 +248,27 @@ pred <- z%*%Rel_Freq%*%t(z)
 return(1-sum(diag(table(lowerTriangle(Y),lowerTriangle(pred>0.5))))/length(lowerTriangle(Y)))
 }
 
+
+####################################################################################
+# COMPUTE MATRIX OF ESTIMATED EDGE PROBABILITIES  ##################################
+####################################################################################
+
+edge_est <- function(memb,Y,a,b){
+ # in: vector of cluster labels (memb), VxV adjancency matrix (Y) and hyperparameters beta priors (a,b)
+ # out: matrix of estimated edge probabilities
+z <- dummy(memb)
+H <- ncol(z)
+V <- dim(Y)[1]
+Abs_Freq <- t(z)%*%Y%*%z
+diag(Abs_Freq) <- diag(Abs_Freq)/2
+Tot <- t(z)%*%matrix(1,V,V)%*%z
+diag(Tot) <- (diag(Tot)-table(memb))/2
+Rel_Freq <- (a+Abs_Freq)/(a+b+Tot)
+edge_matr <- z%*%Rel_Freq%*%t(z)
+diag(edge_matr)<-0
+return(edge_matr)
+}
+
 ####################################################################################
 # COMPUTE LOG MARGINAL LIKELIHOOD  #################################################
 ####################################################################################
@@ -273,6 +294,102 @@ b_bar_n<-lowerTriangle(No_Edge,diag=TRUE)+b
 return(sum(lbeta(a_n,b_bar_n))-(H*(H+1)/2)*lbeta(a,b))
 }
 
+####################################################################################
+# COMPUTE OUT-OF-SAMPLE CLUSTER PROBABILITIES  #####################################
+####################################################################################
+
+pred_esbm <- function(Y, prior, z_hat, a=1, b=1,alpha_PY=NA, sigma_PY=NA, beta_DM=NA, H_DM=NA, gamma_GN=NA){
+
+# in: Adjacency matrix Y whose last row and column contain the observed edges for the new node to be classified, one vector of node labels z_hat for the already observed nodes, hyperparameters (a,b) of Beta priors for block probabilities, and prior for the partition process
+# out: full conditional probabilities for the memebership of the new node to the different clusters.
+
+	
+  # ----------------------------------------------
+  # Selection of the prior distribution to be used
+  # ----------------------------------------------
+  
+  if (prior=="DP"){
+    urn<-function(v_minus){return(urn_DP(v_minus,alpha_PY))}
+  } else if (prior=="PY"){
+    urn<-function(v_minus){return(urn_PY(v_minus,alpha_PY,sigma_PY))}
+  } else if (prior=="DM"){
+    urn<-function(v_minus){return(urn_DM(v_minus,beta_DM,H_DM))}
+  } else if (prior=="GN"){
+    urn<-function(v_minus){return(urn_GN(v_minus,gamma_GN))}
+  } else { 
+    stop("Invalid value for prior")  
+  }
+  
+  # ----------------------------------------------
+  # Initialization
+  # ----------------------------------------------
+    
+  V <- nrow(Y)
+  z_init <- c(z_hat,max(z_hat)+1)
+   
+  # cluster assignments are encoded in two equivalent ways:
+  # [i] a VxH matrix Z, s.t. Z[v,h]=1{node v in cluster h}, faster to use within each iteration
+  Z <- vec2mat(z_init)  
+  
+  # Create the matrix with block connections
+  temp   <- Y%*%Z
+  m_full <- t(Z)%*%temp - diag(0.5*colSums(temp*Z),ncol(Z))
+  
+  # ----------------------------------------------
+  # Predictive
+  # ----------------------------------------------
+    
+  v <- V
+  
+   # remove empty clusters and
+      # if the cluster containing node v has no other node, discard it as well
+      if(ncol(Z) > 1){
+        nonempty_v <- which(colSums(Z[-v,]) > 0)  
+        Z <- Z[, nonempty_v]
+        if (length(nonempty_v)==1){Z <- matrix(Z,V,1)}
+        
+        # Reduce the dimensions of the m_full matrix
+        m_full <- matrix(m_full[nonempty_v,nonempty_v],ncol(Z),ncol(Z))
+      } 
+      
+      # H = number of active clusters
+      H   <- ncol(Z)
+      Z_v <- Z[-v,]
+      
+      # v_minus = number of nodes in each cluster, excluding node v
+      if (H==1){v_minus <- sum(Z[-v])} else {v_minus <- colSums(Z_v)}
+      
+      # r_v = number of edges from node v to each cluster (no self-loops)
+      r_v         <- crossprod(Z_v, Y[-v,v])
+      h_v         <- which(Z[v,] > 0)
+      
+      # Compute the m matrix by difference
+      if(length(h_v) == 1){
+        resid1       <- matrix(0,H,H)
+        resid1[,h_v] <- r_v; resid1[h_v,] <- r_v
+        m            <- m_full - resid1
+      } else {m <- m_full} # No need to update m in this case
+      
+      # m_bar = number of non-edges between cluster h and cluster k, excluding node v 
+      m_bar   <- matrix(v_minus,H,1)%*%matrix(v_minus,1,H) - diag(0.5*v_minus*(v_minus+1),H) - m
+      V_minus <- matrix(1,H,1)%*%matrix(v_minus,1,H)
+      R       <- matrix(1,H,1)%*%matrix(r_v,1,H)
+      
+      # ----------------------------------------------
+      # Computing the probabilities
+      # ----------------------------------------------
+      
+      log_lhds_old <- rowSums(lbeta(m + R + a, m_bar + V_minus - R + b) - lbeta(m + a, m_bar + b)) # vector of length H
+      log_lhd_new  <- sum(lbeta(r_v + a, v_minus - r_v + b) - lbeta(a, b)) # scalar
+      log_addit    <- 0  
+  
+      log_p <- log_addit + log(urn(v_minus)) + c(log_lhds_old, log_lhd_new)
+      p     <- exp(log_p - max(log_p)); 
+            
+      return(p)
+}
+
+
 
 ####################################################################################
 # COMPUTE THE DISTRIBUTION OF H AND THE EXPECTED VALUE UNDER VARIOUS GIBBS TYPE ####
@@ -295,6 +412,7 @@ expected_cl_py <- function(n, sigma, theta, H){
   }
   return(out)
 }
+
 
 # ----------------------------------------------
 # INTERNAL USAGE ONLY
