@@ -6,12 +6,12 @@ Data pre-processing
 ================
 The original data [`NDRANGHETAMAFIA_2M.csv`] are available in the zip directory `Ndrangheta Mafia 2 CSV.zip` at the link https://sites.google.com/site/ucinetsoftware/datasets/covert-networks/ndranghetamafia2, and comprise information on the co–participation of 156 suspects at 47 monitored summits of the criminal organization *La Lombardia*, as reported in the **judicial acts** which can be accessed at, e.g., https://liberavco.liberapiemonte.it/wp-content/uploads/sites/13/2012/04/Operazione-Infinito-Ordinanza-di-Custodia-Cautelare.pdf.  
 
-To load these data, set the working directory where the file `NDRANGHETAMAFIA_2M.csv` is located. Once this has been done, **clean the workspace and load the data**.
+To load these data, **set the working directory** where the `README` file is located. Once this has been done, **clean the workspace, and load the data along with useful** `R` **packages**.
  
 ``` r
 rm(list=ls())
 
-A <- read.csv(file="NDRANGHETAMAFIA_2M.csv",header=TRUE)
+A <- read.csv(file="Application/NDRANGHETAMAFIA_2M.csv",header=TRUE)
 ```
 
 A first careful double check between the information in the judicial acts at the data in `A` shows that **in few cases, the attendance of a suspect to a summit was not reported in** `A`. Hence, let us impute this information. 
@@ -111,19 +111,19 @@ actors_test <- actors_temp[-sel]
 Finally, **save the data** in the file `crime_net.RData` and clean the workspace.
 
 ``` r
-save(Y,Y_test,Locale,Locale_test,Role,Role_test,RoleLocale,RoleLocale_test,file="crime_net.RData")
+save(Y,Y_test,Locale,Locale_test,Role,Role_test,RoleLocale,RoleLocale_test,file="Application/crime_net.RData")
 
 rm(list=ls())
 ```
 
 Upload the data
 ================
-To start the analysis, **set the working directory** where the simulated network `crime_net.RData`, and the source codes `esbm.R` and `stirling.cpp` are located. Once this has been done, **clean the workspace, and load the data along with useful** `R` **packages**.
+To start the analysis, **set the working directory** where the `README` file is located. Once this has been done, **clean the workspace, and load the data along with useful** `R` **packages**.
 
 ``` r
 rm(list=ls())
-source("esbm.R")
-Rcpp::sourceCpp('stirling.cpp')
+source("Source/esbm.R")
+Rcpp::sourceCpp('Source/stirling.cpp')
 
 library(reshape)
 library(gdata)
@@ -141,7 +141,7 @@ library(randnet)
 library(randnet)
 library(scatterpie)
 
-load("crime_net.RData")
+load("Application/crime_net.RData")
 V <- dim(Y)[1]
 
 # note that Y must have diagonal equal to 0
@@ -260,7 +260,7 @@ for (t in 1:N_iter){
 }
 
 # Save the output
-save(Z_DP,l_y_DP,Z_PY,l_y_PY,Z_GN,l_y_GN,Z_DM,l_y_DM,file="Posterior_No_Attributes.RData")
+save(Z_DP,l_y_DP,Z_PY,l_y_PY,Z_GN,l_y_GN,Z_DM,l_y_DM,file="Application/Posterior_No_Attributes.RData")
 rm(Z_DP,l_y_DP,Z_PY,l_y_PY,Z_GN,l_y_GN,Z_DM,l_y_DM)
 ```
 
@@ -340,7 +340,7 @@ for (t in 1:N_iter){
 }
 
 # save the output
-save(Z_DP_x,l_y_DP_x,Z_PY_x,l_y_PY_x,Z_GN_x,l_y_GN_x,Z_DM_x,l_y_DM_x,file="Posterior_Attributes.RData")
+save(Z_DP_x,l_y_DP_x,Z_PY_x,l_y_PY_x,Z_GN_x,l_y_GN_x,Z_DM_x,l_y_DM_x,file="Application/Posterior_Attributes.RData")
 rm(Z_DP_x,l_y_DP_x,Z_PY_x,l_y_PY_x,Z_GN_x,l_y_GN_x,Z_DM_x,l_y_DM_x)
 ```
 
@@ -350,8 +350,8 @@ This section contains the **code to perform estimation, uncertainty quantificati
 
 ``` r
 burn_in <- 10000
-load("Posterior_No_Attributes.RData")
-load("Posterior_Attributes.RData")
+load("Application/Posterior_No_Attributes.RData")
+load("Application/Posterior_Attributes.RData")
 ```
 
 Before performing posterior inference, let us **visualize the traceplots for the logarithm of the likelihood in Eq. [1]**, evaluated at the MCMC samples of `z` under the different priors, both with and without nodal attributes.
