@@ -745,7 +745,7 @@ log_pY_z(Y,r_sc,1,1)
 
 Results are still worse relative to those provided by **ESBM**, thereby confirming the **superior performance of the ESBM class also in this specific application**.
 
-Predictive performance for held-out suspects [Table 5]
+Predictive performance for held-out suspects
 ================
 We study the performance of the **supervised GN process prior** (which yields the most accurate inference within the **ESBM** class for the **Infinito network**) in **predicting the group membership of the held-out suspects**. To accomplish this goal, let us first **create an augmented adjacency matrix** which adds to `Y` a last row and column that will contain the edges between a new incoming suspect in the held-out set and the `V=84` original suspects (Note: prediction is done for one node at-a-time). 
 
@@ -773,7 +773,7 @@ Post_Prob[v,] <- pred_esbm(Y_augmented, prior="GN", z_hat=memb_Z_GN,a = 1, b = 1
 Pred_memb <- apply(Post_Prob,1,which.max)
 ```
 
-Execute the code below to **reproduce the results in Table 5**.
+Execute the code below to **compute the predictive measures** discussed in the article.
 
 ``` r
 # transform the adjacency matrix into an igraph object
@@ -794,13 +794,11 @@ norm_betwenness <- (betwenness_block-min(betwenness_block))/(max(betwenness_bloc
 norm_transitivity_pred <- norm_transitivity[Pred_memb]
 norm_betwenness_pred <- norm_betwenness[Pred_memb]
 
-# summaries of the difference between such quantities for held-out affiliates
+# mean of the difference between such quantities for held-out affiliates
 mean((norm_transitivity_pred-norm_betwenness_pred)[which(Role_test=="aff")])
-quantile((norm_transitivity_pred-norm_betwenness_pred)[which(Role_test=="aff")],probs=c(0.25,0.5,0.75))
 
-# summaries of the difference between such quantities for held-out bosses
+# mean of the difference between such quantities for held-out bosses
 mean((norm_transitivity_pred-norm_betwenness_pred)[which(Role_test=="boss")])
-quantile((norm_transitivity_pred-norm_betwenness_pred)[which(Role_test=="boss")],probs=c(0.25,0.5,0.75))
 ```
 
 
