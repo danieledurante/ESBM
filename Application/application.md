@@ -6,14 +6,12 @@ Data pre-processing
 ================
 The original data [`NDRANGHETAMAFIA_2M.csv`] are available in the zip directory `Ndrangheta Mafia 2 CSV.zip` at the link https://sites.google.com/site/ucinetsoftware/datasets/covert-networks/ndranghetamafia2, and comprise information on the co–participation of 156 suspects at 47 monitored summits of the criminal organization *La Lombardia*, as reported in the **judicial acts** which can be accessed at, e.g., https://liberavco.liberapiemonte.it/wp-content/uploads/sites/13/2012/04/Operazione-Infinito-Ordinanza-di-Custodia-Cautelare.pdf.  
 
-Please download the [`NDRANGHETAMAFIA_2M.csv`] file and save it in the [`Application`] folder.
-
-To load these data, **set the working directory** where the `README` file is located. Once this has been done, **clean the workspace, and load the data along with useful** `R` **packages**.
+Please download the original [`NDRANGHETAMAFIA_2M.csv`](https://sites.google.com/site/ucinetsoftware/datasets/covert-networks/ndranghetamafia2/Ndrangheta%20Mafia%202%20CSV.zip?attredirects=0&d=1) file and save it in the [`Application`] folder. To load these data, then **set the working directory** where the `README` file is located. Once this has been done, **clean the workspace, and load the data along with useful** `R` **packages**.
  
 ``` r
 rm(list=ls())
 
-A <- read.csv(file="Application/NDRANGHETAMAFIA_2M.csv",header=TRUE)
+A <- read.csv(file="Application/NDRANGHETAMAFIA_2M.csv",header=TRUE, stringsAsFactors = TRUE)
 ```
 
 A first careful double check between the information in the judicial acts at the data in `A` shows that **in few cases, the attendance of a suspect to a summit was not reported in** `A`. Hence, let us impute this information. 

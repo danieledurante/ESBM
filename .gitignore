@@ -1,3 +1,6 @@
 
 *.RData
 *.csv
+Application/crime_net.RData
+*.RData
+Application/crime_net.RData
