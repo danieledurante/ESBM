@@ -1,12 +1,12 @@
 Application: The Infinito Network
 ================
-This tutorial contains guidelines and code to perform the analyses in the application to the *Infinito network* [`crime_net.RData`] illustrated in the article **extended stochastic block models with application to criminal networks**. In particular, you will find a detailed step-by-step guide and `R` code to **pre-process the original data**, **implement the collapsed Gibbs sampler developed in the article** and **fully reproduce the results** discussed in Section 5 of the article. For implementation purposes, **execute the code below considering the same order in which is presented**.
+This tutorial contains guidelines and code to perform the analyses in the application to the *Infinito network* [`crime_net.RData`] illustrated in the article **extended stochastic block models with application to criminal networks**. In particular, you will find a detailed step-by-step guide and `R` code to **pre-process the original data**, **implement the collapsed Gibbs sampler developed in the article** and **fully reproduce the results** discussed in Sections 1 and 5 of the article. For implementation purposes, **execute the code below considering the same order in which is presented**.
 
 Data pre-processing
 ================
 The original data [`NDRANGHETAMAFIA_2M.csv`] are available in the zip directory `Ndrangheta Mafia 2 CSV.zip` at the link https://sites.google.com/site/ucinetsoftware/datasets/covert-networks/ndranghetamafia2, and comprise information on the co–participation of 156 suspects at 47 monitored summits of the criminal organization *La Lombardia*, as reported in the **judicial acts** which can be accessed at, e.g., https://liberavco.liberapiemonte.it/wp-content/uploads/sites/13/2012/04/Operazione-Infinito-Ordinanza-di-Custodia-Cautelare.pdf.  
 
-Please download the original [`NDRANGHETAMAFIA_2M.csv`](https://sites.google.com/site/ucinetsoftware/datasets/covert-networks/ndranghetamafia2/Ndrangheta%20Mafia%202%20CSV.zip?attredirects=0&d=1) file and save it in the [`Application`] folder. To load these data, then **set the working directory** where the `README` file is located. Once this has been done, **clean the workspace, and load the data along with useful** `R` **packages**.
+Please download the original [`NDRANGHETAMAFIA_2M.csv`](https://sites.google.com/site/ucinetsoftware/datasets/covert-networks/ndranghetamafia2/Ndrangheta%20Mafia%202%20CSV.zip?attredirects=0&d=1) file and save it in the [`Application`] folder. To load these data, then **set the working directory** where the `README` file and the subfolders `Source`, `Simulation` and `Application` are located. Once this has been done, **clean the workspace, and load the data along with useful** `R` **packages**.
  
 ``` r
 rm(list=ls())
@@ -118,7 +118,7 @@ rm(list=ls())
 
 Import the data
 ================
-To start the analysis, **set the working directory** where the `README` file is located. Once this has been done, **clean the workspace, and load the data along with useful** `R` **packages**.
+To start the analysis, **set the working directory** where the `README` file and the subfolders `Source`, `Simulation` and `Application` are located. Once this has been done, **clean the workspace, and load the data along with useful** `R` **packages**.
 
 ``` r
 rm(list=ls())
@@ -138,8 +138,6 @@ library(ggplot2)
 library(coda)
 library(dummies)
 library(randnet)
-library(randnet)
-library(scatterpie)
 
 load("Application/crime_net.RData")
 V <- dim(Y)[1]
@@ -697,7 +695,7 @@ sc <- reg.SP(Y,K=sel_H,lap=TRUE,tau=0)$cluster
 length(table(sc))
 
 # deviance (D)
-log_pY_z(Y,sc,1,1)
+-log_pY_z(Y,sc,1,1)
 
 # ------------------------------------
 # REGULARIZED SPECTRAL CLUSTERING
@@ -712,7 +710,7 @@ r_sc <- reg.SP(Y,K=sel_H,lap=TRUE,tau=1)$cluster
 length(table(r_sc))
 
 # deviance (D)
-log_pY_z(Y,r_sc,1,1)
+-log_pY_z(Y,r_sc,1,1)
 ```
 
 All the above **deviances are considerably higher relative to those provided by ESBM with GN prior**. Since `sel_H` is lower than the one obtained under the GN prior, let us also compute the deviance for spectral clustering with the same number of clusters `H = 15` inferred by the GN process.
@@ -728,7 +726,7 @@ set.seed(1)
 sc <- reg.SP(Y,K=15,lap=TRUE,tau=0)$cluster
 
 # deviance (D)
-log_pY_z(Y,sc,1,1)
+-log_pY_z(Y,sc,1,1)
 
 # ------------------------------------
 # REGULARIZED SPECTRAL CLUSTERING
@@ -740,7 +738,7 @@ set.seed(1)
 r_sc <- reg.SP(Y,K=15,lap=TRUE,tau=1)$cluster
 
 # deviance (D)
-log_pY_z(Y,r_sc,1,1)
+-log_pY_z(Y,r_sc,1,1)
 ```
 
 Results are still worse relative to those provided by **ESBM**, thereby confirming the **superior performance of the ESBM class also in this specific application**.
