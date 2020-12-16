@@ -4,7 +4,7 @@ This tutorial contains guidelines and code to perform the analyses for the third
 
 Import the data
 ================
-To start the analysis, **set the working directory** where the `README` file is located. Once this has been done, **clean the workspace, and load the data along with useful** `R` **packages**.
+To start the analysis, **set the working directory** where the `README` file and the subfolders `Source`, `Simulation` and `Application` are located. Once this has been done, **clean the workspace, and load the data along with useful** `R` **packages**.
 
 ``` r
 rm(list=ls())
