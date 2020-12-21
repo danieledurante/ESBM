@@ -1,12 +1,12 @@
 Application: The Infinito Network
 ================
-This tutorial contains guidelines and code to perform the analyses in the application to the *Infinito network* [`crime_net.RData`] illustrated in the article **extended stochastic block models with application to criminal networks**. In particular, you will find a detailed step-by-step guide and `R` code to **pre-process the original data**, **implement the collapsed Gibbs sampler developed in the article** and **fully reproduce the results** discussed in Sections 1 and 5 of the article. For implementation purposes, **execute the code below considering the same order in which is presented**.
+This tutorial contains guidelines and code to perform the analyses in the application to the *Infinito network* [`crime_net.RData`] illustrated in the article **Extended stochastic block models with application to criminal networks**. In particular, you will find a detailed step-by-step guide and `R` code to **pre-process the original data**, **implement the collapsed Gibbs sampler developed in the article** and **fully reproduce the results** discussed in Sections 1 and 5 of the article. For implementation purposes, please **execute the code below considering the same order in which is presented**.
 
 Data pre-processing
 ================
 The original data [`NDRANGHETAMAFIA_2M.csv`] are available in the zip directory `Ndrangheta Mafia 2 CSV.zip` at the link https://sites.google.com/site/ucinetsoftware/datasets/covert-networks/ndranghetamafia2, and comprise information on the co–participation of 156 suspects at 47 monitored summits of the criminal organization *La Lombardia*, as reported in the **judicial acts** which can be accessed at, e.g., https://liberavco.liberapiemonte.it/wp-content/uploads/sites/13/2012/04/Operazione-Infinito-Ordinanza-di-Custodia-Cautelare.pdf.  
 
-Please download the original [`NDRANGHETAMAFIA_2M.csv`](https://sites.google.com/site/ucinetsoftware/datasets/covert-networks/ndranghetamafia2/Ndrangheta%20Mafia%202%20CSV.zip?attredirects=0&d=1) file and save it in the [`Application`] folder. To load these data, then **set the working directory** where the `README` file and the subfolders `Source`, `Simulation` and `Application` are located. Once this has been done, **clean the workspace, and load the data along with useful** `R` **packages**.
+Please download the original [`NDRANGHETAMAFIA_2M.csv`](https://sites.google.com/site/ucinetsoftware/datasets/covert-networks/ndranghetamafia2/Ndrangheta%20Mafia%202%20CSV.zip?attredirects=0&d=1) file and save it in the [`Application`] folder. To load these data in `R`, first **set the working directory** where the `README` file and the subfolders `Source`, `Simulation` and `Application` are located. Once this has been done, **clean the workspace, and load the data in** `R`.
  
 ``` r
 rm(list=ls())
@@ -14,7 +14,7 @@ rm(list=ls())
 A <- read.csv(file="Application/NDRANGHETAMAFIA_2M.csv",header=TRUE, stringsAsFactors = TRUE)
 ```
 
-A first careful double check between the information in the judicial acts at the data in `A` shows that **in few cases, the attendance of a suspect to a summit was not reported in** `A`. Hence, let us impute this information. 
+A first careful double check between the information in the judicial acts and the data in `A` shows that **in few cases, the attendance of a suspect to a summit was not reported in** `A`. Hence, let us impute this information. 
 
 ``` r
 A[23,20] <- 1
@@ -29,7 +29,7 @@ As discussed in Section 1.1, our overarching goal in this application is to **sh
 # suspects who never attended a summit
 sel_empty <- which(apply(as.matrix(A[,-1]),1,sum)==0)
 
-# suspects have not been recognized during the investigation process
+# suspects who have not been recognized during the investigation process
 A[c(38,105,106,125,135),1]
 
 # indicators of the two groups of suspects to be excluded
@@ -148,7 +148,7 @@ diag(Y)
 
 Setting the hyperparameters
 ================
-For the hyperparameters of the `Beta(a,b)` **priors on the block probabilities** we follow common implementations of stochastic block models and consider the default values `a=1` and `b=1` to induce a **uniform** prior. Less straightforward is instead the choice of the hyperparameters for the **Gibb-type priors on the random partition**. A possibility to address this issue is to specify such quantities in order to obtain a value for the expectation of the non-empty number of groups `H` that matches some prior knowledge. Below, we provide the **code to obtain such a quantity as a function of pre-specified hyperparameters for the four relevant examples of Gibbs-type priors** discussed in the article. 
+For the hyperparameters of the `Beta(a,b)` **priors on the block probabilities** we follow common implementations of stochastic block models and consider the default values `a=1` and `b=1` to induce a **uniform** prior. Less straightforward is instead the choice of the hyperparameters for the **Gibbs-type priors on the random partition**. A possibility to address this issue is to specify such quantities in order to obtain a value for the expectation of the non-empty number of groups `H` that matches some prior knowledge. Below, we provide the **code to obtain such a quantity as a function of pre-specified hyperparameters for the four relevant examples of Gibbs-type priors** discussed in the article. 
 
 ``` r
 # ------------------------------------
@@ -428,13 +428,13 @@ l_y_post_GN_x <- log(length(l_y_GN_x))-max(neg_l_y_GN_x)-log(sum(exp(neg_l_y_GN_
 l_y_post_GN_x
 ```
 
-As it can be noticed, the **Gnedin process tends to perform slightly better** in both scenarios relative to the other priors. Moreover, the **external node attribute**, defined by a combination of *locale* membership and leadership *role*, **yields further improvements in the learning process**. For instance, we obtain strong evidence in favor of the supervised GN process relative to the unsupervised representation, when studying the **Bayes factor**.
+As it can be noticed, the **Gnedin process performs slightly better** in both scenarios relative to the other priors. Moreover, the **external node attribute**, defined by a combination of *locale* membership and leadership *role*, **yields further improvements in the learning process**. For instance, we obtain strong evidence in favor of the supervised GN process relative to the unsupervised representation, when studying the **Bayes factor**.
 
 ``` r
 2*(l_y_post_GN_x-l_y_post_GN)
 ```
 
-As discussed in the article, accurate learning of the underlying number of groups is a fundamental goal. Hence, let us study the **quantiles of the posterior distribution for the number of non-empty groups** under the different priors and models (*see the fifth and sixth column in Table 4*). 
+As discussed in the article, accurate learning of the underlying number of groups is a fundamental goal. Hence, let us study the **quartiles of the posterior distribution for the number of non-empty groups** under the different priors and models (*see the fifth and sixth column in Table 4*). 
 
 ``` r
 # ------------------------------------
@@ -464,7 +464,7 @@ quantile(apply(Z_GN_x[,(burn_in+1):N_iter],2,max))[c(2:4)]
 
 The above results seem to provide consistent evidence for the presence of either **14 or 15 groups in the Infinito network**. 
 
-To conclude Table 4, let us obtain a **point estimate** and **credible balls** for the group assignments of the different nodes. This is done by adapting the methods presented in Wade and Ghahramani (2018) and implemented in the `R` package `mcclust.ext`. To apply these strategies we also require an estimate of the **co-clustering matrix**, whose generic element `c[v,u]` encodes the relative frequency of MCMC samples in which nodes `v` and `u` are in the same cluster. Such an estimate can be obtained via the function `pr_cc()` in the source code `esbm.R` (*see the third and fourth column of Table 4 for the logarithm of the likelihood in Eq. [1] evaluated at the estimated partition. The `VI` distance between the estimated partition and the 95% credible bound is reported in the seventh and eighth column of Table 4*). 
+To complete Table 4, let us obtain **point estimate** and **credible balls** for the group assignments of the different nodes. This is done by adapting the methods presented in Wade and Ghahramani (2018) and implemented in the `R` package `mcclust.ext`. To apply these strategies we also require an estimate of the **co-clustering matrix**, whose generic element `c[v,u]` encodes the relative frequency of MCMC samples in which nodes `v` and `u` are in the same cluster. Such an estimate can be obtained via the function `pr_cc()` in the source code `esbm.R` (*see the third and fourth column of Table 4 for the logarithm of the likelihood in Eq. [1] evaluated at the estimated partition. The `VI` distance between the estimated partition and the 95% credible bound is reported in the seventh and eighth column of Table 4*). 
 
 
 ``` r
@@ -598,7 +598,7 @@ Comparison with state-of-the-art competitors
 ================
 Let us now compare the **deviances** of **ESBM (with GN prior)** and **state–of–the–art competitors** in the `R` libraries `igraph` and `randnet`. Such alternative strategies include the **Louvain algorithm** [Blondel et al., 2008], **spectral clustering** [Von Luxburg, 2007] and **regularized spectral clustering** [Amini et al., 2013]. 
 
-The deviances for the **unsupervised and supervised GN prior** can be easily computed as follow.
+The deviances for the **unsupervised and supervised GN prior** can be easily computed as follows.
 
 ``` r
 # ------------------------------------
@@ -679,7 +679,7 @@ sel_H <- round(median(H_select))
 ```
 Note that the outputs in `ncv` and `ecv` provide **empirical support in favor of SBM rather than degree-corrected SBM** in this specific application, thus further motivating the choice of **ESBM** for analyzing the *Infinito network*.
 
-Once `sel_H` is available, we can obtain the deviances under **spectral clustering** and **regularized spectral clustering** as follow.
+Once `sel_H` is available, we can obtain the deviances under **spectral clustering** and **regularized spectral clustering** as follows.
 
 ``` r
 # ------------------------------------
@@ -713,7 +713,7 @@ length(table(r_sc))
 -log_pY_z(Y,r_sc,1,1)
 ```
 
-All the above **deviances are considerably higher relative to those provided by ESBM with GN prior**. Since `sel_H` is lower than the one obtained under the GN prior, let us also compute the deviance for spectral clustering with the same number of clusters `H = 15` inferred by the GN process.
+All the above **deviances are considerably higher relative to those provided by ESBM with GN prior**. Since `sel_H` is lower than the one obtained under the GN prior, let us also compute the deviance for spectral clustering with the same number of clusters `H = 15` inferred under the GN process.
 
 ``` r
 # ------------------------------------
@@ -842,7 +842,7 @@ l <- norm_coords(l, ymin=-1, ymax=1, xmin=-1.5, xmax=1.5)
 plot(net_Y, rescale=F, layout=l*1.5,edge.curved=.3,edge.width=0.5)
 ```
 
-To **display Figure 2** execute the code below
+To **display Figure 2** execute the code below.
 
 ``` r
 # ------------------------------------
