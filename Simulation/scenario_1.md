@@ -555,7 +555,7 @@ VI(z_0,t(memb_Z_GN))
 mean(abs(lowerTriangle(edge_est(memb_Z_GN,Y,a=1,b=1))-lowerTriangle(pi_true)))
 ```
 
-Similarly, the performance measures in *columns 1, 4 and 7 of Table 3* for the **supervised GN prior** are obtained as follow.
+Similarly, the performance measures in *columns 1, 4 and 7 of Table 3* for the **supervised GN prior** are obtained as follows.
 
 ``` r
 # ------------------------------------
@@ -633,7 +633,7 @@ H_select[8] <- ecv.R$auc.rank
 sel_H <- round(median(H_select))
 ```
 
-Once `sel_H` is available, we can obtain the performance measures in *columns 1, 4 and 7 of Table 3* under **spectral clustering** and **regularized spectral clustering** as follow.
+Once `sel_H` is available, we can obtain the performance measures in *columns 1, 4 and 7 of Table 3* under **spectral clustering** and **regularized spectral clustering** as follows.
 
 ``` r
 # ------------------------------------
