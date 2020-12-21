@@ -1,6 +1,6 @@
 Simulation: Scenario 2
 ================
-This tutorial contains guidelines and code to perform the analyses for the second scenario `network_2.RData` considered in the simulation study of the article **extended stochastic block models with application to criminal networks**. In particular, you will find a detailed step-by-step guide and `R` code to **implement the collapsed Gibbs sampler presented in the article** and to **fully reproduce the results for the second scenario** presented in Section 4 of the article. For implementation purposes, **execute the code below considering the same order in which is presented**.
+This tutorial contains guidelines and code to perform the analyses for the second scenario `network_2.RData` considered in the simulation study of the article **Extended stochastic block models with application to criminal networks**. In particular, you will find a detailed step-by-step guide and `R` code to **implement the collapsed Gibbs sampler presented in the article** and to **fully reproduce the results for the second scenario** presented in Section 4 of the article. For implementation purposes, please **execute the code below considering the same order in which is presented**.
 
 Import the data
 ================
@@ -36,7 +36,7 @@ As discussed in the article, the network under analysis has *V=80* nodes and *5*
 
 Setting the hyperparameters
 ================
-For the hyperparameters of the `Beta(a,b)` **priors on the block probabilities** we follow common implementations of stochastic block models and consider the default values `a=1` and `b=1` to induce a **uniform** prior. Less straightforward is instead the choice of the hyperparameters for the **Gibb-type priors on the random partition**. A possibility to address this issue is to specify such quantities in order to obtain a value for the expectation of the non-empty number of groups `H` that matches some prior knowledge. Below, we provide the **code to obtain such a quantity as a function of pre-specified hyperparameters for the four relevant examples of Gibbs-type priors** discussed in the article. 
+For the hyperparameters of the `Beta(a,b)` **priors on the block probabilities** we follow common implementations of stochastic block models and consider the default values `a=1` and `b=1` to induce a **uniform** prior. Less straightforward is instead the choice of the hyperparameters for the **Gibbs-type priors on the random partition**. A possibility to address this issue is to specify such quantities in order to obtain a value for the expectation of the non-empty number of groups `H` that matches some prior knowledge. Below, we provide the **code to obtain such a quantity as a function of pre-specified hyperparameters for the four relevant examples of Gibbs-type priors** discussed in the article. 
 
 ``` r
 # ------------------------------------
@@ -315,9 +315,9 @@ l_y_post_GN_x <- log(length(l_y_GN_x))-max(neg_l_y_GN_x)-log(sum(exp(neg_l_y_GN_
 l_y_post_GN_x
 ```
 
-As it can be noticed, the **Gnedin process tends to perform slightly better** in both scenarios relative to the other priors. Moreover, as expected, the overall **learning process benefits from informative node-specific attributes**.   
+As it can be noticed, the **Gnedin process performs slightly better** in both scenarios relative to the other priors. Moreover, as expected, the overall **learning process benefits from informative node-specific attributes**.   
 
-The **posterior mean of the VI distance from the true partition** `z_0` can be instead obtained using the `VI()` function within the `mcclust.ext` package [Wade and Ghahramani, 2018] as follow (*see the third and fourth column of scenario 2 in Table 2*).
+The **posterior mean of the variation of information (VI) distance from the true partition** `z_0` can be instead obtained using the `VI()` function within the `mcclust.ext` package [Wade and Ghahramani, 2018] as follows (*see the third and fourth column of scenario 2 in Table 2*).
 
 
 ``` r
@@ -348,7 +348,7 @@ VI(z_0,t(Z_GN_x[,(burn_in+1):N_iter]))
 
 The above results **confirm the rankings** obtained from the analysis of the marginal likelihoods.
 
-As discussed in the article, accurate learning of the underlying number of groups is a fundamental goal. Hence, let us study the **quantiles of the posterior distribution for the number of non-empty groups** under the different priors and models (*see the fifth and sixth column of scenario 2 in Table 2*). 
+As discussed in the article, accurate learning of the underlying number of groups is a fundamental goal. Hence, let us study the **quartiles of the posterior distribution for the number of non-empty groups** under the different priors and models (*see the fifth and sixth column of scenario 2 in Table 2*). 
 
 ``` r
 # ------------------------------------
@@ -378,7 +378,7 @@ quantile(apply(Z_GN_x[,(burn_in+1):N_iter],2,max))[c(2:4)]
 
 Also for this measure, the inclusion of **informative node-specific attributes provides improved performance**. It is also interesting to notice how, unlike DM, DP and PY, the **Gnedin process can learn accurately the true number of underlying groups even without the additional information** provided by the node-specific attributes.
 
-To conclude Table 2, let us obtain a **point estimates** and **credible balls** for the group assignments of the different nodes. This is done by adapting the methods presented in Wade and Ghahramani (2018) and implemented in the `R` package `mcclust.ext`. To apply these strategies we also require an estimate of the **co-clustering matrix**, whose generic element `c[v,u]` encodes the relative frequency of MCMC samples in which nodes `v` and `u` are in the same cluster. Such an estimate can be obtained via the function `pr_cc()` in the source code `esbm.R`. We also study the **misclassification error** using the function `misclass()` in the source code `esbm.R` (*see the seventh and eighth column of scenario 2 in Table 2 for the `VI` distance between the estimated partition and the 95% credible bound*). 
+To complete Table 2, let us obtain **point estimates** and **credible balls** for the group assignments of the different nodes. This is done by adapting the methods presented in Wade and Ghahramani (2018) and implemented in the `R` package `mcclust.ext`. To apply these strategies we also require an estimate of the **co-clustering matrix**, whose generic element `c[v,u]` encodes the relative frequency of MCMC samples in which nodes `v` and `u` are in the same cluster. Such an estimate can be obtained via the function `pr_cc()` in the source code `esbm.R`. We also study the **misclassification error** using the function `misclass()` in the source code `esbm.R` (*see the seventh and eighth column of scenario 2 in Table 2 for the `VI` distance between the estimated partition and the 95% credible bound*). 
 
 
 ``` r
@@ -557,7 +557,7 @@ VI(z_0,t(memb_Z_GN))
 mean(abs(lowerTriangle(edge_est(memb_Z_GN,Y,a=1,b=1))-lowerTriangle(pi_true)))
 ```
 
-Similarly, the performance measures in *columns 2, 5 and 8 of Table 3* for the **supervised GN prior** are obtained as follow.
+Similarly, the performance measures in *columns 2, 5 and 8 of Table 3* for the **supervised GN prior** are obtained as follows.
 
 ``` r
 # ------------------------------------
@@ -635,7 +635,7 @@ H_select[8] <- ecv.R$auc.rank
 sel_H <- round(median(H_select))
 ```
 
-Once `sel_H` is available, we can obtain the performance measures in *columns 2, 5 and 8 of Table 3* under **spectral clustering** and **regularized spectral clustering** as follow.
+Once `sel_H` is available, we can obtain the performance measures in *columns 2, 5 and 8 of Table 3* under **spectral clustering** and **regularized spectral clustering** as follows.
 
 ``` r
 # ------------------------------------
@@ -678,7 +678,7 @@ mean(abs(lowerTriangle(edge_est(r_sc,Y,a=1,b=1))-lowerTriangle(pi_true)))
 
 Predictive performance for the group membership of new nodes
 ================
-We study the performance of the **supervised GN process prior** (which yields the most accurate inference within the **ESBM** class for **scenario 2**) in **predicting the group membership of new incoming nodes**. To accomplish this goal, we first simulate the edges between `300` new nodes and those comprising the original network `Y`. Among these incoming nodes, `50` belong to a new group not yet observed in `Y` (which is characterized by low connection probability with nodes in the original `5` clusters).
+We study the performance of the **supervised GN process prior** (which yields the most accurate inference within the **ESBM** class for **scenario 2**) in **predicting the group membership of new incoming nodes**. To accomplish this goal, we first simulate the edges between `300` new nodes and those included in the original network `Y`. Among these incoming nodes, `50` belong to a new group not yet observed in `Y` (which is characterized by low connection probability with nodes in the original `5` clusters).
 
 ``` r
 set.seed(1)
