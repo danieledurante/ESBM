@@ -273,23 +273,27 @@ return(edge_matr)
 # COMPUTE LOG MARGINAL LIKELIHOOD  #################################################
 ####################################################################################
 
-log_pY_z<-function(Y,z,a,b){
+log_pY_z <- function(Y,z,a,b){
 # in: Adjacency matrix Y, one vector of node labels z, hyperparameters (a,b) of Beta priors for block probabilities
 # out: logarithm of the marginal likelihood in eq. [3] evaluated at z.
-H<-length(unique(z))
-colnames(Y)<-rownames(Y)<-z
 
-edge_counts<-melt(Y)
-non_edge_counts<-melt(1-Y)
+H <- length(unique(z))
+colnames(Y) <- rownames(Y) <- z
 
-Edge<-matrix(aggregate(edge_counts[,3],by=list(edge_counts[,1],edge_counts[,2]),sum,na.rm=TRUE)[,3],H,H)
-diag(Edge)<-diag(Edge)/2
+edge_counts <- melt(Y)
 
-No_Edge<-matrix(aggregate(non_edge_counts[,3],by=list(non_edge_counts[,1],non_edge_counts[,2]),sum,na.rm=TRUE)[,3],H,H)
-diag(No_Edge)<-diag(No_Edge)/2
+Y_c <- 1 - Y
+diag(Y_c) <- 0
+non_edge_counts <- melt(Y_c)
+	
+Edge <- matrix(aggregate(edge_counts[,3],by=list(edge_counts[,1],edge_counts[,2]),sum,na.rm=TRUE)[,3],H,H)
+diag(Edge) <- diag(Edge)/2
 
-a_n<-lowerTriangle(Edge,diag=TRUE)+a
-b_bar_n<-lowerTriangle(No_Edge,diag=TRUE)+b
+No_Edge <- matrix(aggregate(non_edge_counts[,3],by=list(non_edge_counts[,1],non_edge_counts[,2]),sum,na.rm=TRUE)[,3],H,H)
+diag(No_Edge) <- diag(No_Edge)/2
+
+a_n <- lowerTriangle(Edge,diag=TRUE)+a
+b_bar_n <- lowerTriangle(No_Edge,diag=TRUE)+b
 
 return(sum(lbeta(a_n,b_bar_n))-(H*(H+1)/2)*lbeta(a,b))
 }
