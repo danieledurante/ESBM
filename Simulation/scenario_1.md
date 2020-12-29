@@ -75,7 +75,7 @@ Here we **set the hyperparameters so that the expectation of `H` is close to *10
 
 Posterior computation via collapsed Gibbs sampler
 ================
-This section contains the code to **implement the collapsed Gibbs sampler for ESBM** [function `esbm()`] and to **evaluate marginal likelihoods** [function `log_pY_z()`] for model selection. Such a code is applied to [ii] first select among the four relevant examples of unsupervised Gibbs-type priors discussed in the article, and then [ii] check whether introducing informative node attributes further improves the performance of the selected best unsupervised prior. See the source code `esbm.R` for a detailed description of the inputs and the outputs of the two functions `esbm()` and `log_pY_z()`.
+This section contains the code to **implement the collapsed Gibbs sampler for ESBM** [function `esbm()`] and to **evaluate marginal likelihoods** [function `log_pY_z()`] for model selection. Such a code is applied to [i] first select among the four relevant examples of unsupervised Gibbs-type priors discussed in the article, and then [ii] check whether introducing informative node attributes further improves the performance of the selected best unsupervised prior. See the source code `esbm.R` for a detailed description of the inputs and the outputs of the two functions `esbm()` and `log_pY_z()`.
 
 Implementation without node-specific attributes
 ------------------
