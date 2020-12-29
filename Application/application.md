@@ -6,7 +6,7 @@ Data pre-processing
 ================
 The original data [`NDRANGHETAMAFIA_2M.csv`] are available in the zip directory `Ndrangheta Mafia 2 CSV.zip` at the link https://sites.google.com/site/ucinetsoftware/datasets/covert-networks/ndranghetamafia2, and comprise information on the co–participation of 156 suspects at 47 monitored summits of the criminal organization *La Lombardia*, as reported in the **judicial acts** which can be accessed at, e.g., https://liberavco.liberapiemonte.it/wp-content/uploads/sites/13/2012/04/Operazione-Infinito-Ordinanza-di-Custodia-Cautelare.pdf.  
 
-Please download the original [`NDRANGHETAMAFIA_2M.csv`](https://sites.google.com/site/ucinetsoftware/datasets/covert-networks/ndranghetamafia2/Ndrangheta%20Mafia%202%20CSV.zip?attredirects=0&d=1) file and save it in the [`Application`] folder. To load these data in `R`, first **set the working directory** where the `README` file and the subfolders `Source`, `Simulation` and `Application` are located. Once this has been done, **clean the workspace, and load the data in** `R`.
+Please download the original [`NDRANGHETAMAFIA_2M.csv`](https://sites.google.com/site/ucinetsoftware/datasets/covert-networks/ndranghetamafia2/Ndrangheta%20Mafia%202%20CSV.zip?attredirects=0&d=1) file and save it in the `Application` folder. To load these data in `R`, first **set the working directory** where the `README` file and the subfolders `Source`, `Simulation` and `Application` are located. Once this has been done, **clean the workspace, and load the data in** `R`.
  
 ``` r
 rm(list=ls())
