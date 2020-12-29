@@ -14,7 +14,7 @@ rm(list=ls())
 A <- read.csv(file="Application/NDRANGHETAMAFIA_2M.csv",header=TRUE, stringsAsFactors = TRUE)
 ```
 
-A first careful double check between the information in the judicial acts and the data in `A` shows that **in few cases, the attendance of a suspect to a summit was not reported in** `A`. Hence, let us impute this information. 
+A first careful double check between the information in the judicial acts and the data in `A` shows that **in few cases the attendance of a suspect to a summit was not reported in** `A`. Hence, let us impute this information. 
 
 ``` r
 A[23,20] <- 1
