@@ -59,12 +59,12 @@ Recalling Section 1.1, information on presumed **locale membership** and **leade
 # ----------------------------------------------------
 # Locale membership ("OUT": Suspects not belonging to La Lombardia. "MISS": Information not available)
 
-Locale <- c("C","OUT","A","MISS","O","A","MISS","D","D","D","D","D","C","P","L","L","Q","MISS","B","OUT","B","B","I","MISS","OUT","D","A","O","N","N","H","OUT","D","D","G","G","L","A","OUT","Q","C","OUT","Q","L","C","MISS","C","C","F","C","OUT","D","A","B","B","E","M","MISS","C","C","C","B","H","C","C","E","E","E","E","C","MISS","L","A","A","E","E","C","E","E","E","C","MISS","OUT","C","C","E","G","A","A","B","I","I","A","B","B","OUT","I","A","G","N","E","D","F","OUT","OUT","C","D","C","MISS","MISS","C","MISS","E","E","C","MISS","OUT","B","L","A","D","D","O","MISS","B","D","O","D","D","A","A","I","C","MISS","MISS","MISS","A","A","F","E","C","Q","H","B","B","B")   
+Locale <- c("C","OUT","A","MISS","O","A","MISS","D","D","D","D","D","C","P","L","L","Q","MISS","B","OUT","B","B","I","MISS","OUT","D","A","O","N","N","H","OUT","D","E","G","G","L","A","OUT","Q","C","OUT","Q","L","C","MISS","C","C","F","C","OUT","D","A","B","B","E","M","MISS","C","C","C","B","H","C","C","E","E","E","E","C","MISS","L","A","A","E","E","C","E","E","E","C","MISS","OUT","C","C","E","G","A","A","B","I","I","A","B","B","OUT","I","A","G","N","E","D","F","OUT","OUT","C","D","C","MISS","MISS","C","MISS","E","E","C","MISS","OUT","B","L","A","D","D","O","MISS","B","D","O","D","D","A","A","I","C","MISS","MISS","MISS","A","A","F","E","C","Q","H","B","B","B")   
 
 # ----------------------------------------------------
 # Leadership role ("miss”: Information not available)
 
-Role <- c("aff","aff","aff","miss","aff","boss","miss","aff","boss","aff","aff","aff","aff","aff","aff","aff","aff","miss","aff","boss","boss","boss","boss","miss","boss","boss","aff","aff","aff","boss","aff","boss","aff","aff","aff","aff","aff","aff","boss","aff","aff","aff","boss","aff","aff","miss","aff","aff","aff","aff","boss","aff","aff","aff","aff","aff","boss","miss","aff","aff","aff","aff","boss","boss","boss","aff","boss","aff","aff","aff","miss","aff","aff","boss","boss","aff","aff","aff","aff","aff","aff","miss","boss","aff","aff","aff","aff","aff","aff","boss","aff","boss","aff","aff","aff","aff","boss","boss","boss","boss","aff","aff","aff","aff","aff","aff","aff","boss","miss","miss","aff","miss","aff","aff","aff","miss","aff","aff","boss","aff","aff","aff","aff","miss","aff","aff","boss","aff","aff","aff","aff","aff","aff","miss","miss","miss","aff","aff","boss","aff","aff","aff","boss","aff","aff","boss")
+Role <- c("aff","aff","aff","miss","aff","boss","miss","boss","boss","aff","aff","aff","aff","aff","aff","aff","aff","miss","aff","boss","boss","boss","boss","miss","boss","boss","aff","aff","aff","boss","aff","boss","aff","aff","aff","aff","aff","aff","boss","aff","aff","aff","boss","aff","aff","miss","aff","aff","aff","aff","boss","aff","aff","aff","aff","aff","boss","miss","aff","aff","aff","aff","boss","boss","boss","aff","boss","aff","aff","boss","miss","aff","aff","boss","boss","aff","aff","aff","aff","aff","aff","miss","boss","aff","aff","aff","aff","aff","aff","boss","aff","boss","aff","aff","aff","aff","boss","boss","boss","boss","aff","aff","aff","aff","aff","aff","aff","boss","miss","miss","aff","miss","aff","aff","aff","miss","aff","aff","boss","aff","aff","aff","aff","miss","aff","aff","boss","aff","boss","aff","aff","aff","aff","miss","miss","miss","aff","aff","boss","aff","aff","aff","boss","aff","aff","boss")
 ```
 
 As mentioned above, the overarching focus is on the criminal organization *La Lombardia*. Hence, **let us restrict our attention only to those suspects who are known to belong to one of the *locali* of such a criminal organization**.
@@ -274,31 +274,14 @@ my_z <- c(1:V)
 
 # define the vector with node attributes
 my_x <- c(as.factor(RoleLocale))
-my_x[which(my_x>5)] <- 6
+my_x[which(my_x>5)] <- 7
+
+# actors with known peripheral roles in locale D
+sel_periphery_D <- c(6,8,69,73)
+my_x[sel_periphery_D]<- 6
 
 # set hyperparameters for the Dirichlet-Multinomial cohesion function (see the article)
-my_alpha_xi <- rep(1,6)
-
-# ------------------------------------
-# DIRICHLET MULTINOMIAL
-# ------------------------------------
-
-my_prior <- "DM"
-Z_DM_x <- esbm(Y, my_seed, N_iter, my_prior, my_z, a = 1, b = 1, beta_DM = 12/50, H_DM = 50, x = my_x, alpha_xi = my_alpha_xi)
-
-# ------------------------------------
-# DIRICHLET PROCESS (CRP)
-# ------------------------------------
-
-my_prior <- "DP"
-Z_DP_x <- esbm(Y, my_seed, N_iter, my_prior, my_z, a = 1, b = 1, alpha_PY = 8, sigma_PY = 0, x = my_x, alpha_xi = my_alpha_xi)
-
-# ------------------------------------
-# PITMAN-YOR PROCESS
-# ------------------------------------
-
-my_prior <- "PY"
-Z_PY_x <- esbm(Y,my_seed,N_iter, my_prior, my_z,a=1,b=1,alpha_PY = -0.350, sigma_PY = 0.725,x=my_x,alpha_xi=my_alpha_xi)
+my_alpha_xi <- rep(1,7)
 
 # ------------------------------------
 # GNEDIN PROCESS
@@ -313,24 +296,6 @@ Also in this case we **compute the logarithm of the marginal likelihoods** that 
 ``` r
 # compute the logarithm of the marginal likelihoods under the different priors
 
-l_y_DM_x <- rep(0,N_iter)
-for (t in 1:N_iter){
-  l_y_DM_x[t] <- log_pY_z(Y,Z_DM_x[,t],1,1)
-  if (t%%1000 == 0){print(paste("Iteration:", t))}
-}
-
-l_y_DP_x <- rep(0,N_iter)
-for (t in 1:N_iter){
-l_y_DP_x[t] <-	log_pY_z(Y,Z_DP_x[,t],1,1)
-if (t%%1000 == 0){print(paste("Iteration:", t))}
-}
-
-l_y_PY_x <- rep(0,N_iter)
-for (t in 1:N_iter){
-  l_y_PY_x[t] <- log_pY_z(Y,Z_PY_x[,t],1,1)
-  if (t%%1000 == 0){print(paste("Iteration:", t))}
-}
-
 l_y_GN_x <- rep(0,N_iter)
 for (t in 1:N_iter){
   l_y_GN_x[t] <- log_pY_z(Y,Z_GN_x[,t],1,1)
@@ -338,8 +303,8 @@ for (t in 1:N_iter){
 }
 
 # save the output
-save(Z_DP_x,l_y_DP_x,Z_PY_x,l_y_PY_x,Z_GN_x,l_y_GN_x,Z_DM_x,l_y_DM_x,file="Application/Posterior_Attributes.RData")
-rm(Z_DP_x,l_y_DP_x,Z_PY_x,l_y_PY_x,Z_GN_x,l_y_GN_x,Z_DM_x,l_y_DM_x)
+save(Z_GN_x,l_y_GN_x,file="Application/Posterior_Attributes.RData")
+rm(Z_GN_x,l_y_GN_x)
 ```
 
 Posterior inference under ESBM [Table 4]
@@ -355,16 +320,13 @@ load("Application/Posterior_Attributes.RData")
 Before performing posterior inference, let us **visualize the traceplots for the logarithm of the likelihood in Eq. [1]**, evaluated at the MCMC samples of `z` under the different priors, both with and without nodal attributes.
 
 ``` r
-traceplot <- melt(cbind(l_y_DM,l_y_DM_x,l_y_DP,l_y_DP_x,l_y_PY,l_y_PY_x,l_y_GN,l_y_GN_x))
+traceplot <- melt(cbind(l_y_DM,l_y_DP,l_y_PY,l_y_GN,l_y_GN_x))
 traceplot <- traceplot[,-2]
 
-traceplot$Group <- c(rep("DM",N_iter*2),rep("DP",N_iter*2),rep("PY",N_iter*2),rep("GN",N_iter*2))
-traceplot$Group <- factor(traceplot$Group,levels=c("DM","DP","PY","GN"))
+traceplot$Group <- c(rep("DM [unsup]",N_iter),rep("DP [unsup]",N_iter),rep("PY [unsup]",N_iter),rep("GN [unsup]",N_iter),rep("GN [sup]",N_iter))
+traceplot$Group <- factor(traceplot$Group,levels=c("DM [unsup]","DP [unsup]","PY [unsup]","GN [unsup]","GN [sup]"))
 
-traceplot$Attr <- rep(c(rep("Without Attributes",50000),rep("With Attributes",50000)),4)
-traceplot$Attr <- factor(traceplot$Attr,levels=c("Without Attributes","With Attributes"))
-
-Trace <- ggplot(traceplot,aes(y=value,x=X1)) + geom_line() + facet_grid(Attr~Group) + theme_bw() + labs(y="",x="")
+Trace <- ggplot(traceplot,aes(y=value,x=X1)) + geom_line() + facet_grid(.~Group) + theme_bw() + labs(y="",x="")
 Trace
 ```
 
