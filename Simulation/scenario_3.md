@@ -177,7 +177,7 @@ Z_GN_x <- esbm(Y, my_seed, N_iter, my_prior, my_z, a = 1, b = 1, gamma_GN = 0.45
 Also in this case we **compute the logarithm of the marginal likelihood** that will be used for assessing performance, and **save the output** in the file `Posterior_Attributes3.RData`.
 
 ``` r
-# compute the logarithm of the marginal likelihoods under the different priors
+# compute the logarithm of the marginal likelihood under supervised GN prior
 
 l_y_GN_x <- rep(0,N_iter)
 for (t in 1:N_iter){
