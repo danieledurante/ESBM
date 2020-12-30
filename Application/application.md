@@ -770,11 +770,11 @@ sc <- reg.SP(Y,K=sel_H,lap=TRUE,tau=0)$cluster
 
 # for graphical purposed, set the order in which groups are displayed so that clusters 
 # with nodes having similar attributes are shown close to each other
-group_order <- c(1,4,9,3,2,6,7,10,5,8)
+group_order <- c(2,6,7,1,4,9,3,10,5,8)
 
 # to display the block structures, re-order the rows and columns of Y, and the elements 
 # in RoleLocale according to the groupings estimated by spectral clustering 
-sel <- which(sc==1)
+sel <- which(sc==2)
 for (k in 2:length(group_order)){
 sel <- c(sel,which(sc==group_order[k]))	
 }
