@@ -379,7 +379,7 @@ l_y_post_GN_x <- log(length(l_y_GN_x))-max(neg_l_y_GN_x)-log(sum(exp(neg_l_y_GN_
 l_y_post_GN_x
 ```
 
-As it can be noticed, the **Gnedin process performs slightly better** relative to the other priors. Moreover, the **external node attribute**, defined by a combination of *locale* membership and leadership *role*, **yields further improvements in the learning process**. For instance, we obtain strong evidence in favor of the supervised GN process relative to the unsupervised representation, when studying the **Bayes factor**.
+As it can be noticed, the **Gnedin process performs slightly better** relative to the other priors. Moreover, the **external node attribute**, defined by a combination of *locale* membership and leadership *role*, **yields further improvements in the learning process**. For instance, we obtain a positive (almost strong) evidence in favor of the supervised GN process relative to the unsupervised representation, when studying the **Bayes factor**.
 
 ``` r
 2*(l_y_post_GN_x-l_y_post_GN)
