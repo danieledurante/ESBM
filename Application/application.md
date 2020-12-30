@@ -385,7 +385,7 @@ As it can be noticed, the **Gnedin process performs slightly better** relative t
 2*(l_y_post_GN_x-l_y_post_GN)
 ```
 
-As discussed in the article, accurate learning of the underlying number of groups is a fundamental goal. Hence, let us study the **quartiles of the posterior distribution for the number of non-empty groups** under the different priors and models (*see the third column in Table 4*). 
+As discussed in the article, accurate learning of the underlying number of groups is a fundamental goal. Hence, let us study the **quartiles of the posterior distribution for the number of non-empty groups** under the different priors and models (*see the second column in Table 4*). 
 
 ``` r
 # ------------------------------------
@@ -412,7 +412,7 @@ quantile(apply(Z_GN_x[,(burn_in+1):N_iter],2,max))[c(2:4)]
 
 The above results seem to provide consistent evidence for the presence of either **14, 15 or 16 groups in the Infinito network**. 
 
-To complete Table 4, let us obtain **point estimate** and **credible balls** for the group assignments of the different nodes. This is done by adapting the methods presented in Wade and Ghahramani (2018) and implemented in the `R` package `mcclust.ext`. To apply these strategies we also require an estimate of the **co-clustering matrix**, whose generic element `c[v,u]` encodes the relative frequency of MCMC samples in which nodes `v` and `u` are in the same cluster. Such an estimate can be obtained via the function `pr_cc()` in the source code `esbm.R` (*see the second column of Table 4 for the logarithm of the likelihood in Eq. [1] evaluated at the estimated partition. The `VI` distance between the estimated partition and the 95% credible bound is reported in the fourth column of Table 4*). 
+To complete Table 4, let us obtain **point estimate** and **credible balls** for the group assignments of the different nodes. This is done by adapting the methods presented in Wade and Ghahramani (2018) and implemented in the `R` package `mcclust.ext`. To apply these strategies we also require an estimate of the **co-clustering matrix**, whose generic element `c[v,u]` encodes the relative frequency of MCMC samples in which nodes `v` and `u` are in the same cluster. Such an estimate can be obtained via the function `pr_cc()` in the source code `esbm.R` (*the `VI` distance between the estimated partition and the 95% credible bound is reported in the third column of Table 4*). 
 
 
 ``` r
@@ -425,9 +425,6 @@ c_Z_DM <- pr_cc(Z_DM[,(burn_in+1):N_iter])
 # point estimate
 memb_Z_DM_VI <- minVI(c_Z_DM,method="avg",max.k=20)
 memb_Z_DM <- memb_Z_DM_VI$cl
-
-# logarithm of likelihood in Eq. [1] evaluated at the estimated partition
-log_pY_z(Y,memb_Z_DM,1,1)
 
 # horizontal bound of the credible ball
 credibleball(memb_Z_DM_VI$cl,t(Z_DM[,(burn_in+1):N_iter]))[[5]]
@@ -442,9 +439,6 @@ c_Z_DP <- pr_cc(Z_DP[,(burn_in+1):N_iter])
 memb_Z_DP_VI <- minVI(c_Z_DP,method="avg",max.k=20)
 memb_Z_DP <- memb_Z_DP_VI$cl
 
-# logarithm of likelihood in Eq. [1] evaluated at the estimated partition
-log_pY_z(Y,memb_Z_DP,1,1)
-
 # horizontal bound of the credible ball
 credibleball(memb_Z_DP_VI$cl,t(Z_DP[,(burn_in+1):N_iter]))[[5]]
 
@@ -457,9 +451,6 @@ c_Z_PY <- pr_cc(Z_PY[,(burn_in+1):N_iter])
 # point estimate
 memb_Z_PY_VI <- minVI(c_Z_PY,method="avg",max.k=20)
 memb_Z_PY <- memb_Z_PY_VI$cl
-
-# logarithm of likelihood in Eq. [1] evaluated at the estimated partition
-log_pY_z(Y,memb_Z_PY,1,1)
 
 # horizontal bound of the credible ball
 credibleball(memb_Z_PY_VI$cl,t(Z_PY[,(burn_in+1):N_iter]))[[5]]
@@ -474,9 +465,6 @@ c_Z_GN <- pr_cc(Z_GN[,(burn_in+1):N_iter])
 memb_Z_GN_VI <- minVI(c_Z_GN,method="avg",max.k=20)
 memb_Z_GN <- memb_Z_GN_VI$cl
 
-# logarithm of likelihood in Eq. [1] evaluated at the estimated partition
-log_pY_z(Y,memb_Z_GN,1,1)
-
 # horizontal bound of the credible ball
 credibleball(memb_Z_GN_VI$cl,t(Z_GN[,(burn_in+1):N_iter]))[[5]]
 
@@ -487,9 +475,6 @@ c_Z_GN <- pr_cc(Z_GN_x[,(burn_in+1):N_iter])
 # point estimate
 memb_Z_GN_VI <- minVI(c_Z_GN,method="avg",max.k=20)
 memb_Z_GN <- memb_Z_GN_VI$cl
-
-# logarithm of likelihood in Eq. [1] evaluated at the estimated partition
-log_pY_z(Y,memb_Z_GN,1,1)
 
 # horizontal bound of the credible ball
 credibleball(memb_Z_GN_VI$cl,t(Z_GN_x[,(burn_in+1):N_iter]))[[5]]
