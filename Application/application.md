@@ -1005,22 +1005,22 @@ betwenness_block_esbm <- c(c(t(z)%*%betweenness(net_Y))/(table(memb_Z_GN)))
 #------------------------------------------------------
 
 # create the dataset containing betweenness and transitivity for the groups obtained by the
-# three different methods (first 15 rows refer to the 15 clusters estimated under ESBM)
+# three different methods (first 16 rows refer to the 16 clusters estimated under ESBM)
 
 data_measure <- data.frame(cbind(c(betwenness_block_esbm,betwenness_block_Louv,betwenness_block_sc),c(transivity_block_esbm,transivity_block_Louv,transivity_block_sc)))
 rownames(data_measure)<-c(1:dim(data_measure)[[1]])
 
 # define a grouping variable coded as follow:
-# 1 to 15: Ids of the groups estimated under ESBM
-# 16: Unique Id for the groups estimated under Louvain and spectral clustering
-data_measure$group <- as.factor(c(1:15,rep(16,14)))
+# 1 to 16: Ids of the groups estimated under ESBM
+# 17: Unique Id for the groups estimated under Louvain and spectral clustering
+data_measure$group <- as.factor(c(1:16,rep(17,14)))
 
 # define a shape variable coded as follow:
 # 1: ESBM groups mostly populated by affiliates according to the pie-charts in Figure 5 
 # 2: ESBM groups mostly populated by bosses according to the pie-charts in Figure 5 
 # 3: Louvain groups
 # 4: Spectral clustering groups
-shape_temp <- c(rep(0,15),rep(3,4),rep(4,10))
+shape_temp <- c(rep(0,16),rep(3,4),rep(4,10))
 shape_temp[which(apply(t_standard,1,which.max)<=5)] <- 1
 shape_temp[which(apply(t_standard,1,which.max)>5)] <- 2
 data_measure$shape <- as.factor(shape_temp) 
@@ -1038,7 +1038,7 @@ color_points <- c(mycolors[apply(t_standard,1,which.max)],brewer.pal(9,"Greys")[
 
 # plot Figure 6
 ggplot(data_measure, aes(x=X1, y=X2,color=group,fill=group)) + geom_point(aes(size=(size^1.5),shape=shape),stroke = 1)+theme_bw()+ theme(legend.position = "none")+
-   scale_size_continuous(range = c(0,15))+ scale_color_manual(values=color_points)+ scale_fill_manual(values=alpha(color_points,0.3))+xlim(-5,260)+ylim(0.35,1.05)+xlab("Betweenness")+ylab("Local Transivity")+scale_shape_manual(values=c(21, 22,3,4))
+   scale_size_continuous(range = c(0,16))+ scale_color_manual(values=color_points)+ scale_fill_manual(values=alpha(color_points,0.3))+xlim(-5,260)+ylim(0.35,1.05)+xlab("Betweenness")+ylab("Local Transivity")+scale_shape_manual(values=c(21, 22,3,4))
 ```
 
 Refer to Sections 1 and 5 in the article for detailed comments on the above Figures.
