@@ -804,7 +804,7 @@ memb_Z_GN <- memb_Z_GN_VI$cl
 
 # for graphical purposed, set the order in which groups are displayed so that clusters 
 # with nodes having similar attributes are shown close to each other
-group_order <- c(6,2,16,5,8,12,10,11,1,13,3,7,4,9,14,15)
+group_order <- c(6,2,16,5,8,12,10,11,1,13,15,3,7,4,9,14)
 
 # to display the block structures, re-order the rows and columns of Y, and the elements 
 # in RoleLocale according to the groupings estimated under ESBM with supervised GN prior 
@@ -855,7 +855,7 @@ Y_edge_esbm <- edge_est(memb_Z_GN,Y,1,1)
 
 # for graphical purposed, set the order in which groups are displayed so that clusters 
 # with nodes having similar attributes are shown close to each other (same as for Adj_esbm)
-group_order <- c(6,2,16,5,8,12,10,11,1,13,3,7,4,9,14,15)
+group_order <- c(6,2,16,5,8,12,10,11,1,13,15,3,7,4,9,14)
 
 # to display the block structures, re-order the rows and columns of Y, and the elements 
 # in RoleLocale according to the groupings estimated under ESBM with supervised GN prior 
