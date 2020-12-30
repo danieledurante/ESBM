@@ -804,11 +804,11 @@ memb_Z_GN <- memb_Z_GN_VI$cl
 
 # for graphical purposed, set the order in which groups are displayed so that clusters 
 # with nodes having similar attributes are shown close to each other
-group_order <- c(15,5,11,2,6,9,10,1,12,7,4,8,3,14,13)
+group_order <- c(6,2,16,5,8,12,10,11,1,13,3,7,4,9,14,15)
 
 # to display the block structures, re-order the rows and columns of Y, and the elements 
 # in RoleLocale according to the groupings estimated under ESBM with supervised GN prior 
-sel <- which(memb_Z_GN==15)
+sel <- which(memb_Z_GN==6)
 for (k in 2:length(group_order)){
 sel <- c(sel,which(memb_Z_GN==group_order[k]))	
 }
