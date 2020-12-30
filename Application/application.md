@@ -940,12 +940,12 @@ V(net_Y)$frame.color <- "black"
 E(net_Y)$color <- "grey"
 
 # node positions are obtained via force–directed placement
-set.seed(2)
+set.seed(5)
 l <- layout_with_fr(net_Y)
 l <- norm_coords(l, ymin=-1, ymax=1, xmin=-1.5, xmax=1.5)
 
 # plot Figure 5
-plot(net_Y,rescale=F, layout=l*1.8,edge.curved=0.2,vertex.shape="pie", vertex.pie=values,vertex.pie.color=pie_colors,mark.groups=c(3,4,7,8,13,14), mark.col="#f0f0f0", mark.border=NA)
+plot(net_Y,rescale=F, layout=l*1.8,edge.curved=0.2,vertex.shape="pie", vertex.pie=values,vertex.pie.color=pie_colors,mark.groups=c(3,7,4,9,14,15), mark.col="#f0f0f0", mark.border=NA)
 ```
 
 Finally, to **reproduce Figure 6** execute the following code.
