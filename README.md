@@ -4,7 +4,7 @@ This repository is associated with the article **Extended stochastic block model
 
 The documentation is organized in the **three main folders** described below.  
 
-- `Source`.  It contains all the **source** `R` **functions** [see `esbm.R`] which are required to perform posterior computation and inference under the **ESBM** class, and  the **additional** `cpp` **file** [see `stirling.cpp`] that is necessary to study the **Gibbs-type** priors discussed in the article.
+- `Source`.  It contains all the **source** `R` **functions** [see `esbm.R`] which are required to perform posterior computation and inference under the **ESBM** class, and  the **additional** `cpp` **file** [see `stirling.cpp`] that is necessary to study the **Gibbs-type** priors discussed in the article. The directory also contains the `cpp` **file** [see `JCDC.cpp`] developed by [Yuan Zhang](http://www-personal.umich.edu/~yzhanghf/) which implements one of the competiting strategies in the simulations and application. 
 
 - `Simulation`. It contains the three step-by-step tutorials [see `scenario_1.md`, `scenario_2.md` and `scenario_3.md`] to **fully reproduce the results for the simulation scenarios 1, 2 and 3, respectively, presented in Section 4** of the article. The folder contains also the **simulated networks associated with these three scenarios** [see `network_1.RData`, `network_2.RData` and `network_3.RData`].  
 
