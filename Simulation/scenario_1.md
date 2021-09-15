@@ -281,7 +281,7 @@ plot(ts(LL[index_traceplot,]),xlab="",ylab="")
 # ------------------------------------
 # PITMAN-YOR PROCESS SUPERVISED
 # ------------------------------------
-Z_PY_WAIC_x <- Z_PY[,(burn_in+1):N_iter]
+Z_PY_WAIC_x <- Z_PY_x[,(burn_in+1):N_iter]
 
 for (t in 1:dim(Z_PY_WAIC_x)[2]){
   LL[,t]<-sampleLL(Z_PY_WAIC_x[,t],Y,a,b)
