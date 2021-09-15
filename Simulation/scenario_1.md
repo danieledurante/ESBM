@@ -197,25 +197,14 @@ set.seed(1)
 V <- dim(Y)[1]
 burn_in <- 10000
 N_iter  <- 50000
-
+index_traceplot <- sample(c(1:(V*(V-1)/2)),1)
 a <- b <- 1
 LL <- matrix(nrow=V*(V-1)/2,ncol=N_iter)
 
+# ------------------------------------
+# DIRICHLET MULTINOMIAL UNSUPERVISED
+# ------------------------------------
 Z_DM_WAIC <- Z_DM[,(burn_in+1):N_iter]
-Z_DP_WAIC <- Z_DP[,(burn_in+1):N_iter]
-Z_PY_WAIC <- Z_PY[,(burn_in+1):N_iter]
-Z_GN_WAIC <- Z_GN[,(burn_in+1):N_iter]
-
-Z_DM_WAIC_x <- Z_DM_x[,(burn_in+1):N_iter]
-Z_DP_WAIC_x <- Z_DP_x[,(burn_in+1):N_iter]
-Z_PY_WAIC_x <- Z_PY_x[,(burn_in+1):N_iter]
-Z_GN_WAIC_x <- Z_GN_x[,(burn_in+1):N_iter]
-
-index_traceplot <- sample(c(1:(V*(V-1)/2)),1)
-
-# ------------------------------------
-# DIRICHLET MULTINOMIAL
-# ------------------------------------
 
 for (t in 1:dim(Z_DM_WAIC)[2]){
   LL[,t]<-sampleLL(Z_DM_WAIC[,t],Y,a,b)
@@ -224,6 +213,50 @@ for (t in 1:dim(Z_DM_WAIC)[2]){
 WAIC(LL)$WAIC
 # Selected traceplot
 plot(ts(LL[index_traceplot,]),xlab="",ylab="")
+
+# ------------------------------------
+# DIRICHLET PROCESS (CRP) UNSUPERVISED
+# ------------------------------------
+Z_DP_WAIC <- Z_DP[,(burn_in+1):N_iter]
+
+for (t in 1:dim(Z_DP_WAIC)[2]){
+  LL[,t]<-sampleLL(Z_DP_WAIC[,t],Y,a,b)
+  if (t%%10000 == 0){print(paste("Iteration:", t))}
+}
+WAIC(LL)$WAIC
+# Selected traceplot
+plot(ts(LL[index_traceplot,]),xlab="",ylab="")
+
+# ------------------------------------
+# PITMAN-YOR PROCESS UNSUPERVISED
+# ------------------------------------
+Z_PY_WAIC <- Z_PY[,(burn_in+1):N_iter]
+
+for (t in 1:dim(Z_PY_WAIC)[2]){
+  LL[,t]<-sampleLL(Z_PY_WAIC[,t],Y,a,b)
+  if (t%%10000 == 0){print(paste("Iteration:", t))}
+}
+WAIC(LL)$WAIC
+# Selected traceplot
+plot(ts(LL[index_traceplot,]),xlab="",ylab="")
+
+# ------------------------------------
+# GNEDIN PROCESS UNSUPERVISED
+# ------------------------------------
+Z_GN_WAIC <- Z_GN[,(burn_in+1):N_iter]
+
+for (t in 1:dim(Z_GN_WAIC)[2]){
+  LL[,t]<-sampleLL(Z_GN_WAIC[,t],Y,a,b)
+  if (t%%10000 == 0){print(paste("Iteration:", t))}
+}
+WAIC(LL)$WAIC
+# Selected traceplot
+plot(ts(LL[index_traceplot,]),xlab="",ylab="")
+
+# ------------------------------------
+# DIRICHLET MULTINOMIAL SUPERVISED
+# ------------------------------------
+Z_DM_WAIC_x <- Z_DM_x[,(burn_in+1):N_iter]
 
 for (t in 1:dim(Z_DM_WAIC_x)[2]){
   LL[,t]<-sampleLL(Z_DM_WAIC_x[,t],Y,a,b)
@@ -234,16 +267,9 @@ WAIC(LL)$WAIC
 plot(ts(LL[index_traceplot,]),xlab="",ylab="")
 
 # ------------------------------------
-# DIRICHLET PROCESS (CRP)
+# DIRICHLET PROCESS (CRP) SUPERVISED
 # ------------------------------------
-
-for (t in 1:dim(Z_DP_WAIC)[2]){
-  LL[,t]<-sampleLL(Z_DP_WAIC[,t],Y,a,b)
-  if (t%%10000 == 0){print(paste("Iteration:", t))}
-}
-WAIC(LL)$WAIC
-# Selected traceplot
-plot(ts(LL[index_traceplot,]),xlab="",ylab="")
+Z_DP_WAIC_x <- Z_DP_x[,(burn_in+1):N_iter]
 
 for (t in 1:dim(Z_DP_WAIC_x)[2]){
   LL[,t]<-sampleLL(Z_DP_WAIC_x[,t],Y,a,b)
@@ -254,16 +280,9 @@ WAIC(LL)$WAIC
 plot(ts(LL[index_traceplot,]),xlab="",ylab="")
 
 # ------------------------------------
-# PITMAN-YOR PROCESS
+# PITMAN-YOR PROCESS SUPERVISED
 # ------------------------------------
-
-for (t in 1:dim(Z_PY_WAIC)[2]){
-  LL[,t]<-sampleLL(Z_PY_WAIC[,t],Y,a,b)
-  if (t%%10000 == 0){print(paste("Iteration:", t))}
-}
-WAIC(LL)$WAIC
-# Selected traceplot
-plot(ts(LL[index_traceplot,]),xlab="",ylab="")
+Z_PY_WAIC_x <- Z_PY[,(burn_in+1):N_iter]
 
 for (t in 1:dim(Z_PY_WAIC_x)[2]){
   LL[,t]<-sampleLL(Z_PY_WAIC_x[,t],Y,a,b)
@@ -274,16 +293,9 @@ WAIC(LL)$WAIC
 plot(ts(LL[index_traceplot,]),xlab="",ylab="")
 
 # ------------------------------------
-# GNEDIN PROCESS
+# GNEDIN PROCESS SUPERVISED
 # ------------------------------------
-
-for (t in 1:dim(Z_GN_WAIC)[2]){
-  LL[,t]<-sampleLL(Z_GN_WAIC[,t],Y,a,b)
-  if (t%%10000 == 0){print(paste("Iteration:", t))}
-}
-WAIC(LL)$WAIC
-# Selected traceplot
-plot(ts(LL[index_traceplot,]),xlab="",ylab="")
+Z_GN_WAIC_x <- Z_GN_x[,(burn_in+1):N_iter]
 
 for (t in 1:dim(Z_GN_WAIC_x)[2]){
   LL[,t]<-sampleLL(Z_GN_WAIC_x[,t],Y,a,b)
@@ -486,7 +498,7 @@ Also these **results are in line with our previous discussion**.
 
 Comparison with state-of-the-art competitors [Table 3: Scenario 1]
 ================
-Let us now reproduce the results for **scenario 1** in **Table 3**. Here the focus is on comparing the performance of **ESBM with GN prior** and **state–of–the–art competitors** in the `R` libraries `igraph` and `randnet`. Such alternative strategies include the **Louvain algorithm** [Blondel et al., 2008], **spectral clustering** [Von Luxburg, 2007] and **regularized spectral clustering** [Amini et al., 2013]. 
+Let us now reproduce the results for **scenario 1** in **Table 3**. Here the focus is on comparing the performance of **ESBM with GN prior** and **state–of–the–art competitors** in the `R` libraries `igraph`, `randnet`, `greed` and `JCDC`. Such alternative strategies include the **Louvain algorithm** [Blondel et al., 2008], **spectral clustering** [Von Luxburg, 2007], **regularized spectral clustering** [Amini et al., 2013], the **greed clustering algorithm** for SBM and degree corrected SBM (DC–SBM) [Come et al., 2021], and the **attribute–assisted JCDC community detection algorithm** [Zhang, Levina and Zhu, 2016] 
 
 To compute the errors in the column `ERROR [EST]`, we require the **matrix of true edge probabilities** which have been used to simulate `network_1.RData`.
 
@@ -577,7 +589,7 @@ VI(z_0,t(Louv))
 mean(abs(lowerTriangle(edge_est(Louv,Y,a=1,b=1))-lowerTriangle(pi_true)))
 ```
 
-In implementing **spectral clustering**, we first need to **specify the number of groups** `sel_H`. To do this, we consider a variety of model selection criteria available in the `R` library `randnet`, and set the number of groups equal to the median of the values of `H` estimated under the different strategies. 
+In implementing **spectral clustering**, we first need to **specify the number of groups** `sel_H`. To do this, we consider a variety of model selection criteria available in the `R` library `randnet`, and set the number of groups equal to the median of the values of `H` estimated under the different strategies. The output of the functions `NCV.select()`and `ECV.block()` also allows to formally **select between SBM and DC–SBM**. Both state-of-the-art strategies provide support in favor of SBM in this specific scenario.
 
 ``` r
 set.seed(1)
@@ -648,6 +660,129 @@ VI(z_0,t(r_sc))
 
 # estimation error for edge probabilities 
 mean(abs(lowerTriangle(edge_est(r_sc,Y,a=1,b=1))-lowerTriangle(pi_true)))
+```
+
+The performance measures in *columns 1, 4 and 7 of Table 3* under the **greed clustering algorithm** for SBM and degree corrected SBM (DC–SBM) can be obtained leveraging the `R` package `greed`. Exploiting the results from the previous methods, the greedy algorithm is initialized at `sel_H`.
+
+``` r
+# ------------------------------------
+# GREED SBM
+# ------------------------------------
+
+set.seed(1)
+
+greed_out <- greed(Y,K=sel_H,model=new("sbm",alpha=3.5/50,type="undirected"),alg=methods::new("hybrid"),verbose=FALSE)
+
+# point estimate
+g_sbm <- greed_out@cl
+
+# estimated H
+length(table(g_sbm))
+
+# VI distance between estimated and true partition
+VI(z_0,t(g_sbm))
+
+# estimation error for edge probabilities 
+mean(abs(lowerTriangle(edge_est(g_sbm,Y,a=1,b=1))-lowerTriangle(pi_true)))
+
+# ------------------------------------
+# GREED DC-SBM
+# ------------------------------------
+
+set.seed(1)
+
+greed_out <- greed(Y,K=sel_H,model=new("dcsbm",alpha=3.5/50,type="undirected"),alg=methods::new("hybrid"),verbose=FALSE)
+
+# point estimate
+g_dcsbm <- greed_out@cl
+
+# estimated H
+length(table(g_dcsbm))
+
+# VI distance between estimated and true partition
+VI(z_0,t(g_dcsbm))
+
+# estimation error for edge probabilities 
+mean(abs(lowerTriangle(edge_est(g_dcsbm,Y,a=1,b=1))-lowerTriangle(pi_true)))
+```
+
+We conclude the comparison against state-of-the-art competitors by considering the **attribute–assisted JCDC community detection algorithm** which, unlike the previous methods, provides a supervised strategy that leverages also information from attributes. The implementation of this strategy requires the `cpp` file  `JCDC.cpp` developed by [Yuan Zhang](http://www-personal.umich.edu/~yzhanghf/) and available in the subfolder `Source`. Also in this case, the number of groups is set equal to `sel_H`. The code below provides the performance measures in *columns 1, 4 and 7 of Table 3* under the **attribute–assisted JCDC community detection algorithm**, with two different settings for the tuning parameters.
+
+``` r
+A <- Y
+K <- sel_H
+N <- V
+
+# similarity matrix among nodes based on attributes
+phi<-matrix(NA,N,N)
+for (i in 1:N)
+  for (j in 1:N)
+    phi[i,j]<-as.integer(z_0[i]==z_0[j])
+
+require(Rcpp)
+require(RcppArmadillo)
+sourceCpp("JCDC.cpp")
+
+# initialize with spectral clustering
+
+D.inv = diag(1./(sqrt(apply(A, 1, sum))+1e-7));
+Laplacian = D.inv %*% A %*% D.inv;
+L.svd = svd(Laplacian);
+U.K = L.svd$u[, 1:K];
+spec.cluster = kmeans(U.K, K, nstart=10)$cluster;
+
+G.fit = array(0, c(N, K));
+for(k in 1:K){
+  G.fit[spec.cluster==k, k] = 1;
+}
+
+# ------------------------------------
+# JCDC with tuning parameter 5
+# ------------------------------------
+
+set.seed(1)
+
+W_max <- 5
+p = dim(phi)[3];	if(length(dim(phi))==2){p = 1;}
+
+result <- JCDC(A, phi, p, G.fit, 1, K, 20, 30, 20, W_max, 2, 0, 1);
+cluster_JCDC = as.vector(result$G.fit %*% (1:K));
+
+# point estimate
+jcdc_5 <- cluster_JCDC
+
+# estimated H
+length(table(jcdc_5))
+
+# VI distance between estimated and true partition
+VI(z_0,t(jcdc_5))
+
+# estimation error for edge probabilities 
+mean(abs(lowerTriangle(edge_est(jcdc_5,Y,a=1,b=1))-lowerTriangle(pi_true)))
+
+# ------------------------------------
+# JCDC with tuning parameter 1.5
+# ------------------------------------
+
+set.seed(1)
+
+W_max <- 1.5
+p = dim(phi)[3];	if(length(dim(phi))==2){p = 1;}
+
+result <- JCDC(A, phi, p, G.fit, 1, K, 20, 30, 20, W_max, 2, 0, 1);
+cluster_JCDC = as.vector(result$G.fit %*% (1:K));
+
+# point estimate
+jcdc_1_5 <- cluster_JCDC
+
+# estimated H
+length(table(jcdc_1_5))
+
+# VI distance between estimated and true partition
+VI(z_0,t(jcdc_1_5))
+
+# estimation error for edge probabilities 
+mean(abs(lowerTriangle(edge_est(jcdc_1_5,Y,a=1,b=1))-lowerTriangle(pi_true)))
 ```
 
 Predictive performance for the group membership of new nodes
