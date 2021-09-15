@@ -196,10 +196,9 @@ set.seed(1)
 
 V <- dim(Y)[1]
 burn_in <- 10000
-N_iter  <- 50000
 index_traceplot <- sample(c(1:(V*(V-1)/2)),1)
 a <- b <- 1
-LL <- matrix(nrow=V*(V-1)/2,ncol=N_iter)
+LL <- matrix(nrow=V*(V-1)/2,ncol=40000)
 
 # ------------------------------------
 # DIRICHLET MULTINOMIAL UNSUPERVISED
