@@ -835,12 +835,12 @@ Post_Prob[v,] <- pred_esbm(Y_augmented, prior="GN", z_hat=memb_Z_GN,a = 1, b = 1
 # compute misclassification error
 (V_new-sum(diag(table(memb_new,apply(Post_Prob,1,which.max)))))/V_new
 ```
+Refer to Section 4 in the article for detailed comments on the above outputs.
 
-
-Graphical representation [Figure 3: Row 1]
+Graphical representation [Figure 3: first matrix. Figure 4: first column.]
 ================
 
-Finally, the code to **reproduce the first row of Figure 3** is provided below.
+The code to **reproduce the first matrix of Figure 3** is provided below.
 
 ``` r
 diag(Y) <- 0
@@ -855,6 +855,15 @@ Network <- pheatmap(Y,color=colorRampPalette(brewer.pal(9,"Greys")[c(1,8)])(30),
 
 # ------------------------------------
 
+g <- grid.arrange(Network[[4]],nrow=1,vp=viewport(width=1, height=1))
+g2 <- cowplot::ggdraw(g)+ theme(plot.background = element_rect(fill=colorRampPalette(brewer.pal(9,"Greys")[c(1,8)])(30)[8]))
+
+print(g2)
+```
+
+The code to **reproduce the first column of Figure 4** is provided below.
+
+``` r
 c_Z_GN <- pr_cc(Z_GN[,(burn_in+1):N_iter])
 memb_Z_GN_VI <- minVI(c_Z_GN,method="avg",max.k=20)
 memb_Z_GN <- memb_Z_GN_VI$cl
@@ -885,7 +894,7 @@ Cov <- pheatmap(c_Z_GN_x,color=colorRampPalette(brewer.pal(9,"Greys")[c(1,8)])(3
 
 # ------------------------------------
 
-g <- grid.arrange(Network[[4]],Marg[[4]],Cov[[4]],nrow=1,vp=viewport(width=1, height=1))
+g <- grid.arrange(Marg[[4]],Cov[[4]],ncol=1,vp=viewport(width=1, height=1))
 g2 <- cowplot::ggdraw(g)+ theme(plot.background = element_rect(fill=colorRampPalette(brewer.pal(9,"Greys")[c(1,8)])(30)[8]))
 
 print(g2)
