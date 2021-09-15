@@ -24,6 +24,8 @@ library(ggplot2)
 library(coda)
 library(dummies)
 library(randnet)
+library(greed)
+library(LaplacesDemon)
 
 load("Simulation/network_1.RData")
 V <- dim(Y)[1]
@@ -32,7 +34,7 @@ V <- dim(Y)[1]
 diag(Y)
 ```
 
-As discussed in the article, the network under analysis has *V=80* nodes and *5* groups displaying **classical community structures** [see first row of Figure 3 in the article]. 
+As discussed in the article, the network under analysis has *V=80* nodes and *5* groups displaying **classical community structures** [see first matrix of Figure 3 in the article]. 
 
 Setting the hyperparameters
 ================
@@ -75,7 +77,7 @@ Here we **set the hyperparameters so that the expectation of `H` is close to *10
 
 Posterior computation via collapsed Gibbs sampler
 ================
-This section contains the code to **implement the collapsed Gibbs sampler for ESBM** [function `esbm()`] and to **evaluate marginal likelihoods** [function `log_pY_z()`] for model selection. Such a code is applied to [i] first select among the four relevant examples of unsupervised Gibbs-type priors discussed in the article, and then [ii] check whether introducing informative node attributes further improves the performance of the selected best unsupervised prior. See the source code `esbm.R` for a detailed description of the inputs and the outputs of the two functions `esbm()` and `log_pY_z()`.
+This section contains the code to **implement the collapsed Gibbs sampler for ESBM** [function `esbm()`]. Such a code is applied to select among the four relevant examples of unsupervised Gibbs-type priors discussed in the article, and to check whether introducing informative node attributes further improves the performance of the different unsupervised prior. See the source code `esbm.R` for a detailed description of the inputs and the outputs of the function `esbm()`.
 
 Implementation without node-specific attributes
 ------------------
@@ -116,43 +118,17 @@ my_prior  <- "GN"
 Z_GN <- esbm(Y, my_seed, N_iter, my_prior, my_z, a = 1, b = 1, gamma_GN = 0.45)
 ```
 
-Once the above steps have been done, **compute the logarithm of the marginal likelihoods** that will be used for comparing the performance of the different prior specifications, and **save the output** in the file `Posterior_No_Attributes1.RData`.
+Once the above steps have been done, **save the output** in the file `Posterior_No_Attributes1.RData`.
 
 ``` r
-# compute the logarithm of the marginal likelihoods under the different priors
-
-l_y_DM <- rep(0,N_iter)
-for (t in 1:N_iter){
-  l_y_DM[t] <- log_pY_z(Y,Z_DM[,t],1,1)
-  if (t%%1000 == 0){print(paste("Iteration:", t))}
-}
-
-l_y_DP <- rep(0,N_iter)
-for (t in 1:N_iter){
-  l_y_DP[t] <- log_pY_z(Y,Z_DP[,t],1,1)
-  if (t%%1000 == 0){print(paste("Iteration:", t))}
-}
-
-l_y_PY <- rep(0,N_iter)
-for (t in 1:N_iter){
-  l_y_PY[t] <- log_pY_z(Y,Z_PY[,t],1,1)
-  if (t%%1000 == 0){print(paste("Iteration:", t))}
-}
-
-l_y_GN <- rep(0,N_iter)
-for (t in 1:N_iter){
-  l_y_GN[t] <- log_pY_z(Y,Z_GN[,t],1,1)
-  if (t%%1000 == 0){print(paste("Iteration:", t))}
-}
-
 # save the output
-save(Z_DP,l_y_DP,Z_PY,l_y_PY,Z_GN,l_y_GN,Z_DM,l_y_DM,file="Simulation/Posterior_No_Attributes1.RData")
-rm(Z_DP,l_y_DP,Z_PY,l_y_PY,Z_GN,l_y_GN,Z_DM,l_y_DM)
+save(Z_DP,Z_PY,Z_GN,Z_DM,file="Simulation/Posterior_No_Attributes1.RData")
+rm(Z_DP,Z_PY,Z_GN,Z_DMM)
 ```
 
 Implementation with node-specific attributes
 ------------------
-As shown in Table 2 in the article, the **GN process** yields the best performance among the four relevant examples of unsupervised Gibbs-type priors discussed in the article. Hence, let us now **perform posterior computation for the supervised GN prior with node-specific attributes** coinciding, in this case, with the true membership labels. To accomplish this goal, execute the code below.
+As shown in Table 2 in the article, the **GN process** yields the best performance among the four relevant examples of unsupervised Gibbs-type priors discussed in the article. Let us now **perform posterior computation for the supervised version of the above priors with node-specific attributes** coinciding, in this case, with the true membership labels. To accomplish this goal, execute the code below.
 
 ``` r
 N_iter  <- 50000
@@ -167,6 +143,27 @@ my_x <- c(rep(1,20),rep(2,20),rep(3,15),rep(4,15),rep(5,10))
 my_alpha_xi <- rep(1,5)
 
 # ------------------------------------
+# DIRICHLET MULTINOMIAL
+# ------------------------------------
+
+my_prior <- "DM"
+Z_DM_x <- esbm(Y, my_seed, N_iter, my_prior, my_z, a = 1, b = 1, beta_DM = 3.5/50, H_DM = 50, x = my_x, alpha_xi = my_alpha_xi)
+
+# ------------------------------------
+# DIRICHLET PROCESS (CRP)
+# ------------------------------------
+
+my_prior <- "DP"
+Z_DP_x <- esbm(Y, my_seed, N_iter, my_prior, my_z, a = 1, b = 1, alpha_PY = 3, sigma_PY = 0, x = my_x, alpha_xi = my_alpha_xi)
+
+# ------------------------------------
+# PITMAN-YOR PROCESS
+# ------------------------------------
+
+my_prior <- "PY"
+Z_PY_x <- esbm(Y, my_seed, N_iter, my_prior, my_z, a = 1, b = 1, alpha_PY = -0.3, sigma_PY = 0.6, x = my_x, alpha_xi = my_alpha_xi)
+
+# ------------------------------------
 # GNEDIN PROCESS
 # ------------------------------------
 
@@ -174,20 +171,12 @@ my_prior <- "GN"
 Z_GN_x <- esbm(Y, my_seed, N_iter, my_prior, my_z, a = 1, b = 1, gamma_GN = 0.45, x = my_x, alpha_xi = my_alpha_xi)
 ```
 
-Also in this case we **compute the logarithm of the marginal likelihood** that will be used for assessing performance, and **save the output** in the file `Posterior_Attributes1.RData`.
+Also in this case we **save the output** in the file `Posterior_Attributes1.RData`.
 
 ``` r
-# compute the logarithm of the marginal likelihood under supervised GN prior
-
-l_y_GN_x <- rep(0,N_iter)
-for (t in 1:N_iter){
-  l_y_GN_x[t] <- log_pY_z(Y,Z_GN_x[,t],1,1)
-  if (t%%1000 == 0){print(paste("Iteration:", t))}
-}
-
 # save the output
-save(Z_GN_x,l_y_GN_x,file="Simulation/Posterior_Attributes1.RData")
-rm(Z_GN_x,l_y_GN_x)
+save(Z_DP_x,Z_PY_x,Z_GN_x,Z_DM_x,file="Simulation/Posterior_Attributes1.RData")
+rm(Z_DP_x,Z_PY_x,Z_GN_x,Z_DM_x)
 ```
 
 Posterior inference under ESBM [Table 2: Scenario 1]
@@ -200,62 +189,109 @@ z_0 <- c(rep(1,20),rep(2,20),rep(3,15),rep(4,15),rep(5,10))
 load("Simulation/Posterior_No_Attributes1.RData")
 load("Simulation/Posterior_Attributes1.RData")
 ```
-Before performing posterior inference, let us **visualize the traceplots for the logarithm of the likelihood in Eq. [1]**, evaluated at the MCMC samples of `z` under the different priors, both with and without nodal attributes.
+Once this has been done, we start by comparing the **performance of the different priors**, both unsupervised and supervised, via the **WAIC** information criterion. This requires posterior samples for the **log-likelihood of the edge probabilities** [function `sampleLL()`] combined with the `WAIC()` routine in the `R` package `LaplacesDemon()` (*see the first column in Table 2*). For each model under analysis, we also provide a quick graphical inspection of the **traceplots** for the log-likelihood of selected edge probabilities, after burn-in. 
 
 ``` r
-traceplot <- melt(cbind(l_y_DM,l_y_DP,l_y_PY,l_y_GN,l_y_GN_x))
-traceplot <- traceplot[,-2]
+set.seed(1)
 
-traceplot$Group <- c(rep("DM [unsup]",N_iter),rep("DP [unsup]",N_iter),rep("PY [unsup]",N_iter),rep("GN [unsup]",N_iter),rep("GN [sup]",N_iter))
-traceplot$Group <- factor(traceplot$Group,levels=c("DM [unsup]","DP [unsup]","PY [unsup]","GN [unsup]","GN [sup]"))
+V <- dim(Y)[1]
+burn_in <- 10000
+N_iter  <- 50000
 
-Trace <- ggplot(traceplot,aes(y=value,x=X1)) + geom_line() + facet_grid(.~Group) + theme_bw() + labs(y="",x="")
-Trace
-```
+a <- b <- 1
+LL <- matrix(nrow=V*(V-1)/2,ncol=N_iter)
 
-The above traceplots confirm that our Gibbs sampler has **satisfactory mixing and rapid convergence**. Due to the stability of the chains for the quantity in Eq. [1], we can reliably compute the **logarithm of the marginal likelihoods** for the different priors and models via the harmonic mean in Eq. [14] (*see the first column in Table 2*).
+Z_DM_WAIC <- Z_DM[,(burn_in+1):N_iter]
+Z_DP_WAIC <- Z_DP[,(burn_in+1):N_iter]
+Z_PY_WAIC <- Z_PY[,(burn_in+1):N_iter]
+Z_GN_WAIC <- Z_GN[,(burn_in+1):N_iter]
 
-``` r
+Z_DM_WAIC_x <- Z_DM_x[,(burn_in+1):N_iter]
+Z_DP_WAIC_x <- Z_DP_x[,(burn_in+1):N_iter]
+Z_PY_WAIC_x <- Z_PY_x[,(burn_in+1):N_iter]
+Z_GN_WAIC_x <- Z_GN_x[,(burn_in+1):N_iter]
+
+index_traceplot <- sample(c(1:(V*(V-1)/2)),1)
+
 # ------------------------------------
 # DIRICHLET MULTINOMIAL
 # ------------------------------------
 
-l_y_DM <- l_y_DM[(burn_in+1):N_iter]
-neg_l_y_DM <- -c(l_y_DM)
-l_y_post_DM <- log(length(l_y_DM))-max(neg_l_y_DM)-log(sum(exp(neg_l_y_DM-max(neg_l_y_DM))))
-l_y_post_DM
+for (t in 1:dim(Z_DM_WAIC)[2]){
+  LL[,t]<-sampleLL(Z_DM_WAIC[,t],Y,a,b)
+  if (t%%10000 == 0){print(paste("Iteration:", t))}
+}
+WAIC(LL)$WAIC
+# Selected traceplot
+plot(ts(LL[index_traceplot,]),xlab="",ylab="")
+
+for (t in 1:dim(Z_DM_WAIC_x)[2]){
+  LL[,t]<-sampleLL(Z_DM_WAIC_x[,t],Y,a,b)
+  if (t%%10000 == 0){print(paste("Iteration:", t))}
+}
+WAIC(LL)$WAIC
+# Selected traceplot
+plot(ts(LL[index_traceplot,]),xlab="",ylab="")
 
 # ------------------------------------
 # DIRICHLET PROCESS (CRP)
 # ------------------------------------
 
-l_y_DP <- l_y_DP[(burn_in+1):N_iter]
-neg_l_y_DP <- -c(l_y_DP)
-l_y_post_DP <- log(length(l_y_DP))-max(neg_l_y_DP)-log(sum(exp(neg_l_y_DP-max(neg_l_y_DP))))
-l_y_post_DP
+for (t in 1:dim(Z_DP_WAIC)[2]){
+  LL[,t]<-sampleLL(Z_DP_WAIC[,t],Y,a,b)
+  if (t%%10000 == 0){print(paste("Iteration:", t))}
+}
+WAIC(LL)$WAIC
+# Selected traceplot
+plot(ts(LL[index_traceplot,]),xlab="",ylab="")
+
+for (t in 1:dim(Z_DP_WAIC_x)[2]){
+  LL[,t]<-sampleLL(Z_DP_WAIC_x[,t],Y,a,b)
+  if (t%%10000 == 0){print(paste("Iteration:", t))}
+}
+WAIC(LL)$WAIC
+# Selected traceplot
+plot(ts(LL[index_traceplot,]),xlab="",ylab="")
 
 # ------------------------------------
 # PITMAN-YOR PROCESS
 # ------------------------------------
 
-l_y_PY <- l_y_PY[(burn_in+1):N_iter]
-neg_l_y_PY <- -c(l_y_PY)
-l_y_post_PY <- log(length(l_y_PY))-max(neg_l_y_PY)-log(sum(exp(neg_l_y_PY-max(neg_l_y_PY))))
-l_y_post_PY
+for (t in 1:dim(Z_PY_WAIC)[2]){
+  LL[,t]<-sampleLL(Z_PY_WAIC[,t],Y,a,b)
+  if (t%%10000 == 0){print(paste("Iteration:", t))}
+}
+WAIC(LL)$WAIC
+# Selected traceplot
+plot(ts(LL[index_traceplot,]),xlab="",ylab="")
+
+for (t in 1:dim(Z_PY_WAIC_x)[2]){
+  LL[,t]<-sampleLL(Z_PY_WAIC_x[,t],Y,a,b)
+  if (t%%10000 == 0){print(paste("Iteration:", t))}
+}
+WAIC(LL)$WAIC
+# Selected traceplot
+plot(ts(LL[index_traceplot,]),xlab="",ylab="")
 
 # ------------------------------------
 # GNEDIN PROCESS
 # ------------------------------------
 
-l_y_GN <- l_y_GN[(burn_in+1):N_iter]
-neg_l_y_GN <- -c(l_y_GN)
-l_y_post_GN <- log(length(l_y_GN))-max(neg_l_y_GN)-log(sum(exp(neg_l_y_GN-max(neg_l_y_GN))))
-l_y_post_GN
+for (t in 1:dim(Z_GN_WAIC)[2]){
+  LL[,t]<-sampleLL(Z_GN_WAIC[,t],Y,a,b)
+  if (t%%10000 == 0){print(paste("Iteration:", t))}
+}
+WAIC(LL)$WAIC
+# Selected traceplot
+plot(ts(LL[index_traceplot,]),xlab="",ylab="")
 
-l_y_GN_x <- l_y_GN_x[(burn_in+1):N_iter]
-neg_l_y_GN_x <- -c(l_y_GN_x)
-l_y_post_GN_x <- log(length(l_y_GN_x))-max(neg_l_y_GN_x)-log(sum(exp(neg_l_y_GN_x-max(neg_l_y_GN_x))))
-l_y_post_GN_x
+for (t in 1:dim(Z_GN_WAIC_x)[2]){
+  LL[,t]<-sampleLL(Z_GN_WAIC_x[,t],Y,a,b)
+  if (t%%10000 == 0){print(paste("Iteration:", t))}
+}
+WAIC(LL)$WAIC
+# Selected traceplot
+plot(ts(LL[index_traceplot,]),xlab="",ylab="")
 ```
 
 As it can be noticed, the **Gnedin process performs slightly better** relative to the other priors. Moreover, as expected, the overall **learning process benefits from informative node-specific attributes**.   
@@ -268,16 +304,19 @@ The **posterior mean of the variation of information (VI) distance from the true
 # DIRICHLET MULTINOMIAL
 # ------------------------------------
 VI(z_0,t(Z_DM[,(burn_in+1):N_iter]))
+VI(z_0,t(Z_DM_x[,(burn_in+1):N_iter]))
 
 # ------------------------------------
 # DIRICHLET PROCESS (CRP)
 # ------------------------------------
 VI(z_0,t(Z_DP[,(burn_in+1):N_iter]))
+VI(z_0,t(Z_DP_x[,(burn_in+1):N_iter]))
 
 # ------------------------------------
 # PITMAN-YOR PROCESS
 # ------------------------------------
 VI(z_0,t(Z_PY[,(burn_in+1):N_iter]))
+VI(z_0,t(Z_PY_x[,(burn_in+1):N_iter]))
 
 # ------------------------------------
 # GNEDIN PROCESS
@@ -295,16 +334,19 @@ As discussed in the article, accurate learning of the underlying number of group
 # DIRICHLET MULTINOMIAL
 # ------------------------------------
 quantile(apply(Z_DM[,(burn_in+1):N_iter],2,max))[c(2:4)]
+quantile(apply(Z_DM_x[,(burn_in+1):N_iter],2,max))[c(2:4)]
 
 # ------------------------------------
 # DIRICHLET PROCESS (CRP)
 # ------------------------------------
 quantile(apply(Z_DP[,(burn_in+1):N_iter],2,max))[c(2:4)]
+quantile(apply(Z_DP_x[,(burn_in+1):N_iter],2,max))[c(2:4)]
 
 # ------------------------------------
 # PITMAN-YOR PROCESS
 # ------------------------------------
 quantile(apply(Z_PY[,(burn_in+1):N_iter],2,max))[c(2:4)]
+quantile(apply(Z_PY_x[,(burn_in+1):N_iter],2,max))[c(2:4)]
 
 # ------------------------------------
 # GNEDIN PROCESS
@@ -336,6 +378,20 @@ credibleball(memb_Z_DM_VI$cl,t(Z_DM[,(burn_in+1):N_iter]))[[5]]
 misclass(memb_Z_DM,Y,a=1,b=1)
 
 # ------------------------------------
+
+c_Z_DM <- pr_cc(Z_DM_x[,(burn_in+1):N_iter])
+
+# point estimate
+memb_Z_DM_VI <- minVI(c_Z_DM,method="avg",max.k=20)
+memb_Z_DM <- memb_Z_DM_VI$cl
+
+# horizontal bound of the credible ball
+credibleball(memb_Z_DM_VI$cl,t(Z_DM_x[,(burn_in+1):N_iter]))[[5]]
+
+# misclassification error [in-sample for edges]
+misclass(memb_Z_DM,Y,a=1,b=1)
+
+# ------------------------------------
 # DIRICHLET PROCESS (CRP)
 # ------------------------------------
 
@@ -352,6 +408,20 @@ credibleball(memb_Z_DP_VI$cl,t(Z_DP[,(burn_in+1):N_iter]))[[5]]
 misclass(memb_Z_DP,Y,a=1,b=1)
 
 # ------------------------------------
+
+c_Z_DP <- pr_cc(Z_DP_x[,(burn_in+1):N_iter])
+
+# point estimate
+memb_Z_DP_VI <- minVI(c_Z_DP,method="avg",max.k=20)
+memb_Z_DP <- memb_Z_DP_VI$cl
+
+# horizontal bound of the credible ball
+credibleball(memb_Z_DP_VI$cl,t(Z_DP_x[,(burn_in+1):N_iter]))[[5]]
+
+# misclassification error [in-sample for edges]
+misclass(memb_Z_DP,Y,a=1,b=1)
+
+# ------------------------------------
 # PITMAN-YOR PROCESS
 # ------------------------------------
 
@@ -363,6 +433,20 @@ memb_Z_PY <- memb_Z_PY_VI$cl
 
 # horizontal bound of the credible ball
 credibleball(memb_Z_PY_VI$cl,t(Z_PY[,(burn_in+1):N_iter]))[[5]]
+
+# misclassification error [in-sample for edges]
+misclass(memb_Z_PY,Y,a=1,b=1)
+
+# ------------------------------------
+
+c_Z_PY <- pr_cc(Z_PY_x[,(burn_in+1):N_iter])
+
+# point estimate
+memb_Z_PY_VI <- minVI(c_Z_PY,method="avg",max.k=20)
+memb_Z_PY <- memb_Z_PY_VI$cl
+
+# horizontal bound of the credible ball
+credibleball(memb_Z_PY_VI$cl,t(Z_PY_x[,(burn_in+1):N_iter]))[[5]]
 
 # misclassification error [in-sample for edges]
 misclass(memb_Z_PY,Y,a=1,b=1)
