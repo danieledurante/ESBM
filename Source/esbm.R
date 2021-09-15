@@ -299,6 +299,38 @@ return(sum(lbeta(a_n,b_bar_n))-(H*(H+1)/2)*lbeta(a,b))
 }
 
 ####################################################################################
+# COMPUTE THE LOG-LIKELIHOOD OF THE EDGES ##########################################
+####################################################################################
+
+sampleLL <- function(memb,Y,a,b){
+  # in: vector of cluster labels (memb), VxV adjancency matrix (Y) and hyperparameters beta priors (a,b)
+  # out: vector of Bernoulli log-likelihoods for the edges under ESBM (conditioned on memb and on block-probabilities)
+  
+  z <- dummy(memb)
+  H <- ncol(z)
+  V <- dim(Y)[1]
+  
+  M <- t(z)%*%Y%*%z
+  diag(M) <- diag(M)/2
+  Tot <- t(z)%*%matrix(1,V,V)%*%z
+  diag(Tot) <- (diag(Tot)-table(memb))/2
+  Mbar <- Tot-M
+  a_n <- lowerTriangle(M,diag=TRUE)+a
+  b_bar_n <- lowerTriangle(Mbar,diag=TRUE)+b
+  
+  theta <- rbeta(length(a_n),a_n,b_bar_n)
+  Theta <- matrix(0,H,H)
+  Theta[lower.tri(Theta,diag=TRUE)] <- theta
+  Theta <- Theta+t(Theta)
+  diag(Theta) <- diag(Theta)/2
+  edge_prob <- z%*%Theta%*%t(z)
+  
+  LL <- dbinom(lowerTriangle(Y,diag=FALSE), size=1, prob=lowerTriangle(edge_prob,diag=FALSE),log=TRUE)
+  
+  return(LL)
+}
+
+####################################################################################
 # COMPUTE OUT-OF-SAMPLE CLUSTER PROBABILITIES  #####################################
 ####################################################################################
 
