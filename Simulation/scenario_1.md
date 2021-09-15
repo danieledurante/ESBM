@@ -193,10 +193,11 @@ Once this has been done, we start by comparing the **performance of the differen
 
 ``` r
 set.seed(1)
+index_traceplot <- sample(c(1:(V*(V-1)/2)),1)
 
+set.seed(1)
 V <- dim(Y)[1]
 burn_in <- 10000
-index_traceplot <- sample(c(1:(V*(V-1)/2)),1)
 a <- b <- 1
 LL <- matrix(nrow=V*(V-1)/2,ncol=40000)
 
