@@ -193,10 +193,11 @@ Once this has been done, we start by comparing the **performance of the differen
 
 ``` r
 set.seed(1)
+index_traceplot <- sample(c(1:(V*(V-1)/2)),1)
 
+set.seed(1)
 V <- dim(Y)[1]
 burn_in <- 10000
-index_traceplot <- sample(c(1:(V*(V-1)/2)),1)
 a <- b <- 1
 LL <- matrix(nrow=V*(V-1)/2,ncol=40000)
 
@@ -281,7 +282,7 @@ plot(ts(LL[index_traceplot,]),xlab="",ylab="")
 # ------------------------------------
 # PITMAN-YOR PROCESS SUPERVISED
 # ------------------------------------
-Z_PY_WAIC_x <- Z_PY[,(burn_in+1):N_iter]
+Z_PY_WAIC_x <- Z_PY_x[,(burn_in+1):N_iter]
 
 for (t in 1:dim(Z_PY_WAIC_x)[2]){
   LL[,t]<-sampleLL(Z_PY_WAIC_x[,t],Y,a,b)
@@ -499,7 +500,7 @@ Comparison with state-of-the-art competitors [Table 3: Scenario 2]
 ================
 Let us now reproduce the results for **scenario 2** in **Table 3**. Here the focus is on comparing the performance of **ESBM with GN prior** and **state–of–the–art competitors** in the `R` libraries `igraph`, `randnet`, `greed` and `JCDC`. Such alternative strategies include the **Louvain algorithm** [Blondel et al., 2008], **spectral clustering** [Von Luxburg, 2007], **regularized spectral clustering** [Amini et al., 2013], the **greed clustering algorithm** for SBM and degree corrected SBM (DC–SBM) [Come et al., 2021], and the **attribute–assisted JCDC community detection algorithm** [Zhang, Levina and Zhu, 2016] 
 
-To compute the errors in the column `ERROR [EST]`, we require the **matrix of true edge probabilities** which have been used to simulate `network_1.RData`.
+To compute the errors in the column `ERROR [EST]`, we require the **matrix of true edge probabilities** which have been used to simulate `network_2.RData`.
 
 ``` r
 pi_true <- matrix(0,V,V)
