@@ -337,7 +337,7 @@ VI(z_0,t(Z_GN[,(burn_in+1):N_iter]))
 VI(z_0,t(Z_GN_x[,(burn_in+1):N_iter]))
 ```
 
-The above results **confirm the rankings** obtained from the analysis of the marginal likelihoods.
+The above results **confirm the conclusions** obtained from the analysis of the WAIC.
 
 As discussed in the article, accurate learning of the underlying number of groups is a fundamental goal. Hence, let us study the **quartiles of the posterior distribution for the number of non-empty groups** under the different priors and models (*see the seventh column in Table 2*). 
 
