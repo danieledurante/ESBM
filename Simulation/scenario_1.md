@@ -123,7 +123,7 @@ Once the above steps have been done, **save the output** in the file `Posterior_
 ``` r
 # save the output
 save(Z_DP,Z_PY,Z_GN,Z_DM,file="Simulation/Posterior_No_Attributes1.RData")
-rm(Z_DP,Z_PY,Z_GN,Z_DMM)
+rm(Z_DP,Z_PY,Z_GN,Z_DM)
 ```
 
 Implementation with node-specific attributes
