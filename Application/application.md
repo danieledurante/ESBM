@@ -726,7 +726,7 @@ length(table(g_sbm))
 -2*log_pY_z(Y,g_sbm,1,1)
 ```
 
-We conclude the computing the deviance of the the **attribute–assisted JCDC community detection algorithm** which, unlike the previous methods, provides a supervised strategy that leverages also information from attributes. The implementation of this strategy requires the `cpp` file `JCDC.cpp` developed by [Yuan Zhang](http://www-personal.umich.edu/~yzhanghf/) and available in the subfolder `Source`. Also in this case, the number of groups is set equal to `sel_H`. The code below allows to compute the deviance under the attribute–assisted JCDC community detection algorithm, with two different settings for the tuning parameters.
+We conclude by computing the deviance of the **attribute–assisted JCDC community detection algorithm** which, unlike the previous methods, provides a supervised strategy that leverages also information from attributes. The implementation of this strategy requires the `cpp` file `JCDC.cpp` developed by [Yuan Zhang](http://www-personal.umich.edu/~yzhanghf/) and available in the subfolder `Source`. Also in this case, the number of groups is set equal to `sel_H`. The code below allows to compute the deviance under the attribute–assisted JCDC community detection algorithm, with two different settings for the tuning parameters.
 
 ``` r
 A <- Y
