@@ -24,6 +24,8 @@ library(ggplot2)
 library(coda)
 library(dummies)
 library(randnet)
+library(greed)
+library(LaplacesDemon)
 
 load("Simulation/network_3.RData")
 V <- dim(Y)[1]
@@ -32,7 +34,7 @@ V <- dim(Y)[1]
 diag(Y)
 ```
 
-As discussed in the article, the network under analysis has *V=80* nodes and *5* groups displaying **community and core-periphery structures** [see third row of Figure 3 in the article]. 
+As discussed in the article, the network under analysis has *V=80* nodes and *5* groups displaying **community and core-periphery structures** [see third matrix of Figure 3 in the article]. 
 
 Setting the hyperparameters
 ================
@@ -75,7 +77,7 @@ Here we **set the hyperparameters so that the expectation of `H` is close to *10
 
 Posterior computation via collapsed Gibbs sampler
 ================
-This section contains the code to **implement the collapsed Gibbs sampler for ESBM** [function `esbm()`] and to **evaluate marginal likelihoods** [function `log_pY_z()`] for model selection. Such a code is applied to [i] first select among the four relevant examples of unsupervised Gibbs-type priors discussed in the article, and then [ii] check whether introducing informative node attributes further improves the performance of the selected best unsupervised prior. See the source code `esbm.R` for a detailed description of the inputs and the outputs of the two functions `esbm()` and `log_pY_z()`.
+This section contains the code to **implement the collapsed Gibbs sampler for ESBM** [function `esbm()`]. Such a code is applied to select among the four relevant examples of unsupervised Gibbs-type priors discussed in the article, and to check whether introducing informative node attributes further improves the performance of the different unsupervised priors. See the source code `esbm.R` for a detailed description of the inputs and the outputs of the function `esbm()`.
 
 Implementation without node-specific attributes
 ------------------
@@ -116,43 +118,17 @@ my_prior  <- "GN"
 Z_GN <- esbm(Y, my_seed, N_iter, my_prior, my_z, a = 1, b = 1, gamma_GN = 0.45)
 ```
 
-Once the above steps have been done, **compute the logarithm of the marginal likelihoods** that will be used for comparing the performance of the different prior specifications, and **save the output** in the file `Posterior_No_Attributes3.RData`.
+Once the above steps have been done, **save the output** in the file `Posterior_No_Attributes3.RData`.
 
 ``` r
-# compute the logarithm of the marginal likelihoods under the different priors
-
-l_y_DM <- rep(0,N_iter)
-for (t in 1:N_iter){
-  l_y_DM[t] <- log_pY_z(Y,Z_DM[,t],1,1)
-  if (t%%1000 == 0){print(paste("Iteration:", t))}
-}
-
-l_y_DP <- rep(0,N_iter)
-for (t in 1:N_iter){
-  l_y_DP[t] <- log_pY_z(Y,Z_DP[,t],1,1)
-  if (t%%1000 == 0){print(paste("Iteration:", t))}
-}
-
-l_y_PY <- rep(0,N_iter)
-for (t in 1:N_iter){
-  l_y_PY[t] <- log_pY_z(Y,Z_PY[,t],1,1)
-  if (t%%1000 == 0){print(paste("Iteration:", t))}
-}
-
-l_y_GN <- rep(0,N_iter)
-for (t in 1:N_iter){
-  l_y_GN[t] <- log_pY_z(Y,Z_GN[,t],1,1)
-  if (t%%1000 == 0){print(paste("Iteration:", t))}
-}
-
 # save the output
-save(Z_DP,l_y_DP,Z_PY,l_y_PY,Z_GN,l_y_GN,Z_DM,l_y_DM,file="Simulation/Posterior_No_Attributes3.RData")
-rm(Z_DP,l_y_DP,Z_PY,l_y_PY,Z_GN,l_y_GN,Z_DM,l_y_DM)
+save(Z_DP,Z_PY,Z_GN,Z_DM,file="Simulation/Posterior_No_Attributes3.RData")
+rm(Z_DP,Z_PY,Z_GN,Z_DM)
 ```
 
 Implementation with node-specific attributes
 ------------------
-As shown in Table 2 in the article, the **GN process** yields the best performance among the four relevant examples of unsupervised Gibbs-type priors discussed in the article. Hence, let us now **perform posterior computation for the supervised GN prior with node-specific attributes** coinciding, in this case, with the true membership labels. To accomplish this goal, execute the code below.
+As shown in Table 2 in the article, the **GN process** yields the best performance among the four relevant examples of unsupervised Gibbs-type priors discussed in the article. Let us now **perform posterior computation for the supervised version of the above priors with node-specific attributes** coinciding, in this case, with the true membership labels. To accomplish this goal, execute the code below.
 
 ``` r
 N_iter  <- 50000
@@ -161,10 +137,31 @@ my_seed <- 1
 my_z <- c(1:V)
 
 # define the vector with node attributes
-my_x <- c(rep(1,35),rep(2,20),rep(3,15),rep(4,5),rep(5,5))
+my_x <- c(rep(1,25),rep(2,20),rep(3,15),rep(4,15),rep(5,5))
 
 # set hyperparameters for the Dirichlet-Multinomial cohesion function (see the article)
 my_alpha_xi <- rep(1,5)
+
+# ------------------------------------
+# DIRICHLET MULTINOMIAL
+# ------------------------------------
+
+my_prior <- "DM"
+Z_DM_x <- esbm(Y, my_seed, N_iter, my_prior, my_z, a = 1, b = 1, beta_DM = 3.5/50, H_DM = 50, x = my_x, alpha_xi = my_alpha_xi)
+
+# ------------------------------------
+# DIRICHLET PROCESS (CRP)
+# ------------------------------------
+
+my_prior <- "DP"
+Z_DP_x <- esbm(Y, my_seed, N_iter, my_prior, my_z, a = 1, b = 1, alpha_PY = 3, sigma_PY = 0, x = my_x, alpha_xi = my_alpha_xi)
+
+# ------------------------------------
+# PITMAN-YOR PROCESS
+# ------------------------------------
+
+my_prior <- "PY"
+Z_PY_x <- esbm(Y, my_seed, N_iter, my_prior, my_z, a = 1, b = 1, alpha_PY = -0.3, sigma_PY = 0.6, x = my_x, alpha_xi = my_alpha_xi)
 
 # ------------------------------------
 # GNEDIN PROCESS
@@ -174,20 +171,12 @@ my_prior <- "GN"
 Z_GN_x <- esbm(Y, my_seed, N_iter, my_prior, my_z, a = 1, b = 1, gamma_GN = 0.45, x = my_x, alpha_xi = my_alpha_xi)
 ```
 
-Also in this case we **compute the logarithm of the marginal likelihood** that will be used for assessing performance, and **save the output** in the file `Posterior_Attributes3.RData`.
+Also in this case we **save the output** in the file `Posterior_Attributes3.RData`.
 
 ``` r
-# compute the logarithm of the marginal likelihood under supervised GN prior
-
-l_y_GN_x <- rep(0,N_iter)
-for (t in 1:N_iter){
-  l_y_GN_x[t] <- log_pY_z(Y,Z_GN_x[,t],1,1)
-  if (t%%1000 == 0){print(paste("Iteration:", t))}
-}
-
 # save the output
-save(Z_GN_x,l_y_GN_x,file="Simulation/Posterior_Attributes3.RData")
-rm(Z_GN_x,l_y_GN_x)
+save(Z_DP_x,Z_PY_x,Z_GN_x,Z_DM_x,file="Simulation/Posterior_Attributes3.RData")
+rm(Z_DP_x,Z_PY_x,Z_GN_x,Z_DM_x)
 ```
 
 Posterior inference under ESBM [Table 2: Scenario 3]
@@ -196,69 +185,128 @@ This section contains the **code to perform estimation, uncertainty quantificati
 
 ``` r
 burn_in <- 10000
-z_0 <- c(rep(1,35),rep(2,20),rep(3,15),rep(4,5),rep(5,5))
+z_0 <- c(rep(1,25),rep(2,20),rep(3,15),rep(4,15),rep(5,5))
 load("Simulation/Posterior_No_Attributes3.RData")
 load("Simulation/Posterior_Attributes3.RData")
 ```
-Before performing posterior inference, let us **visualize the traceplots for the logarithm of the likelihood in Eq. [1]**, evaluated at the MCMC samples of `z` under the different priors, both with and without nodal attributes.
+Once this has been done, we start by comparing the **performance of the different priors**, both unsupervised and supervised, via the **WAIC** information criterion. This requires posterior samples for the **log-likelihood of the edge probabilities** [function `sampleLL()`] combined with the `WAIC()` routine in the `R` package `LaplacesDemon()` (*see the third column in Table 2*). For each model under analysis, we also provide a quick graphical inspection of the **traceplots** for the log-likelihood of selected edge probabilities, after burn-in. 
 
 ``` r
-traceplot <- melt(cbind(l_y_DM,l_y_DP,l_y_PY,l_y_GN,l_y_GN_x))
-traceplot <- traceplot[,-2]
+set.seed(1)
+index_traceplot <- sample(c(1:(V*(V-1)/2)),1)
 
-traceplot$Group <- c(rep("DM [unsup]",N_iter),rep("DP [unsup]",N_iter),rep("PY [unsup]",N_iter),rep("GN [unsup]",N_iter),rep("GN [sup]",N_iter))
-traceplot$Group <- factor(traceplot$Group,levels=c("DM [unsup]","DP [unsup]","PY [unsup]","GN [unsup]","GN [sup]"))
+set.seed(1)
+V <- dim(Y)[1]
+burn_in <- 10000
+a <- b <- 1
+LL <- matrix(nrow=V*(V-1)/2,ncol=40000)
 
-Trace <- ggplot(traceplot,aes(y=value,x=X1)) + geom_line() + facet_grid(.~Group) + theme_bw() + labs(y="",x="")
-Trace
+# ------------------------------------
+# DIRICHLET MULTINOMIAL UNSUPERVISED
+# ------------------------------------
+Z_DM_WAIC <- Z_DM[,(burn_in+1):N_iter]
+
+for (t in 1:dim(Z_DM_WAIC)[2]){
+  LL[,t]<-sampleLL(Z_DM_WAIC[,t],Y,a,b)
+  if (t%%10000 == 0){print(paste("Iteration:", t))}
+}
+WAIC(LL)$WAIC
+# Selected traceplot
+plot(ts(LL[index_traceplot,]),xlab="",ylab="")
+
+# ------------------------------------
+# DIRICHLET PROCESS (CRP) UNSUPERVISED
+# ------------------------------------
+Z_DP_WAIC <- Z_DP[,(burn_in+1):N_iter]
+
+for (t in 1:dim(Z_DP_WAIC)[2]){
+  LL[,t]<-sampleLL(Z_DP_WAIC[,t],Y,a,b)
+  if (t%%10000 == 0){print(paste("Iteration:", t))}
+}
+WAIC(LL)$WAIC
+# Selected traceplot
+plot(ts(LL[index_traceplot,]),xlab="",ylab="")
+
+# ------------------------------------
+# PITMAN-YOR PROCESS UNSUPERVISED
+# ------------------------------------
+Z_PY_WAIC <- Z_PY[,(burn_in+1):N_iter]
+
+for (t in 1:dim(Z_PY_WAIC)[2]){
+  LL[,t]<-sampleLL(Z_PY_WAIC[,t],Y,a,b)
+  if (t%%10000 == 0){print(paste("Iteration:", t))}
+}
+WAIC(LL)$WAIC
+# Selected traceplot
+plot(ts(LL[index_traceplot,]),xlab="",ylab="")
+
+# ------------------------------------
+# GNEDIN PROCESS UNSUPERVISED
+# ------------------------------------
+Z_GN_WAIC <- Z_GN[,(burn_in+1):N_iter]
+
+for (t in 1:dim(Z_GN_WAIC)[2]){
+  LL[,t]<-sampleLL(Z_GN_WAIC[,t],Y,a,b)
+  if (t%%10000 == 0){print(paste("Iteration:", t))}
+}
+WAIC(LL)$WAIC
+# Selected traceplot
+plot(ts(LL[index_traceplot,]),xlab="",ylab="")
+
+# ------------------------------------
+# DIRICHLET MULTINOMIAL SUPERVISED
+# ------------------------------------
+Z_DM_WAIC_x <- Z_DM_x[,(burn_in+1):N_iter]
+
+for (t in 1:dim(Z_DM_WAIC_x)[2]){
+  LL[,t]<-sampleLL(Z_DM_WAIC_x[,t],Y,a,b)
+  if (t%%10000 == 0){print(paste("Iteration:", t))}
+}
+WAIC(LL)$WAIC
+# Selected traceplot
+plot(ts(LL[index_traceplot,]),xlab="",ylab="")
+
+# ------------------------------------
+# DIRICHLET PROCESS (CRP) SUPERVISED
+# ------------------------------------
+Z_DP_WAIC_x <- Z_DP_x[,(burn_in+1):N_iter]
+
+for (t in 1:dim(Z_DP_WAIC_x)[2]){
+  LL[,t]<-sampleLL(Z_DP_WAIC_x[,t],Y,a,b)
+  if (t%%10000 == 0){print(paste("Iteration:", t))}
+}
+WAIC(LL)$WAIC
+# Selected traceplot
+plot(ts(LL[index_traceplot,]),xlab="",ylab="")
+
+# ------------------------------------
+# PITMAN-YOR PROCESS SUPERVISED
+# ------------------------------------
+Z_PY_WAIC_x <- Z_PY_x[,(burn_in+1):N_iter]
+
+for (t in 1:dim(Z_PY_WAIC_x)[2]){
+  LL[,t]<-sampleLL(Z_PY_WAIC_x[,t],Y,a,b)
+  if (t%%10000 == 0){print(paste("Iteration:", t))}
+}
+WAIC(LL)$WAIC
+# Selected traceplot
+plot(ts(LL[index_traceplot,]),xlab="",ylab="")
+
+# ------------------------------------
+# GNEDIN PROCESS SUPERVISED
+# ------------------------------------
+Z_GN_WAIC_x <- Z_GN_x[,(burn_in+1):N_iter]
+
+for (t in 1:dim(Z_GN_WAIC_x)[2]){
+  LL[,t]<-sampleLL(Z_GN_WAIC_x[,t],Y,a,b)
+  if (t%%10000 == 0){print(paste("Iteration:", t))}
+}
+WAIC(LL)$WAIC
+# Selected traceplot
+plot(ts(LL[index_traceplot,]),xlab="",ylab="")
 ```
 
-The above traceplots confirm that our Gibbs sampler has **satisfactory mixing and rapid convergence**. Due to the stability of the chains for the quantity in Eq. [1], we can reliably compute the **logarithm of the marginal likelihoods** for the different priors and models via the harmonic mean in Eq. [14] (*see the third column in Table 2*).
-
-``` r
-# ------------------------------------
-# DIRICHLET MULTINOMIAL
-# ------------------------------------
-
-l_y_DM <- l_y_DM[(burn_in+1):N_iter]
-neg_l_y_DM <- -c(l_y_DM)
-l_y_post_DM <- log(length(l_y_DM))-max(neg_l_y_DM)-log(sum(exp(neg_l_y_DM-max(neg_l_y_DM))))
-l_y_post_DM
-
-# ------------------------------------
-# DIRICHLET PROCESS (CRP)
-# ------------------------------------
-
-l_y_DP <- l_y_DP[(burn_in+1):N_iter]
-neg_l_y_DP <- -c(l_y_DP)
-l_y_post_DP <- log(length(l_y_DP))-max(neg_l_y_DP)-log(sum(exp(neg_l_y_DP-max(neg_l_y_DP))))
-l_y_post_DP
-
-# ------------------------------------
-# PITMAN-YOR PROCESS
-# ------------------------------------
-
-l_y_PY <- l_y_PY[(burn_in+1):N_iter]
-neg_l_y_PY <- -c(l_y_PY)
-l_y_post_PY <- log(length(l_y_PY))-max(neg_l_y_PY)-log(sum(exp(neg_l_y_PY-max(neg_l_y_PY))))
-l_y_post_PY
-
-# ------------------------------------
-# GNEDIN PROCESS
-# ------------------------------------
-
-l_y_GN <- l_y_GN[(burn_in+1):N_iter]
-neg_l_y_GN <- -c(l_y_GN)
-l_y_post_GN <- log(length(l_y_GN))-max(neg_l_y_GN)-log(sum(exp(neg_l_y_GN-max(neg_l_y_GN))))
-l_y_post_GN
-
-l_y_GN_x <- l_y_GN_x[(burn_in+1):N_iter]
-neg_l_y_GN_x <- -c(l_y_GN_x)
-l_y_post_GN_x <- log(length(l_y_GN_x))-max(neg_l_y_GN_x)-log(sum(exp(neg_l_y_GN_x-max(neg_l_y_GN_x))))
-l_y_post_GN_x
-```
-
-As it can be noticed, the **Gnedin process performs slightly better** relative to the other priors. Moreover, as expected, the overall **learning process benefits from informative node-specific attributes**.  
+As it can be noticed, the **Gnedin process performs slightly better** relative to the other priors. Moreover, as expected, the overall **learning process benefits from informative node-specific attributes**.   
 
 The **posterior mean of the variation of information (VI) distance from the true partition** `z_0` can be instead obtained using the `VI()` function within the `mcclust.ext` package [Wade and Ghahramani, 2018] as follows (*see the sixth column in Table 2*).
 
@@ -268,16 +316,19 @@ The **posterior mean of the variation of information (VI) distance from the true
 # DIRICHLET MULTINOMIAL
 # ------------------------------------
 VI(z_0,t(Z_DM[,(burn_in+1):N_iter]))
+VI(z_0,t(Z_DM_x[,(burn_in+1):N_iter]))
 
 # ------------------------------------
 # DIRICHLET PROCESS (CRP)
 # ------------------------------------
 VI(z_0,t(Z_DP[,(burn_in+1):N_iter]))
+VI(z_0,t(Z_DP_x[,(burn_in+1):N_iter]))
 
 # ------------------------------------
 # PITMAN-YOR PROCESS
 # ------------------------------------
 VI(z_0,t(Z_PY[,(burn_in+1):N_iter]))
+VI(z_0,t(Z_PY_x[,(burn_in+1):N_iter]))
 
 # ------------------------------------
 # GNEDIN PROCESS
@@ -286,7 +337,7 @@ VI(z_0,t(Z_GN[,(burn_in+1):N_iter]))
 VI(z_0,t(Z_GN_x[,(burn_in+1):N_iter]))
 ```
 
-The above results **confirm the rankings** obtained from the analysis of the marginal likelihoods.
+The above results **confirm the conclusions** obtained from the analysis of the WAIC.
 
 As discussed in the article, accurate learning of the underlying number of groups is a fundamental goal. Hence, let us study the **quartiles of the posterior distribution for the number of non-empty groups** under the different priors and models (*see the ninth column in Table 2*). 
 
@@ -295,16 +346,19 @@ As discussed in the article, accurate learning of the underlying number of group
 # DIRICHLET MULTINOMIAL
 # ------------------------------------
 quantile(apply(Z_DM[,(burn_in+1):N_iter],2,max))[c(2:4)]
+quantile(apply(Z_DM_x[,(burn_in+1):N_iter],2,max))[c(2:4)]
 
 # ------------------------------------
 # DIRICHLET PROCESS (CRP)
 # ------------------------------------
 quantile(apply(Z_DP[,(burn_in+1):N_iter],2,max))[c(2:4)]
+quantile(apply(Z_DP_x[,(burn_in+1):N_iter],2,max))[c(2:4)]
 
 # ------------------------------------
 # PITMAN-YOR PROCESS
 # ------------------------------------
 quantile(apply(Z_PY[,(burn_in+1):N_iter],2,max))[c(2:4)]
+quantile(apply(Z_PY_x[,(burn_in+1):N_iter],2,max))[c(2:4)]
 
 # ------------------------------------
 # GNEDIN PROCESS
@@ -313,7 +367,7 @@ quantile(apply(Z_GN[,(burn_in+1):N_iter],2,max))[c(2:4)]
 quantile(apply(Z_GN_x[,(burn_in+1):N_iter],2,max))[c(2:4)]
 ```
 
-Also for this measure, the inclusion of **informative node-specific attributes provides improved performance**. 
+Also for this measure, the inclusion of **informative node-specific attributes provides improved performance**. It is also interesting to notice how, unlike DM, DP and PY, the **Gnedin process can learn accurately the true number of underlying groups even without the additional information** provided by the node-specific attributes.
 
 To complete Table 2, let us obtain **point estimates** and **credible balls** for the group assignments of the different nodes. This is done by adapting the methods presented in Wade and Ghahramani (2018) and implemented in the `R` package `mcclust.ext`. To apply these strategies we also require an estimate of the **co-clustering matrix**, whose generic element `c[v,u]` encodes the relative frequency of MCMC samples in which nodes `v` and `u` are in the same cluster. Such an estimate can be obtained via the function `pr_cc()` in the source code `esbm.R`. We also study the **misclassification error** using the function `misclass()` in the source code `esbm.R` (*see the twelfth column in Table 2 for the `VI` distance between the estimated partition and the 95% credible bound*). 
 
@@ -336,6 +390,20 @@ credibleball(memb_Z_DM_VI$cl,t(Z_DM[,(burn_in+1):N_iter]))[[5]]
 misclass(memb_Z_DM,Y,a=1,b=1)
 
 # ------------------------------------
+
+c_Z_DM <- pr_cc(Z_DM_x[,(burn_in+1):N_iter])
+
+# point estimate
+memb_Z_DM_VI <- minVI(c_Z_DM,method="avg",max.k=20)
+memb_Z_DM <- memb_Z_DM_VI$cl
+
+# horizontal bound of the credible ball
+credibleball(memb_Z_DM_VI$cl,t(Z_DM_x[,(burn_in+1):N_iter]))[[5]]
+
+# misclassification error [in-sample for edges]
+misclass(memb_Z_DM,Y,a=1,b=1)
+
+# ------------------------------------
 # DIRICHLET PROCESS (CRP)
 # ------------------------------------
 
@@ -352,6 +420,20 @@ credibleball(memb_Z_DP_VI$cl,t(Z_DP[,(burn_in+1):N_iter]))[[5]]
 misclass(memb_Z_DP,Y,a=1,b=1)
 
 # ------------------------------------
+
+c_Z_DP <- pr_cc(Z_DP_x[,(burn_in+1):N_iter])
+
+# point estimate
+memb_Z_DP_VI <- minVI(c_Z_DP,method="avg",max.k=20)
+memb_Z_DP <- memb_Z_DP_VI$cl
+
+# horizontal bound of the credible ball
+credibleball(memb_Z_DP_VI$cl,t(Z_DP_x[,(burn_in+1):N_iter]))[[5]]
+
+# misclassification error [in-sample for edges]
+misclass(memb_Z_DP,Y,a=1,b=1)
+
+# ------------------------------------
 # PITMAN-YOR PROCESS
 # ------------------------------------
 
@@ -363,6 +445,20 @@ memb_Z_PY <- memb_Z_PY_VI$cl
 
 # horizontal bound of the credible ball
 credibleball(memb_Z_PY_VI$cl,t(Z_PY[,(burn_in+1):N_iter]))[[5]]
+
+# misclassification error [in-sample for edges]
+misclass(memb_Z_PY,Y,a=1,b=1)
+
+# ------------------------------------
+
+c_Z_PY <- pr_cc(Z_PY_x[,(burn_in+1):N_iter])
+
+# point estimate
+memb_Z_PY_VI <- minVI(c_Z_PY,method="avg",max.k=20)
+memb_Z_PY <- memb_Z_PY_VI$cl
+
+# horizontal bound of the credible ball
+credibleball(memb_Z_PY_VI$cl,t(Z_PY_x[,(burn_in+1):N_iter]))[[5]]
 
 # misclassification error [in-sample for edges]
 misclass(memb_Z_PY,Y,a=1,b=1)
@@ -402,7 +498,7 @@ Also these **results are in line with our previous discussion**.
 
 Comparison with state-of-the-art competitors [Table 3: Scenario 3]
 ================
-Let us now reproduce the results for **scenario 3** in **Table 3**. Here the focus is on comparing the performance of **ESBM with GN prior** and **state–of–the–art competitors** in the `R` libraries `igraph` and `randnet`. Such alternative strategies include the **Louvain algorithm** [Blondel et al., 2008], **spectral clustering** [Von Luxburg, 2007] and **regularized spectral clustering** [Amini et al., 2013]. 
+Let us now reproduce the results for **scenario 3** in **Table 3**. Here the focus is on comparing the performance of **ESBM with GN prior** and **state–of–the–art competitors** in the `R` libraries `igraph`, `randnet`, `greed` and `JCDC`. Such alternative strategies include the **Louvain algorithm** [Blondel et al., 2008], **spectral clustering** [Von Luxburg, 2007], **regularized spectral clustering** [Amini et al., 2013], the **greed clustering algorithm** for SBM and degree corrected SBM (DC–SBM) [Come et al., 2021], and the **attribute–assisted JCDC community detection algorithm** [Zhang, Levina and Zhu, 2016]. 
 
 To compute the errors in the column `ERROR [EST]`, we require the **matrix of true edge probabilities** which have been used to simulate `network_3.RData`.
 
@@ -419,6 +515,7 @@ block_matrix[4,1] <- block_matrix[1,4] <- 0.75
 block_matrix[4,5] <- block_matrix[5,4] <- 0.75
 block_matrix[2,5] <- block_matrix[5,2] <- 0.75
 block_matrix[3,5] <- block_matrix[5,3] <- 0.75
+
 
 for (v in 2:V){
 	for (u in 1:(v-1)){
@@ -497,7 +594,7 @@ VI(z_0,t(Louv))
 mean(abs(lowerTriangle(edge_est(Louv,Y,a=1,b=1))-lowerTriangle(pi_true)))
 ```
 
-In implementing **spectral clustering**, we first need to **specify the number of groups** `sel_H`. To do this, we consider a variety of model selection criteria available in the `R` library `randnet`, and set the number of groups equal to the median of the values of `H` estimated under the different strategies. 
+In implementing **spectral clustering**, we first need to **specify the number of groups** `sel_H`. To do this, we consider a variety of model selection criteria available in the `R` library `randnet`, and set the number of groups equal to the median of the values of `H` estimated under the different strategies. The output of the functions `NCV.select()`and `ECV.block()` also allows to formally **select between SBM and DC–SBM**. Both state-of-the-art strategies provide support in favor of SBM in this specific scenario.
 
 ``` r
 set.seed(1)
@@ -570,6 +667,129 @@ VI(z_0,t(r_sc))
 mean(abs(lowerTriangle(edge_est(r_sc,Y,a=1,b=1))-lowerTriangle(pi_true)))
 ```
 
+The performance measures in *columns 3, 6 and 9 of Table 3* under the **greed clustering algorithm** for SBM and degree corrected SBM (DC–SBM) can be obtained leveraging the `R` package `greed`. Exploiting the results from the previous methods, the greedy algorithm is initialized at `sel_H`.
+
+``` r
+# ------------------------------------
+# GREED SBM
+# ------------------------------------
+
+set.seed(1)
+
+greed_out <- greed(Y,K=sel_H,model=new("sbm",alpha=3.5/50,type="undirected"),alg=methods::new("hybrid"),verbose=FALSE)
+
+# point estimate
+g_sbm <- greed_out@cl
+
+# estimated H
+length(table(g_sbm))
+
+# VI distance between estimated and true partition
+VI(z_0,t(g_sbm))
+
+# estimation error for edge probabilities 
+mean(abs(lowerTriangle(edge_est(g_sbm,Y,a=1,b=1))-lowerTriangle(pi_true)))
+
+# ------------------------------------
+# GREED DC-SBM
+# ------------------------------------
+
+set.seed(1)
+
+greed_out <- greed(Y,K=sel_H,model=new("dcsbm",alpha=3.5/50,type="undirected"),alg=methods::new("hybrid"),verbose=FALSE)
+
+# point estimate
+g_dcsbm <- greed_out@cl
+
+# estimated H
+length(table(g_dcsbm))
+
+# VI distance between estimated and true partition
+VI(z_0,t(g_dcsbm))
+
+# estimation error for edge probabilities 
+mean(abs(lowerTriangle(edge_est(g_dcsbm,Y,a=1,b=1))-lowerTriangle(pi_true)))
+```
+
+We conclude the comparison against state-of-the-art competitors by considering the **attribute–assisted JCDC community detection algorithm** which, unlike the previous methods, provides a supervised strategy that leverages also information from attributes. The implementation of this strategy requires the `cpp` file `JCDC.cpp` developed by [Yuan Zhang](http://www-personal.umich.edu/~yzhanghf/) and available in the subfolder `Source`. Also in this case, the number of groups is set equal to `sel_H`. The code below provides the performance measures in *columns 3, 6 and 9 of Table 3* under the **attribute–assisted JCDC community detection algorithm**, with two different settings for the tuning parameters.
+
+``` r
+A <- Y
+K <- sel_H
+N <- V
+
+# similarity matrix among nodes based on attributes
+phi<-matrix(NA,N,N)
+for (i in 1:N)
+  for (j in 1:N)
+    phi[i,j]<-as.integer(z_0[i]==z_0[j])
+
+require(Rcpp)
+require(RcppArmadillo)
+sourceCpp("Source/JCDC.cpp")
+
+# initialize with spectral clustering
+
+D.inv = diag(1./(sqrt(apply(A, 1, sum))+1e-7));
+Laplacian = D.inv %*% A %*% D.inv;
+L.svd = svd(Laplacian);
+U.K = L.svd$u[, 1:K];
+spec.cluster = kmeans(U.K, K, nstart=10)$cluster;
+
+G.fit = array(0, c(N, K));
+for(k in 1:K){
+  G.fit[spec.cluster==k, k] = 1;
+}
+
+# ------------------------------------
+# JCDC with tuning parameter 5
+# ------------------------------------
+
+set.seed(1)
+
+W_max <- 5
+p = dim(phi)[3];	if(length(dim(phi))==2){p = 1;}
+
+result <- JCDC(A, phi, p, G.fit, 1, K, 20, 30, 20, W_max, 2, 0, 1);
+cluster_JCDC = as.vector(result$G.fit %*% (1:K));
+
+# point estimate
+jcdc_5 <- cluster_JCDC
+
+# estimated H
+length(table(jcdc_5))
+
+# VI distance between estimated and true partition
+VI(z_0,t(jcdc_5))
+
+# estimation error for edge probabilities 
+mean(abs(lowerTriangle(edge_est(jcdc_5,Y,a=1,b=1))-lowerTriangle(pi_true)))
+
+# ------------------------------------
+# JCDC with tuning parameter 1.5
+# ------------------------------------
+
+set.seed(1)
+
+W_max <- 1.5
+p = dim(phi)[3];	if(length(dim(phi))==2){p = 1;}
+
+result <- JCDC(A, phi, p, G.fit, 1, K, 20, 30, 20, W_max, 2, 0, 1);
+cluster_JCDC = as.vector(result$G.fit %*% (1:K));
+
+# point estimate
+jcdc_1_5 <- cluster_JCDC
+
+# estimated H
+length(table(jcdc_1_5))
+
+# VI distance between estimated and true partition
+VI(z_0,t(jcdc_1_5))
+
+# estimation error for edge probabilities 
+mean(abs(lowerTriangle(edge_est(jcdc_1_5,Y,a=1,b=1))-lowerTriangle(pi_true)))
+```
+
 Predictive performance for the group membership of new nodes
 ================
 We study the performance of the **supervised GN process prior** (which yields the most accurate inference within the **ESBM** class for **scenario 3**) in **predicting the group membership of new incoming nodes**. To accomplish this goal, we first simulate the edges between `300` new nodes and those included in the original network `Y`. Among these incoming nodes, `50` belong to a new group not yet observed in `Y` (which is characterized by low connection probability with nodes in the original `5` clusters).
@@ -620,12 +840,12 @@ Post_Prob[v,] <- pred_esbm(Y_augmented, prior="GN", z_hat=memb_Z_GN,a = 1, b = 1
 # compute misclassification error
 (V_new-sum(diag(table(memb_new,apply(Post_Prob,1,which.max)))))/V_new
 ```
+Refer to Section 4 in the article for detailed comments on the above outputs.
 
-
-Graphical representation [Figure 3: Row 3]
+Graphical representation [Figure 3: third matrix. Figure 4: third column.]
 ================
 
-Finally, the code to **reproduce the third row of Figure 3** is provided below.
+The code to **reproduce the third matrix of Figure 3** is provided below.
 
 ``` r
 diag(Y) <- 0
@@ -640,6 +860,15 @@ Network <- pheatmap(Y,color=colorRampPalette(brewer.pal(9,"Greys")[c(1,8)])(30),
 
 # ------------------------------------
 
+g <- grid.arrange(Network[[4]],nrow=1,vp=viewport(width=1, height=1))
+g2 <- cowplot::ggdraw(g)+ theme(plot.background = element_rect(fill=colorRampPalette(brewer.pal(9,"Greys")[c(1,8)])(30)[8]))
+
+print(g2)
+```
+
+The code to **reproduce the third column of Figure 4** is provided below.
+
+``` r
 c_Z_GN <- pr_cc(Z_GN[,(burn_in+1):N_iter])
 memb_Z_GN_VI <- minVI(c_Z_GN,method="avg",max.k=20)
 memb_Z_GN <- memb_Z_GN_VI$cl
@@ -670,7 +899,7 @@ Cov <- pheatmap(c_Z_GN_x,color=colorRampPalette(brewer.pal(9,"Greys")[c(1,8)])(3
 
 # ------------------------------------
 
-g <- grid.arrange(Network[[4]],Marg[[4]],Cov[[4]],nrow=1,vp=viewport(width=1, height=1))
+g <- grid.arrange(Marg[[4]],Cov[[4]],ncol=1,vp=viewport(width=1, height=1))
 g2 <- cowplot::ggdraw(g)+ theme(plot.background = element_rect(fill=colorRampPalette(brewer.pal(9,"Greys")[c(1,8)])(30)[8]))
 
 print(g2)
