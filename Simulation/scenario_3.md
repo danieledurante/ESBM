@@ -876,7 +876,7 @@ memb_Z_GN <- memb_Z_GN_VI$cl
 row_plot_GN <- as.data.frame(as.factor(matrix(memb_Z_GN,V,1)))
 names(row_plot_GN) <- "memb_Z_GN"
 rownames(c_Z_GN) <- rownames(row_plot_GN)
-mycolors <- c(brewer.pal(10,"RdBu")[4],brewer.pal(9,"YlOrBr")[3],brewer.pal(10,"RdBu")[7],brewer.pal(10,"PRGn")[7])
+mycolors <- c(brewer.pal(10,"RdBu")[4],brewer.pal(10,"PRGn")[4],brewer.pal(10,"RdBu")[7],brewer.pal(10,"PRGn")[7],brewer.pal(9,"YlOrBr")[3])
 names(mycolors) <- unique(row_plot_GN$memb_Z_GN)
 mycolors <- list(memb_Z_GN = mycolors)
 
