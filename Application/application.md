@@ -240,7 +240,7 @@ rm(Z_DP,Z_PY,Z_GN,Z_DM)
 
 Implementation with node-specific attributes
 ------------------
-As shown in Table 4 in the article, the **GN process** yields the best performance among the four relevant examples of unsupervised Gibbs-type priors discussed in the article. Hence, let us now **perform posterior computation for the supervised GN prior with node-specific attributes**. As clarified in Section 5, we consider as node attribute an external variable in which:
+As shown in Table 4 in the article, the **GN process** yields the best performance among the four relevant examples of unsupervised Gibbs-type priors discussed in the article. Hence, let us now **perform posterior computation for the supervised version of the above priors with node-specific attributes**. As clarified in Section 5, we consider as node attribute an external variable in which:
 
 - the class of each **affiliate** corresponds to the associated locale
 - the **bosses** share a common label indicating that such members have a leadership role within the organization
