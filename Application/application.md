@@ -705,7 +705,7 @@ length(table(r_sc))
 -2*log_pY_z(Y,r_sc,1,1)
 ```
 
-The deviance under the **greed clustering algorithm** for SBM can be obtained leveraging the `R` package greed. Exploiting the results from the previous methods, the greedy algorithm is initialized at `sel_H.
+The deviance under the **greed clustering algorithm** for SBM can be obtained leveraging the `R` package `greed`. Exploiting the results from the previous methods, the greedy algorithm is initialized at `sel_H.
 
 ``` r
 # ------------------------------------
