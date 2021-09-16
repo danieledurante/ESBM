@@ -775,7 +775,7 @@ jcdc_5 <- cluster_JCDC
 length(table(jcdc_5))
 
 # deviance (D)
--log_pY_z(Y,jcdc_5,1,1)
+-2*log_pY_z(Y,jcdc_5,1,1)
 
 # ------------------------------------
 # JCDC with tuning parameter 1.5
@@ -796,7 +796,7 @@ jcdc_1_5 <- cluster_JCDC
 length(table(jcdc_1_5))
 
 # deviance (D)
--log_pY_z(Y,jcdc_1_5,1,1)
+-2*log_pY_z(Y,jcdc_1_5,1,1)
 ```
 
 All the above **deviances are higher relative to those provided by ESBM with GN prior**. Since `sel_H` is lower than the one obtained under the GN prior, let us also compute the deviance for spectral clustering, greed and JCDC with the same number of clusters `H = 16` inferred under the GN process.
@@ -812,7 +812,7 @@ set.seed(1)
 sc <- reg.SP(Y,K=16,lap=TRUE,tau=0)$cluster
 
 # deviance (D)
--log_pY_z(Y,sc,1,1)
+-2*log_pY_z(Y,sc,1,1)
 
 # ------------------------------------
 # REGULARIZED SPECTRAL CLUSTERING
@@ -824,7 +824,7 @@ set.seed(1)
 r_sc <- reg.SP(Y,K=16,lap=TRUE,tau=1)$cluster
 
 # deviance (D)
--log_pY_z(Y,r_sc,1,1)
+-2*log_pY_z(Y,r_sc,1,1)
 
 # ------------------------------------
 # GREED SBM
@@ -890,7 +890,7 @@ jcdc_5 <- cluster_JCDC
 length(table(jcdc_5))
 
 # deviance (D)
--log_pY_z(Y,jcdc_5,1,1)
+-2*log_pY_z(Y,jcdc_5,1,1)
 
 # ------------------------------
 # JCDC with tuning parameter 1.5
@@ -911,7 +911,7 @@ jcdc_1_5 <- cluster_JCDC
 length(table(jcdc_1_5))
 
 # deviance (D)
--log_pY_z(Y,jcdc_1_5,1,1)
+-2*log_pY_z(Y,jcdc_1_5,1,1)
 ```
 
 Results are still worse relative to those provided by **ESBM**, thereby confirming the **superior performance of the ESBM class also in this specific application**.
