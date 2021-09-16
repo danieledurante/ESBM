@@ -973,10 +973,10 @@ mean((norm_transitivity_pred-norm_betwenness_pred)[which(Role_test=="boss")])
 ```
 
 
-Graphical representations [Figures 1, 2, 4, 5 and 6]
+Graphical representations [Figures 1, 2, 5, 6 and 7]
 ================
 
-Let us first **define the colors for the different categories of the attribute** `RoleLocale`. Such colors will be used for Figures 1, 2, 4, 5 and 6.
+Let us first **define the colors for the different categories of the attribute** `RoleLocale`. Such colors will be used for Figures 1, 2, 5, 6 and 7.
 
 ``` r
 mycolors <- c(brewer.pal(10,"RdBu")[c(4,7)],brewer.pal(10,"PRGn")[c(7,4)],brewer.pal(9,"YlOrBr")[3],
@@ -1120,7 +1120,7 @@ Fig_2 <- cowplot::ggdraw(g)+ theme(plot.background =element_rect(fill=colorRampP
 print(Fig_2)
 ```
 
-To **reproduce Figure 4**, note that panel (a) has been already obtained in Figure 2 and is available in the object `Adj_esbm`. Hence, it is sufficient to obtain panel (b) via the following code.
+To **reproduce Figure 5**, note that panel (a) has been already obtained in Figure 2 and is available in the object `Adj_esbm`. Hence, it is sufficient to obtain panel (b) via the following code.
 
 ``` r
 # ------------------------------------
@@ -1171,7 +1171,7 @@ Fig_4 <- cowplot::ggdraw(g)+ theme(plot.background =element_rect(fill=colorRampP
 print(Fig_4)
 ```
 
-The code to **reproduce Figure 5** is provided below. 
+The code to **reproduce Figure 6** is provided below. 
 
 ``` r
 set.seed(1)
@@ -1233,7 +1233,7 @@ l <- norm_coords(l, ymin=-1, ymax=1, xmin=-1.5, xmax=1.5)
 plot(net_Y,rescale=F, layout=l*1.8,edge.curved=0.2,vertex.shape="pie", vertex.pie=values,vertex.pie.color=pie_colors,mark.groups=c(3,7,4,9,14,15), mark.col="#f0f0f0", mark.border=NA)
 ```
 
-Finally, to **reproduce Figure 6** execute the following code.
+Finally, to **reproduce Figure 7** execute the following code.
 
 ``` r
 # transform the adjacency matrix into an igraph object
