@@ -310,7 +310,7 @@ load("Application/Posterior_No_Attributes.RData")
 load("Application/Posterior_Attributes.RData")
 ```
 
-Once this has been done, we start by comparing the **performance of the different priors**, both unsupervised and supervised, via the **WAIC** information criterion. This requires posterior samples for the log-likelihood of the edge probabilities [function `sampleLL()`] combined with the `WAIC()` routine in the `R` package `LaplacesDemon() (see the first and second columns in Table 4). For each model under analysis, we also provide a quick graphical inspection of the **traceplots** for the log-likelihood of selected edge probabilities, after burn-in.
+Once this has been done, we start by comparing the **performance of the different priors**, both unsupervised and supervised, via the **WAIC** information criterion. This requires posterior samples for the log-likelihood of the edge probabilities [function `sampleLL()`] combined with the `WAIC()` routine in the `R` package `LaplacesDemon()` (see the first and second columns in Table 4). For each model under analysis, we also provide a quick graphical inspection of the **traceplots** for the log-likelihood of selected edge probabilities, after burn-in.
 
 ``` r
 set.seed(1)
