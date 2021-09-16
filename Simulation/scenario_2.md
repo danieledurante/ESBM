@@ -723,7 +723,7 @@ for (i in 1:N)
 
 require(Rcpp)
 require(RcppArmadillo)
-sourceCpp("JCDC.cpp")
+sourceCpp("Source/JCDC.cpp")
 
 # initialize with spectral clustering
 
