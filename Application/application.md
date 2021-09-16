@@ -588,7 +588,7 @@ Also these **results are in line with our previous discussion**.
 
 Comparison with state-of-the-art competitors
 ================
-Let us now compare the **deviances** of **ESBM (with GN prior)** and **state–of–the–art competitors** in the `R` libraries `igraph` and `randnet`. Such alternative strategies include the **Louvain algorithm** [Blondel et al., 2008], **spectral clustering** [Von Luxburg, 2007], **regularized spectral clustering** [Amini et al., 2013], the **greed clustering algorithm** for SBM [Come et al., 2021], and the **attribute–assisted JCDC community detection algorithm** [Zhang, Levina and Zhu, 2016].
+Let us now compare the **deviances** of **ESBM (with GN prior)** and **state–of–the–art competitors** in the `R` libraries `igraph`, `randnet`, `greed` and `JCDC`. Such alternative strategies include the **Louvain algorithm** [Blondel et al., 2008], **spectral clustering** [Von Luxburg, 2007], **regularized spectral clustering** [Amini et al., 2013], the **greed clustering algorithm** for SBM [Come et al., 2021], and the **attribute–assisted JCDC community detection algorithm** [Zhang, Levina and Zhu, 2016].
 
 The deviances for the **unsupervised and supervised GN prior** can be easily computed as follows.
 
