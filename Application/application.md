@@ -1166,9 +1166,9 @@ Adj_edge_esbm <- pheatmap(Y_edge_esbm,color=colorRampPalette(brewer.pal(9,"Greys
 # ------------------------------------
 
 g <- grid.arrange(Adj_esbm[[4]],Adj_edge_esbm[[4]],nrow=1,ncol=2,vp=viewport(width=1, height=1))
-Fig_4 <- cowplot::ggdraw(g)+ theme(plot.background =element_rect(fill=colorRampPalette(brewer.pal(9,"Greys")[c(1,8)])(30)[8]))
+Fig_5 <- cowplot::ggdraw(g)+ theme(plot.background =element_rect(fill=colorRampPalette(brewer.pal(9,"Greys")[c(1,8)])(30)[8]))
 
-print(Fig_4)
+print(Fig_5)
 ```
 
 The code to **reproduce Figure 6** is provided below. 
@@ -1229,7 +1229,7 @@ set.seed(5)
 l <- layout_with_fr(net_Y)
 l <- norm_coords(l, ymin=-1, ymax=1, xmin=-1.5, xmax=1.5)
 
-# plot Figure 5
+# plot Figure 6
 plot(net_Y,rescale=F, layout=l*1.8,edge.curved=0.2,vertex.shape="pie", vertex.pie=values,vertex.pie.color=pie_colors,mark.groups=c(3,7,4,9,14,15), mark.col="#f0f0f0", mark.border=NA)
 ```
 
@@ -1321,7 +1321,7 @@ data_measure$size <- c(table(memb_Z_GN),rep(1.2,14))
 
 color_points <- c(mycolors[apply(t_standard,1,which.max)],brewer.pal(9,"Greys")[6]) 
 
-# plot Figure 6
+# plot Figure 7
 ggplot(data_measure, aes(x=X1, y=X2,color=group,fill=group)) + geom_point(aes(size=(size^1.5),shape=shape),stroke = 1)+theme_bw()+ theme(legend.position = "none")+
    scale_size_continuous(range = c(0,16))+ scale_color_manual(values=color_points)+ scale_fill_manual(values=alpha(color_points,0.3))+xlim(-5,260)+ylim(0.35,1.05)+xlab("Betweenness")+ylab("Local Transivity")+scale_shape_manual(values=c(21, 22,3,4))
 ```
