@@ -333,7 +333,7 @@ for (t in 1:dim(Z_DM_WAIC)[2]){
 }
 WAIC(LL)$WAIC
 # Selected traceplot
-plot(ts(LL[index_traceplot,]),xlab="",ylab="")
+plot(ts(LL[index_traceplot,]),xlab="",ylab="",ylim=c(-4,0))
 
 # ------------------------------------
 # DIRICHLET PROCESS (CRP) UNSUPERVISED
@@ -346,7 +346,7 @@ for (t in 1:dim(Z_DP_WAIC)[2]){
 }
 WAIC(LL)$WAIC
 # Selected traceplot
-plot(ts(LL[index_traceplot,]),xlab="",ylab="")
+plot(ts(LL[index_traceplot,]),xlab="",ylab="",ylim=c(-4,0))
 
 # ------------------------------------
 # PITMAN-YOR PROCESS UNSUPERVISED
@@ -359,7 +359,7 @@ for (t in 1:dim(Z_PY_WAIC)[2]){
 }
 WAIC(LL)$WAIC
 # Selected traceplot
-plot(ts(LL[index_traceplot,]),xlab="",ylab="")
+plot(ts(LL[index_traceplot,]),xlab="",ylab="",ylim=c(-4,0))
 
 # ------------------------------------
 # GNEDIN PROCESS UNSUPERVISED
@@ -372,7 +372,7 @@ for (t in 1:dim(Z_GN_WAIC)[2]){
 }
 WAIC(LL)$WAIC
 # Selected traceplot
-plot(ts(LL[index_traceplot,]),xlab="",ylab="")
+plot(ts(LL[index_traceplot,]),xlab="",ylab="",ylim=c(-4,0))
 
 # ------------------------------------
 # DIRICHLET MULTINOMIAL SUPERVISED
@@ -385,7 +385,7 @@ for (t in 1:dim(Z_DM_WAIC_x)[2]){
 }
 WAIC(LL)$WAIC
 # Selected traceplot
-plot(ts(LL[index_traceplot,]),xlab="",ylab="")
+plot(ts(LL[index_traceplot,]),xlab="",ylab="",ylim=c(-4,0))
 
 # ------------------------------------
 # DIRICHLET PROCESS (CRP) SUPERVISED
@@ -398,7 +398,7 @@ for (t in 1:dim(Z_DP_WAIC_x)[2]){
 }
 WAIC(LL)$WAIC
 # Selected traceplot
-plot(ts(LL[index_traceplot,]),xlab="",ylab="")
+plot(ts(LL[index_traceplot,]),xlab="",ylab="",ylim=c(-4,0))
 
 # ------------------------------------
 # PITMAN-YOR PROCESS SUPERVISED
@@ -411,7 +411,7 @@ for (t in 1:dim(Z_PY_WAIC_x)[2]){
 }
 WAIC(LL)$WAIC
 # Selected traceplot
-plot(ts(LL[index_traceplot,]),xlab="",ylab="")
+plot(ts(LL[index_traceplot,]),xlab="",ylab="",ylim=c(-4,0))
 
 # ------------------------------------
 # GNEDIN PROCESS SUPERVISED
@@ -424,7 +424,7 @@ for (t in 1:dim(Z_GN_WAIC_x)[2]){
 }
 WAIC(LL)$WAIC
 # Selected traceplot
-plot(ts(LL[index_traceplot,]),xlab="",ylab="")
+plot(ts(LL[index_traceplot,]),xlab="",ylab="",ylim=c(-4,0))
 ```
 
 As it can be noticed, the **Gnedin process performs slightly better** relative to the other priors. Moreover, the **external node attribute**, defined by a combination of *locale* membership and leadership *role*, **yields further improvements in the learning process**. For instance, we obtain a strong evidence in favor of the supervised GN process relative to the unsupervised representation, when looking at the **difference in WAIC** between the unsupervised and supervised Gnedin process prior.
