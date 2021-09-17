@@ -1322,8 +1322,7 @@ data_measure$size <- c(table(memb_Z_GN),rep(1.2,14))
 color_points <- c(mycolors[apply(t_standard,1,which.max)],brewer.pal(9,"Greys")[6]) 
 
 # plot Figure 7
-ggplot(data_measure, aes(x=X1, y=X2,color=group,fill=group)) + geom_point(aes(size=(size^1.5),shape=shape),stroke = 1)+theme_bw()+ theme(legend.position = "none")+
-   scale_size_continuous(range = c(0,16))+ scale_color_manual(values=color_points)+ scale_fill_manual(values=alpha(color_points,0.3))+xlim(-5,260)+ylim(0.35,1.05)+xlab("Betweenness")+ylab("Local Transivity")+scale_shape_manual(values=c(21, 22,3,4))
+ggplot(data_measure, aes(x=X1, y=X2,color=group,fill=group)) + geom_point(aes(size=(size^1.5),shape=shape),stroke = 1)+theme_bw()+ theme(legend.position = "none")+ scale_size_continuous(range = c(0,16))+ scale_color_manual(values=as.character(color_points))+ scale_fill_manual(values=alpha(as.character(color_points),0.3))+xlim(-5,260)+ylim(0.35,1.05)+xlab("Betweenness")+ylab("Local Transivity")+scale_shape_manual(values=c(21, 22,3,2))
 ```
 
 Refer to Sections 1 and 5 in the article for detailed comments on the above Figures.
