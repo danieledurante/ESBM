@@ -927,7 +927,7 @@ Y_augmented <- matrix(0,V+1,V+1)
 Y_augmented[1:V,1:V] <- Y
 ```
 
-Let us now compute a **plug–in estimate for the predictive probabilities of the cluster allocations** by applying Eq. [15] to each held-out suspect (one at-a-time). This can be done via the function `pred_esbm()` in the source code `esbm.R`. The final prediction of the group allocation for each suspect is that label with the highest predicted probability. 
+Let us now compute a **plug–in estimate for the predictive probabilities of the cluster allocations** by applying Eq. [13] to each held-out suspect (one at-a-time). This can be done via the function `pred_esbm()` in the source code `esbm.R`. The final prediction of the group allocation for each suspect is that label with the highest predicted probability. 
 
 
 ``` r
