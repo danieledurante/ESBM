@@ -1,6 +1,6 @@
 Application: The Infinito Network
 ================
-This tutorial contains guidelines and code to perform the analyses in the application to the *Infinito network* [`crime_net.RData`] illustrated in the article **Extended stochastic block models with application to criminal networks**. In particular, you will find a detailed step-by-step guide and `R` code to **pre-process the original data**, **implement the collapsed Gibbs sampler developed in the article** and **fully reproduce the results** discussed in Sections 1 and 5 of the article. For implementation purposes, please **execute the code below considering the same order in which is presented**.
+This tutorial contains guidelines and code to perform the analyses in the application to the *Infinito network* [`crime_net.RData`] illustrated in the article **Extended Stochastic Block Models with Application to Criminal Networks**. In particular, you will find a detailed step-by-step guide and `R` code to **pre-process the original data**, **implement the collapsed Gibbs sampler developed in the article** and **fully reproduce the results** discussed in Sections 1 and 5 of the article. For implementation purposes, please **execute the code below considering the same order in which is presented**.
 
 Data pre-processing
 ================
