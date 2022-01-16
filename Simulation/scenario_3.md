@@ -1,6 +1,6 @@
 Simulation: Scenario 3
 ================
-This tutorial contains guidelines and code to perform the analyses for the third scenario `network_3.RData` considered in the simulation study of the article **Extended stochastic block models with application to criminal networks**. In particular, you will find a detailed step-by-step guide and `R` code to **implement the collapsed Gibbs sampler presented in the article** and to **fully reproduce the results for the third scenario** presented in Section 4 of the article. For implementation purposes, please **execute the code below considering the same order in which is presented**.
+This tutorial contains guidelines and code to perform the analyses for the third scenario `network_3.RData` considered in the simulation study of the article **Extended Stochastic Block Models with Application to Criminal Networks**. In particular, you will find a detailed step-by-step guide and `R` code to **implement the collapsed Gibbs sampler presented in the article** and to **fully reproduce the results for the third scenario** presented in Section 4 of the article. For implementation purposes, please **execute the code below considering the same order in which is presented**.
 
 Import the data
 ================
