@@ -8,7 +8,7 @@ The documentation is organized in the **three main folders** described below.
 
 - `Simulation`. It contains the three step-by-step tutorials [see `scenario_1.md`, `scenario_2.md` and `scenario_3.md`] to **fully reproduce the results for the simulation scenarios 1, 2 and 3, respectively, presented in Section 4** of the article. The folder contains also the **simulated networks associated with these three scenarios** [see `network_1.RData`, `network_2.RData` and `network_3.RData`].  
 
-- `Application`. It contains a step-by-step tutorial [see `application.md`] to **fully reproduce the pre-processing and the analysis of the *Infinito network*, presented in Sections 1 and 5** of the article. The folder contains also the **pre-processed network studied in the article** [see `crime_net.RData`]. Raw data are available at https://sites.google.com/site/ucinetsoftware/datasets/covert-networks/ndranghetamafia2. 
+- `Application`. It contains a step-by-step tutorial [see `application.md`] to **fully reproduce the pre-processing and the analysis of the *Infinito network*, presented in Sections 1 and 5** of the article. The folder contains also the **pre-processed network studied in the article** [see `crime_net.RData`]. Raw data are available at https://sites.google.com/site/ucinetsoftware/datasets/covert-networks/ndrangheta-mafia-2. 
 
 The analyses are performed with an **iMac (macOS Sierra, version 10.12.6)**, using the `R` version **3.6.1**. 
 
